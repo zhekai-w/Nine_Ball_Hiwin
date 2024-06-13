@@ -1,9 +1,5 @@
-import numpy as np 
 
-cue = np.zeros(2)
-
-tlist = [1,2,3,4,5]
-relist = [tlist[:2], tlist[-2:]]
-
-print(tlist[:2])
-print(relist)
+fix_value = 2
+value = 1
+for i in range(0, 10, 2):
+    print(i)

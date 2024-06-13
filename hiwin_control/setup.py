@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'arm_controller = hiwin_control.arm_controller:main',
+            'stream_rs = hiwin_control.stream_rs:main',
         ],
     },
 )
