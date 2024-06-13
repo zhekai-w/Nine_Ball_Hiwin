@@ -14,8 +14,6 @@ import numpy as np
 import math
 import quaternion as qtn
 import hiwin_control.transformations as transformations
-import hiwin_control.tableball as table
-# import hiwin_control.just_pool_think0524 as table2
 import hiwin_control.nine_ball_strat as table2
 import matplotlib.pyplot as plt
 
