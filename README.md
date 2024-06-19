@@ -12,7 +12,7 @@ This package requires a system setup with ROS2. It is recommended to use **Ubunt
 
 To make sure that program isn't affected by python version, it is highly recommended to use a docker, 
 we have build a environment that all Requirement for this package is build, 
-See the [ubuntu-docker](https://github.com/errrr0501/ubuntu20.04_docker) on information how to set this up.
+See the [ubuntu-docker](https://github.com/errrr0501/ubuntu22.04_ros2.git) on information how to set this up.
 
 # Getting start
 ## Building
@@ -55,3 +55,26 @@ ros2 run py_pubsub strategy_client
 # or run example strategy
 python3 src/Hiwin_libmodbus/hiwin_example/hiwin_example/strategy_example.py
 ```
+
+## Run Nine Ball Script
+
+```bash
+
+# Stream video for YOLO detection
+ros2 run hiwin_control stream_rs
+# Or
+ros2 launch realsense2_camera rs_launch.py rgb_camera.color_profile:=1920x1080x30
+
+# Launch YOLOv7 object detection
+ros2 launch yolov7_obj_detect object_detection_launch.py 
+
+# Publish YOLOv7 detected bounding boxes
+ros2 run center publisher_dection_boxes
+
+# Connect to Hiwin Robot
+ros2 run hiwin_libmodbus hiwinlibmodbus_server
+
+# Run Nine ball strategy/controller
+ros2 run hiwin_control arm_controller
+```
+
