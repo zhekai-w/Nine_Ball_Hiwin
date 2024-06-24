@@ -33,11 +33,13 @@ tableheight = 932 #914
 
 # [1.5683861280265246, -0.0021305364693475553, -3.056812207597806]
 FIX_ABS_CAM = [36.326, 376.998, 411.897, 180.0, 0.0, 90.0]
+FIX_ABS_RIGHT_CAM = [186.326, 376.998, 411.897, 180.0, 0.0, 90.0]
+FIX_ABS_LEFT_CAM = [-114.326, 376.998, 411.897, 180.0, 0.0, 90.0]
 # tool_to_cam = [-34.829, 126.788, -66.624]
 tool_to_cam = [-36.715, 77.5046, -68.49]
 
-# CAM_TO_TABLE = 481
-CAM_TO_TABLE = 500
+CAM_TO_TABLE = 480
+# CAM_TO_TABLE = 500
 CALI_HIGHT = 80.0
 
 
@@ -179,7 +181,7 @@ class Hiwin_Controller(Node):
         self.target_cue = []
         self.all_label = []
         self.label_buffer = []
-        self.fix_z = 80.0
+        self.fix_z = 90.
         self.table_z = FIX_ABS_CAM[2] + tool_to_cam[2] - CAM_TO_TABLE
     
     # def strategy_callback(self, msg):
@@ -236,8 +238,7 @@ class Hiwin_Controller(Node):
                 digital_output_pin = LIGHT_PIN
             )
             self.call_hiwin(req)
-            self.fix_check_point = FIX_ABS_CAM
-            self.fix_check_point[0] = self.fix_check_point[0] + 150.0
+            self.fix_check_point = FIX_ABS_RIGHT_CAM
             pose = Twist()
             [pose.linear.x, pose.linear.y, pose.linear.z] = self.fix_check_point[0:3]
             [pose.angular.x, pose.angular.y, pose.angular.z] = self.fix_check_point[3:6]
@@ -260,8 +261,7 @@ class Hiwin_Controller(Node):
                 digital_output_pin = LIGHT_PIN
             )
             self.call_hiwin(req)
-            self.fix_check_point = FIX_ABS_CAM
-            self.fix_check_point[0] = self.fix_check_point[0] - 150.0
+            self.fix_check_point = FIX_ABS_LEFT_CAM
             pose = Twist()
             [pose.linear.x, pose.linear.y, pose.linear.z] = self.fix_check_point[0:3]
             [pose.angular.x, pose.angular.y, pose.angular.z] = self.fix_check_point[3:6]
@@ -550,9 +550,9 @@ class Hiwin_Controller(Node):
             self.get_logger().info('GOING TO HIT BALL...')
             pose = Twist()
             if self.obstacle == 0:
-                [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx, self.hitpointy, -130.]
+                [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx, self.hitpointy, -112.]
             else:
-                [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx, self.hitpointy, -112.642]
+                [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx, self.hitpointy, -106.642]
             [pose.angular.x, pose.angular.y, pose.angular.z] = self.current_pose[3:6]
             req = self.generate_robot_request(
                 cmd_mode = RobotCommand.Request.PTP,
@@ -566,10 +566,12 @@ class Hiwin_Controller(Node):
                 nest_state = None
         
         elif state == States.HITBALL:
-            if self.score <= 3000 or self.score == 0:
+            if self.score <= 2000 or self.score == 0:
                 hitpin = HITHEAVY_PIN
-            else:
+            elif self.score > 2000 and self.score <=4000:
                 hitpin = HITMID_PIN
+            else:
+                hitpin = HITSOFT_PIN
             # input("Press Enter to Hitball")
             self.get_logger().info('OPEN PIN TO HIT BALL')
             print("hit pin IO:", hitpin)

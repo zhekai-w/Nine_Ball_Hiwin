@@ -553,11 +553,12 @@ def main(objectballx, objectbally, cuex, cuey):
         plt.axis([0, tablewidth, 0, tableheight])
         plt.axis("equal")
         plt.show(block=False)
-        # input("Enter to continue...")
+        input("Enter to continue...")
         plt.pause(0.5)
         plt.cla()
 
         return [score, cuetotarget_v[0], cuetotarget_v[1], obstacle_flag, hitpoint[0], hitpoint[1]]
+        # [score, cuetotarget_v[0], cuetotarget_v[1], obstacle_flag, hitpoint[0], hitpoint[1]]
 
     else:
         print("No valid simple route")
@@ -734,7 +735,7 @@ def main(objectballx, objectbally, cuex, cuey):
         plt.axis([0, tablewidth, 0, tableheight])
         plt.axis("equal")
         plt.show(block=False)
-        # input("Enter to continue...")
+        input("Enter to continue...")
         plt.pause(0.5)
         plt.cla()
         
