@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import time
+
+from matplotlib import tempfile
 import rclpy
 from enum import Enum
 from threading import Thread
@@ -39,7 +41,6 @@ FIX_ABS_LEFT_CAM = [-114.326, 376.998, 411.897, 180.0, 0.0, 90.0]
 tool_to_cam = [-36.715, 77.5046, -68.49]
 
 CAM_TO_TABLE = 480
-# CAM_TO_TABLE = 500
 CALI_HIGHT = 80.0
 
 
@@ -79,7 +80,7 @@ def check_mid_pose(all_ball_pose):
 
     return mid_x, mid_y
 
-def mid_point_error(mid_ball: list) -> list:
+def mid_point_error(mid_ball: list) -> float:
     dev_x = mid_ball[0] - 1920/2
     dev_y = mid_ball[1] - 1080/2
     mid_error = math.sqrt((dev_x)**2+(dev_y)**2)
@@ -183,7 +184,7 @@ class Hiwin_Controller(Node):
         self.label_buffer = []
         self.fix_z = 90.
         self.table_z = FIX_ABS_CAM[2] + tool_to_cam[2] - CAM_TO_TABLE
-    
+
     # def strategy_callback(self, msg):
     #     _ = msg.data
 
@@ -195,12 +196,29 @@ class Hiwin_Controller(Node):
         self.target_cue = [self.all_ball_pose[:2], self.all_ball_pose[-2:]]
         # self.cue = self.all_ball_pose[-2:]
         # self.target_ball = self.all_ball_pose[:2]
-         
+
 
     def _state_machine(self, state: States) -> States:
         if state == States.INIT:
-            self.get_logger().info('INIT/TURNING LIGHTS ON')
-
+            """
+            need to place arm in initial position.
+            1) first joint 90 degrees to the left or right
+            2) fifth joint is on top of first joint
+            """
+            self.get_logger().info('INIT/WAIT FOR BUTTON')
+            req = self.generate_robot_request(
+                cmd_mode = RobotCommand.Request.READ_ID,
+                digital_input_pin = 1
+            )
+            res = self.call_hiwin(req)
+            last_state = res.digital_state
+            while True:
+                res = self.call_hiwin(req)
+                current_state = res.digital_state
+                if current_state != last_state:
+                    break
+                else:
+                    continue
             nest_state = States.MOVE_TO_PHOTO_POSE
 
         elif state == States.MOVE_TO_PHOTO_POSE:
@@ -208,7 +226,7 @@ class Hiwin_Controller(Node):
             self.updated_target_cue = []
             self.index = 0
 
-            self.get_logger().info('MOVING TO CAMERA POSE...')
+            self.get_logger().info('TUNING LIGHTS ON/MOVING TO CAMERA POSE...')
             req = self.generate_robot_request(
                 cmd_mode = RobotCommand.Request.DIGITAL_OUTPUT,
                 digital_output_cmd = RobotCommand.Request.DIGITAL_ON,
@@ -288,11 +306,11 @@ class Hiwin_Controller(Node):
                 self.ball_pose[1] = temp_actual_pose
                 self.fix_check_point = FIX_ABS_CAM
                 nest_state = States.DYNAMIC_CALI
-        
+
             else:
                 print("MOVING TO FIX LEFT POSE...")
                 nest_state = States.FIX_LEFT_PHOTO_POSE
-            
+
         elif state == States.LOCK_INFO:
             time.sleep(1)
             self.ball_pose = []
@@ -320,8 +338,8 @@ class Hiwin_Controller(Node):
                     self.ball_pose.append(temp_actual_pose[0:2])
                 nest_state = States.FIX_RIGHT_PHOTO_POSE
 
-            
-          
+
+
 
         elif state == States.DYNAMIC_CALI:
             Kp = 0.25 # Proportion constant, P controller
@@ -341,7 +359,6 @@ class Hiwin_Controller(Node):
                 # change
                 [pose.angular.x, pose.angular.y, pose.angular.z] = FIX_ABS_CAM[3:6]
                 print("Pose:", pose)
-                # input("Press Enter to continue...")
 
                 req = self.generate_robot_request(
                     cmd_mode = RobotCommand.Request.DIGITAL_OUTPUT,
@@ -359,26 +376,22 @@ class Hiwin_Controller(Node):
                     print("START DYNAMIC CALIBRATION")
 
                 req = self.generate_robot_request(cmd_mode=RobotCommand.Request.CHECK_POSE)
-                res = self.call_hiwin(req)
-                second_photo = res.current_position 
+                rse= self.call_hiwin(req)
+                second_photo = res.current_position
 
-                while True:    
-                    # req = self.generate_robot_request(cmd_mode=RobotCommand.Request.CHECK_POSE)
-                    # res = self.call_hiwin(req)
-                    # second_photo = res.current_position 
-
+                while True:
                     mid_x, mid_y = check_mid_pose(self.all_ball_pose)
                     mid_error = mid_point_error([mid_x, mid_y])
                     ball_relative_cam = pixel_mm_convert(self.fix_z - abs(tool_to_cam[2]) + abs(self.table_z), [mid_x, mid_y])
 
                     # mid_error = mid_point_error(self.target_cue[self.index])
                     # ball_relative_cam = pixel_mm_convert(self.fix_z - abs(tool_to_cam[2]) + abs(self.table_z), self.target_cue[self.index])
-                    
+
                     [pose.linear.x, pose.linear.y, pose.linear.z] = [second_photo[0] + Kp*ball_relative_cam[0],
                                                                     second_photo[1] - Kp*ball_relative_cam[1],
                                                                     self.fix_z]
                     [pose.angular.x, pose.angular.y, pose.angular.z] = FIX_ABS_CAM[3:6]
-                    
+
                     # input("Press Enter to continue...")
                     req = self.generate_robot_request(
                     cmd_mode=RobotCommand.Request.PTP,
@@ -394,7 +407,7 @@ class Hiwin_Controller(Node):
                     if abs(mid_error) <= 3:
                         # cv2.destroyAllWindows()
                         break
-                
+
                 # update ball position
                 ball_relative_cam = pixel_mm_convert(self.fix_z - abs(tool_to_cam[2]) + abs(self.table_z), self.target_cue[self.index])
                 req = self.generate_robot_request(cmd_mode=RobotCommand.Request.CHECK_POSE)
@@ -402,14 +415,14 @@ class Hiwin_Controller(Node):
                 update_ball = res.current_position
                 self.updated_target_cue.append(update_ball[0] + tool_to_cam[0] + ball_relative_cam[0])
                 self.updated_target_cue.append(update_ball[1] + tool_to_cam[1] - ball_relative_cam[1])
-               
+
                 self.index += 1
 
                 if res.arm_state == RobotCommand.Response.IDLE and self.index < len(self.target_cue):
                     nest_state = States.DYNAMIC_CALI
                 else:
                     nest_state = States.OPEN_SEC_IO
-        
+
         elif state == States.OPEN_SEC_IO:
             self.get_logger().info('Opening second IO\n')
             req = self.generate_robot_request(
@@ -423,7 +436,7 @@ class Hiwin_Controller(Node):
                 nest_state = States.STRATEGY
             else:
                 nest_state = None
-                
+
         elif state == States.STRATEGY:
             req = self.generate_robot_request(
                 cmd_mode = RobotCommand.Request.DIGITAL_OUTPUT,
@@ -435,7 +448,7 @@ class Hiwin_Controller(Node):
             actual_y = []
             self.get_logger().info('UPDATE BALL POSITION')
             for i in range(0, len(self.ball_pose_buffer), 2):
-                i_rela_to_cam = pixel_mm_convert(CAM_TO_TABLE, self.ball_pose_buffer[i:i+2]) 
+                i_rela_to_cam = pixel_mm_convert(CAM_TO_TABLE, self.ball_pose_buffer[i:i+2])
                 actual_ball_pose = convert_arm_pose(i_rela_to_cam, FIX_ABS_CAM)
                 actual_x.append(actual_ball_pose[0])
                 actual_y.append(actual_ball_pose[1])
@@ -450,37 +463,18 @@ class Hiwin_Controller(Node):
             actual_y[-1] =  self.updated_target_cue[-1]
             print("after cali x:", actual_x)
             print("after cali y:", actual_y)
+            '''
+            check before and after update
+            '''
             ballcount = len(actual_x) - 1
             cuex, cuey = self.updated_target_cue[-2], self.updated_target_cue[-1]
-            
+
             self.get_logger().info('CALCULATE PATH')
-            # table.main return this [bestscore, bestvx, bestvy, countobs, final_self.hitpointx, final_self.hitpointy]
+            # table.main returns -> [bestscore, bestvx, bestvy, countobs, final_self.hitpointx, final_self.hitpointy]
             self.strategy_info = table2.main(actual_x[:-1], actual_y[:-1], cuex, cuey)
             print("strategy info:", self.strategy_info)
-            # for j in range(len(actual_x)-1):
-            #     if j == 0:
-            #         aimpoint = plt.Circle((actual_x[j], actual_y[j]),
-            #                         16, color="green")
-            #     else:
-            #         aimpoint = plt.Circle((actual_x[j], actual_y[j]),
-            #                         16, color="red")
-            #     # plt.text(aimpointx[j],aimpointy[j],j,color='red',fontsize=15)
-            #     plt.gca().add_patch(aimpoint)
-            # plt.gca().add_patch(plt.Circle((cuex, cuey), 16, color='blue'))
-            # plt.gca().add_patch(plt.Circle((self.strategy_info[4], self.strategy_info[5]), 3, color='black'))
-            # # plt.quiver(cuex, cuey,-self.strategy_info[1], -self.strategy_info[2],color='black',units="xy",angles="xy",scale_units="xy",scale=1, width=2,alpha=0.5)
-            # plt.quiver(self.strategy_info[4], self.strategy_info[5],-self.strategy_info[1], -self.strategy_info[2],
-            #            color='black',units="xy",angles="xy",scale_units="xy",scale=1, width=2,alpha=0.5)
-            # plt.title("sim pool table") 
-            # plt.axis([0, tablewidth, 0, tableheight])
-            # # plt.autoscale(enable=True, axis='both', tight=None) 
-            # plt.axis("equal")
-            # plt.show(block=False)
-            # input("Enter to close plot...")
-            # plt.cla()
-            # plt.close()
             nest_state = States.HITPOINT_TOP
-            
+
         elif state == States.HITPOINT_TOP:
             self.score = self.strategy_info[0]
             self.obstacle = self.strategy_info[3]
@@ -565,7 +559,7 @@ class Hiwin_Controller(Node):
                 nest_state = States.HITBALL
             else:
                 nest_state = None
-        
+
         elif state == States.HITBALL:
             if self.score <= 2000 or self.score == 0:
                 hitpin = HITHEAVY_PIN
@@ -633,7 +627,7 @@ class Hiwin_Controller(Node):
                 pose = pose
             )
             res = self.call_hiwin(req)
-            nest_state = States.MOVE_TO_PHOTO_POSE
+            nest_state = States.INIT
             # if res.arm_state == RobotCommand.Response.IDLE:
             #     nest_state = States.MOVE_TO_PHOTO_POSE
             # else:
@@ -668,9 +662,9 @@ class Hiwin_Controller(Node):
                 self.get_logger().error('Wait for service timeout!')
                 return False
         return True
-    
+
     def generate_robot_request(
-            self, 
+            self,
             holding=True,
             cmd_mode=RobotCommand.Request.PTP,
             cmd_type=RobotCommand.Request.POSE_CMD,
