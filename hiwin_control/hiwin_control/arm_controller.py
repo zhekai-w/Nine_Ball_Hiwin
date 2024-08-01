@@ -375,7 +375,7 @@ class Hiwin_Controller(Node):
                     print("START DYNAMIC CALIBRATION")
 
                 req = self.generate_robot_request(cmd_mode=RobotCommand.Request.CHECK_POSE)
-                rse= self.call_hiwin(req)
+                res = self.call_hiwin(req)
                 second_photo = res.current_position
 
                 while True:
