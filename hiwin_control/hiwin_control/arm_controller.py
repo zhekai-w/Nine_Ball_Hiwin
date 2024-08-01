@@ -294,6 +294,7 @@ class Hiwin_Controller(Node):
                 nest_state = None
 
         elif state == States.LOCK_CUE:
+            
             time.sleep(0.3)
             self.get_logger().info('LOCKING CUE BALL INFO...')
             self.ball_pose_buffer = self.all_ball_pose
