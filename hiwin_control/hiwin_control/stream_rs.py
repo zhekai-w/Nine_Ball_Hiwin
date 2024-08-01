@@ -5,6 +5,45 @@ from cv_bridge import CvBridge
 import pyrealsense2 as rs
 import cv2
 import numpy as np
+import os
+import configparser
+
+def read_camera_config(filepath):
+    camera_matrix = None
+    dist_coeffs = None
+    config = configparser.ConfigParser()
+    config.read(filepath)
+    try:
+        # Read camera matrix
+        cm = config['Intrinsic']
+        camera_matrix = np.array([
+            [float(cm['0_0']), float(cm['0_1']), float(cm['0_2'])],
+            [float(cm['1_0']), float(cm['1_1']), float(cm['1_2'])],
+            [0, 0, 1]
+        ])
+
+        # Read distortion coefficient
+        dc = config['Distortion']
+        dist_coeffs = np.array(
+            [float(dc['k1']), float(dc['k2']), float(dc['t1']), float(dc['t2']), float(dc['k3'])]
+        )
+    except configparser.Error as e:
+        print(e)
+    return camera_matrix, dist_coeffs
+
+def undistort_image(image, camera_matrix, dist_coeffs):
+    """
+    Undistort an image using camera calibration parameters
+    param image: Input image
+    param camera_matrix: Camera matrix
+    param dist_coeffs: Distortion ceofficients
+    return: Undistorted image
+    """
+    h, w = image.shape[:2]
+
+    new_camera_matrix,  roi = cv2.getOptimalNewCameraMatrix(camera_matrix, dist_coeffs, (w, h), 1, (w, h))
+    undistorted = cv2.undistort(image, camera_matrix, dist_coeffs, None, new_camera_matrix)
+    return undistorted
 
 class ImagePublisher(Node):
     def __init__(self):
@@ -35,6 +74,11 @@ class ImagePublisher(Node):
         # Initialize CvBridge
         self.bridge = CvBridge()
 
+        # Read camera_calibration.ini
+        current_dir = os.getcwd()
+        filepath = current_dir + '/camera_calibration.ini'
+        self.camera_matrix, self.dist_coeffs = read_camera_config(filepath)
+
     def timer_callback(self):
         # Get the frames
         frames = self.pipeline.wait_for_frames()
@@ -47,8 +91,11 @@ class ImagePublisher(Node):
         # Convert to numpy array and resize
         color_image = np.asanyarray(color_frame.get_data())
 
+        # Undistort image
+        undistort = undistort_image(color_image, self.camera_matrix, self.dist_coeffs)
+
         # Create and publish the image message
-        msg = self.bridge.cv2_to_imgmsg(color_image, encoding="bgr8")
+        msg = self.bridge.cv2_to_imgmsg(undistort, encoding="bgr8")
         msg.header.stamp = self.get_clock().now().to_msg()
         self.publisher_.publish(msg)
 

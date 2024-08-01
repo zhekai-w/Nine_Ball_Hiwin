@@ -25,11 +25,11 @@ rb = 20
 TOP_LEFT = [-311.196, 612.0]
 
 #define hole locations and aiming point
-holex =     [TOP_LEFT[0],            TOP_LEFT[0],            TOP_LEFT[0]+tablewidth/2, 
+holex =     [TOP_LEFT[0],            TOP_LEFT[0],            TOP_LEFT[0]+tablewidth/2,
              TOP_LEFT[0]+tablewidth, TOP_LEFT[0]+tablewidth, TOP_LEFT[0]+tablewidth/2]
-holey =     [TOP_LEFT[1],             TOP_LEFT[1]-tableheight, TOP_LEFT[1]-tableheight,  
+holey =     [TOP_LEFT[1],             TOP_LEFT[1]-tableheight, TOP_LEFT[1]-tableheight,
              TOP_LEFT[1]-tableheight, TOP_LEFT[1],             TOP_LEFT[1]]
-aimpointx = [TOP_LEFT[0]+r,            TOP_LEFT[0]+r,            TOP_LEFT[0]+tablewidth/2, 
+aimpointx = [TOP_LEFT[0]+r,            TOP_LEFT[0]+r,            TOP_LEFT[0]+tablewidth/2,
              TOP_LEFT[0]+tablewidth-r, TOP_LEFT[0]+tablewidth-r, TOP_LEFT[0]+tablewidth/2]
 aimpointy = [TOP_LEFT[1]-r,             TOP_LEFT[1]-tableheight+r, TOP_LEFT[1]-tableheight+r,
              TOP_LEFT[1]-tableheight+r, TOP_LEFT[1]-r,             TOP_LEFT[1]-r]
@@ -54,7 +54,7 @@ def generateballs(number_of_objectballs):
     cuex = round(cuex, 2)
     cuey = random.uniform(aimpointy[0], aimpointy[1])
     cuey = round(cuey, 2)
- 
+
 
     # generate cue ball location
     objectballx = []
@@ -73,7 +73,7 @@ def ballinhole(ballx, bally):
         x, y, z= disandvec(holex[i], holey[i], ballx, bally)
         balltohole.append(x)
     mindis = min(balltohole)
-    return mindis 
+    return mindis
 
 #CALCULATE VOCTOR TO DOT DISTANCE
 def dottovector(fromdotx, fromdoty, vectorx, vectory, dotx, doty):
@@ -92,7 +92,7 @@ def dottovector(fromdotx, fromdoty, vectorx, vectory, dotx, doty):
         return normallengh#, normalvectorx, normalvectory, shadowx, shadowy
     else:
         return -1
-    
+
 def findhitpoint(ballx, bally, vectorx, vectory):
     vectorlengh = math.sqrt(abs(vectorx)**2+abs(vectory)**2)
     x = vectorx*2*r/vectorlengh
@@ -112,8 +112,8 @@ def hitpoint(ballx, bally, vectorx, vectory):
 def outofbound(hitx, hity):
     checkhitxplus = hitx + r
     checkhityplus = hity + r
-    checkhitxminus = hitx - r 
-    checkhityminus = hity - r 
+    checkhitxminus = hitx - r
+    checkhityminus = hity - r
     if checkhitxplus > holex[3] or checkhityplus > holey[0] or checkhitxminus < holex[0] or checkhityminus < holey[1]:
         hitoutbound = 1
     else:
@@ -136,7 +136,7 @@ def end_effector_mask(ballx, bally, vectorx, vectory):
     return first_poly, second_poly, third_poly, fourth_poly
 
 
-def check_obstacle(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally):   
+def check_obstacle(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally):
     # polygon
     points_inside = []
     obstacle_flag = 0
@@ -148,7 +148,7 @@ def check_obstacle(first_poly, second_poly, third_poly, fourth_poly, objectballx
     table_line_2 = [(holex[4], holey[4]), (holex[3], holey[3])]
     table_line_3 = [(holex[1], holey[1]),(holex[3], holey[3])]
     table_line_4 = [(holex[0], holey[0]), (holex[1], holey[1])]
-    #check table intersect with polygon 
+    #check table intersect with polygon
     line1 = LineString(table_line_1)
     line2 = LineString(table_line_2)
     line3 = LineString(table_line_3)
@@ -167,28 +167,28 @@ def check_obstacle(first_poly, second_poly, third_poly, fourth_poly, objectballx
             obstacle_flag = 1
     return obstacle_flag, points_inside
 
-def check_ball_inhole(all_ball_x:list, all_ball_y:list): 
+def check_ball_inhole(all_ball_x:list, all_ball_y:list):
     inholeindex = []
     n = len(all_ball_x)
     for i in range(0,n): #because cue ball is in objectball[-1]
         distohole = ballinhole(all_ball_x[i], all_ball_y[i])
         if distohole < rb:
-            print("objectball[%d] is in hole\n"%i)    
+            print("objectball[%d] is in hole\n"%i)
             inholeindex.append(i)
-            # print("objectball[%d] is deleted\n"%i)    
+            # print("objectball[%d] is deleted\n"%i)
         else:
-            print("objectball[%d] is out of hole\n"%i) 
+            print("objectball[%d] is out of hole\n"%i)
 
     for j in range(0, len(inholeindex)):
         del all_ball_x[inholeindex[j]]
         del all_ball_y[inholeindex[j]]
-        print("objectball[%d] is deleted\n"%j) 
+        print("objectball[%d] is deleted\n"%j)
     return all_ball_x, all_ball_y
 
 def angle_between_vector(v1, v2):
     v1_u = v1 / np.linalg.norm(v1)  # Unit vector of v1
     v2_u = v2 / np.linalg.norm(v2)  # Unit vector of v2
-    theta_radians = np.arccos(np.clip(np.dot(v1_u, v2_u), -1.0, 1.0)) 
+    theta_radians = np.arccos(np.clip(np.dot(v1_u, v2_u), -1.0, 1.0))
     return np.degrees(theta_radians)
 
 def vector_mask(ballx, bally, vectorx, vectory):
@@ -284,9 +284,9 @@ class ReflectPointsVectors:
                                                self.target_hitpoint_x[i] - self.aimpointx[3],
                                                self.target_hitpoint_y[i] - reflect_point_y])
 
-def simple_route(cue=[0, 0], cuetoivector=[0, 0], itok2vector=[0, 0] ,k2tok1vector=[0, 0], toholevector=[0, 0],n=0): 
-    #fix cuefinalvector 
-    
+def simple_route(cue=[0, 0], cuetoivector=[0, 0], itok2vector=[0, 0] ,k2tok1vector=[0, 0], toholevector=[0, 0],n=0):
+    #fix cuefinalvector
+
     if n == 0 or n == -1:
         if n == 0:
             cuefinalvector = [cuetoivector[0]-toholevector[0], cuetoivector[1]-toholevector[1]]
@@ -302,14 +302,14 @@ def simple_route(cue=[0, 0], cuetoivector=[0, 0], itok2vector=[0, 0] ,k2tok1vect
             itohL = math.sqrt(abs(toholevector[0])**2+abs(toholevector[1])**2)
             dotproduct0 = cuetoivector[0]*toholevector[0] + cuetoivector[1]*toholevector[1]
             score = -6000.0
-        
+
     elif n == 1:
         cuefinalvector = [cuetoivector[0]-itok2vector[0],cuetoivector[1]-itok2vector[1]]
         cuetoiL = math.sqrt(abs(cuetoivector[0])**2+abs(cuetoivector[1])**2)
         itok2L = math.sqrt(abs(itok2vector[0])**2+abs(itok2vector[1])**2)
         k2toholeL = math.sqrt(abs(toholevector[0])**2+abs(toholevector[1])**2)
         angle0 = math.acos((cuetoivector[0]*itok2vector[0]+cuetoivector[1]*itok2vector[1])/(cuetoiL*itok2L))
-        angle1 = math.acos((itok2vector[0]*toholevector[0]+itok2vector[1]*toholevector[1])/(k2toholeL*itok2L))      
+        angle1 = math.acos((itok2vector[0]*toholevector[0]+itok2vector[1]*toholevector[1])/(k2toholeL*itok2L))
         score = (-angle0*1273 + 2000)/2 + (-angle1*1273 + 2000)/2 + (- 3.16*(cuetoiL+itok2L+k2toholeL) + 2000)  + (-n*1000 + 2000)
 
     elif n == 2:
@@ -333,7 +333,7 @@ def reflected_route(cue, cue_to_wall_v, wall_to_target_v, target_to_aim_v):
     target_to_aim_dis = math.sqrt(abs(target_to_aim_v[0])**2+abs(target_to_aim_v[1])**2)
     angle0 = angle_between_vector(cue_to_wall_v, wall_to_target_v)
     angle1 = angle_between_vector(wall_to_target_v, target_to_aim_v)
-    score =  (-angle0*1273 + 2000)/2 + (-angle1*1273 + 2000)/2 + (- 3.16*(cue_to_wall_dis+wall_to_target_dis+target_to_aim_dis) + 2000) 
+    score =  (-angle0*1273 + 2000)/2 + (-angle1*1273 + 2000)/2 + (- 3.16*(cue_to_wall_dis+wall_to_target_dis+target_to_aim_dis) + 2000)
     final_hitpoint_x, final_hitpoint_y = hitpoint(cue[0], cue[1], cue_to_wall_v[0], cue_to_wall_v[1])
 
     return score, cue_to_wall_v, [final_hitpoint_x, final_hitpoint_y]
@@ -379,7 +379,7 @@ def DISPLAY_POOL_TABLE(objectballx, objectbally, cuex, cuey) -> None:
     plt.plot([holex[0],holex[1]],[holey[0],holey[1]],[holex[1],holex[2]],[holey[1],holey[2]],
              [holex[2],holex[3]],[holey[2],holey[3]],[holex[3],holex[4]],[holey[3],holey[4]],
              [holex[4],holex[5]],[holey[4],holey[5]],[holex[5],holex[0]],[holey[5],holey[0]],color='black')
-    
+
     #plot aim point
     for j in range(len(aimpointx)):
         aimpoint = plt.Circle((aimpointx[j], aimpointy[j]),
@@ -397,10 +397,10 @@ def DISPLAY_POOL_TABLE(objectballx, objectbally, cuex, cuey) -> None:
             objectball = plt.Circle((objectballx[i], objectbally[i]), r, color='blue', alpha=0.5)
         plt.text(objectballx[i],objectbally[i],i,fontsize=15)
         plt.gca().add_patch(objectball)
-    
+
     #plot cue ball
     plt.gca().add_patch(plt.Circle((cuex, cuey), r, color='red', alpha=0.5))
-    
+
 
     #plot holes
     for j in range(len(holex)):
@@ -411,7 +411,7 @@ def DISPLAY_POOL_TABLE(objectballx, objectbally, cuex, cuey) -> None:
 
 
 
-def main(objectballx, objectbally, cuex, cuey):
+def main(objectballx, objectbally, cuex, cuey) -> Tuple:
     target_to_aimpoint_x = []
     target_to_aimpoint_y = []
     target_hitpoint_x = []
@@ -438,7 +438,7 @@ def main(objectballx, objectbally, cuex, cuey):
         cue_to_target_x.append(cue_vx)
         cue_to_target_y.append(cue_vy)
 
-        # calculate each routes vectors angle 
+        # calculate each routes vectors angle
         angle = angle_between_vector([target_vx, target_vy], [cue_vx,cue_vy])
         angles.append(angle)
 
@@ -475,7 +475,7 @@ def main(objectballx, objectbally, cuex, cuey):
                     SAVE ROUTE (score, obstacle_flag, hitpoint, vector)
                     """
                     # route(cue=[0, 0], cuetoivector=[0, 0], itok2vector=[0, 0] ,k2tok1vector=[0, 0], toholevector=[0, 0],n=0)
-                    route_info = simple_route(cue=[cuex, cuey], cuetoivector=[cue_to_target_x[i], cue_to_target_y[i]], 
+                    route_info = simple_route(cue=[cuex, cuey], cuetoivector=[cue_to_target_x[i], cue_to_target_y[i]],
                                        toholevector=[target_to_aimpoint_x[i], target_to_aimpoint_y[i]], n=0)
                     All_simple_routes.append(route_info)
 
@@ -483,7 +483,7 @@ def main(objectballx, objectbally, cuex, cuey):
                 elif in_target_aim_obs_number == 1:
                     print("kiss ball")
                     '''
-                    YOU STILL NEED TO CHECK ANGLE
+                    STILL NEED TO CHECK ANGLE
                     '''
                     kiss_aim_dis, kiss_aim_vx, kiss_aim_vy = disandvec(aimpointx[i], aimpointy[i], objectballx[in_target_aim_poly_indices[0]], objectbally[in_target_aim_poly_indices[0]])
                     kiss_hitpoint_x, kiss_hitpoint_y = findhitpoint(objectballx[in_target_aim_poly_indices[0]], objectbally[in_target_aim_poly_indices[0]], kiss_aim_vx, kiss_aim_vy)
@@ -501,17 +501,17 @@ def main(objectballx, objectbally, cuex, cuey):
                             units="xy",angles="xy",scale_units="xy",scale=1, width=2)
                         plt.quiver(cuex, cuey, cue_target_vx, cue_target_vy, color='green',
                             units="xy",angles="xy",scale_units="xy",scale=1, width=2)
-                        
+
                         """
                         SAVE ROUTE (score, obstacle_flag, hitpoint, vector)
                         """
-                        route_info = simple_route(cue=[cuex, cuey], cuetoivector=[cue_target_vx, cue_target_vy], 
+                        route_info = simple_route(cue=[cuex, cuey], cuetoivector=[cue_target_vx, cue_target_vy],
                                        itok2vector=[target_kiss_vx, target_kiss_vy], toholevector=[kiss_aim_vx, kiss_aim_vy], n=1)
                         All_simple_routes.append(route_info)
 
                     else:
                         print("kiss angle is off")
-                
+
                 else:
                     print("Too many balls in between target and aimpoint")
                     print("going for reflect ball")
@@ -530,26 +530,26 @@ def main(objectballx, objectbally, cuex, cuey):
 
     if len(All_simple_routes) > 0:
         # simple_route return this -> score, cuetoivector, [final_hitpoint_x, final_hitpoint_y]
-        
+
         score = []
         for route in All_simple_routes:
             tempscore = route[0]
             score.append(tempscore)
-        
+
         best_route_index = score.index(max(score))
         print("Best Simple Route:", All_simple_routes[best_route_index])
         score, cuetotarget_v, hitpoint = All_simple_routes[best_route_index]
         # check obstacle or outofbound
         out_flag = outofbound(hitpoint[0], hitpoint[1])
         first_poly, second_poly, third_poly, fourth_poly = end_effector_mask(cuex, cuey, cuetotarget_v[0], cuetotarget_v[1])
-        
+
         obstacle_flag, points_in_poly = check_obstacle(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
         obstacle_flag = out_flag or obstacle_flag
         print("obstacle flag:", obstacle_flag)
         DISPLAY_MASK(first_poly, second_poly, third_poly, fourth_poly)
         DISPLAY_OBSTACLE_BALL(who_in_cue_to_target_way, who_in_target_to_aim_way, objectballx, objectbally)
         DISPLAY_POOL_TABLE(objectballx, objectbally, cuex, cuey)
-        plt.title("sim pool table") 
+        plt.title("sim pool table")
         plt.axis([0, tablewidth, 0, tableheight])
         plt.axis("equal")
         plt.show(block=False)
@@ -563,7 +563,7 @@ def main(objectballx, objectbally, cuex, cuey):
     else:
         print("No valid simple route")
         print("Going for reflected route")
-        
+
     reflect_points_vectors = ReflectPointsVectors(target_hitpoint_x, target_hitpoint_y, cuex, cuey, aimpointx, aimpointy)
 
     # Call the method to calculate the reflect points and vectors
@@ -589,7 +589,7 @@ def main(objectballx, objectbally, cuex, cuey):
             cue_top_and_cue_target_angle = angle_between_vector([reflect_top_vectors[i][0], reflect_top_vectors[i][1]], [objectballx[0]-cuex, objectbally[0]-cuey])
             top_target_and_target_aim_angle = angle_between_vector([reflect_top_vectors[i][2], reflect_top_vectors[i][3]], [target_to_aimpoint_x[i], target_to_aimpoint_y[i]])
             if cue_top_and_cue_target_angle < 135 and top_target_and_target_aim_angle < 80:
-                
+
                 first_poly_0_T, second_poly_0_T, third_poly_0_T, fourth_poly_0_T = vector_mask(cuex, cuey, reflect_top_vectors[i][0], reflect_top_vectors[i][1])
                 number_of_obstacle_T, in_poly_indices = check_ball_in_way(first_poly_0_T, second_poly_0_T, third_poly_0_T, fourth_poly_0_T, objectballx, objectbally)
                 if number_of_obstacle_T == 0:
@@ -599,7 +599,7 @@ def main(objectballx, objectbally, cuex, cuey):
                             first_poly_2_T, second_poly_2_T, third_poly_2_T, fourth_poly_2_T = vector_mask(target_hitpoint_x[i], target_hitpoint_y[i], target_to_aimpoint_x[i], target_to_aimpoint_y[i])
                             number_of_obstacle_T, in_poly_indices = check_ball_in_way(first_poly_2_T, second_poly_2_T, third_poly_2_T, fourth_poly_2_T, objectballx, objectbally)
                             if number_of_obstacle_T <= 1:
-                                route_info = reflected_route([cuex, cuey], [reflect_top_vectors[i][0], reflect_top_vectors[i][1]], 
+                                route_info = reflected_route([cuex, cuey], [reflect_top_vectors[i][0], reflect_top_vectors[i][1]],
                                                              [reflect_top_vectors[i][2], reflect_top_vectors[i][3]], [target_to_aimpoint_x[i], target_to_aimpoint_y[i]])
                                 All_reflected_routes.append(route_info)
                                 plt.gca().add_patch(plt.Circle((top_reflect_point_x[i], aimpointy[0]), 3, color='red'))
@@ -613,9 +613,9 @@ def main(objectballx, objectbally, cuex, cuey):
                                 DISPLAY_MASK(first_poly_1_T, second_poly_1_T, third_poly_1_T, fourth_poly_1_T)
                                 DISPLAY_MASK(first_poly_2_T, second_poly_2_T, third_poly_2_T, fourth_poly_2_T)
                 else:
-                    continue                            
-            
-            # bot reflection points and vectors 
+                    continue
+
+            # bot reflection points and vectors
             cue_bot_and_cue_target_angle = angle_between_vector([reflect_bot_vectors[i][0], reflect_bot_vectors[i][1]], [objectballx[0]-cuex, objectbally[0]-cuey])
             bot_target_and_target_aim_angle = angle_between_vector([reflect_bot_vectors[i][2], reflect_bot_vectors[i][3]], [target_to_aimpoint_x[i], target_to_aimpoint_y[i]])
             if cue_bot_and_cue_target_angle < 135 and bot_target_and_target_aim_angle < 80:
@@ -629,7 +629,7 @@ def main(objectballx, objectbally, cuex, cuey):
                             first_poly_2_B, second_poly_2_B, third_poly_2_B, fourth_poly_2_B = vector_mask(target_hitpoint_x[i], target_hitpoint_y[i], target_to_aimpoint_x[i], target_to_aimpoint_y[i])
                             number_of_obstacle_B, in_poly_indices = check_ball_in_way(first_poly_2_B, second_poly_2_B, third_poly_2_B, fourth_poly_2_B, objectballx, objectbally)
                             if number_of_obstacle_B <= 1:
-                                route_info = reflected_route([cuex, cuey], [reflect_bot_vectors[i][0], reflect_bot_vectors[i][1]], 
+                                route_info = reflected_route([cuex, cuey], [reflect_bot_vectors[i][0], reflect_bot_vectors[i][1]],
                                                              [reflect_bot_vectors[i][2], reflect_bot_vectors[i][3]], [target_to_aimpoint_x[i], target_to_aimpoint_y[i]])
                                 All_reflected_routes.append(route_info)
 
@@ -643,11 +643,11 @@ def main(objectballx, objectbally, cuex, cuey):
                                 DISPLAY_MASK(first_poly_0_B, second_poly_0_B, third_poly_0_B, fourth_poly_0_B)
                                 DISPLAY_MASK(first_poly_1_B, second_poly_1_B, third_poly_1_B, fourth_poly_1_B)
                                 DISPLAY_MASK(first_poly_2_B, second_poly_2_B, third_poly_2_B, fourth_poly_2_B)
-                                
+
                 else:
                     continue
-                
-            # left reflection points and vectors 
+
+            # left reflection points and vectors
             cue_left_and_cue_target_angle = angle_between_vector([reflect_left_vectors[i][0], reflect_left_vectors[i][1]], [objectballx[0]-cuex, objectbally[0]-cuey])
             left_target_and_target_aim_angle = angle_between_vector([reflect_left_vectors[i][2], reflect_left_vectors[i][3]], [target_to_aimpoint_x[i], target_to_aimpoint_y[i]])
             if cue_left_and_cue_target_angle < 135 and left_target_and_target_aim_angle < 80:
@@ -661,7 +661,7 @@ def main(objectballx, objectbally, cuex, cuey):
                             first_poly_2_L, second_poly_2_L, third_poly_2_L, fourth_poly_2_L = vector_mask(target_hitpoint_x[i], target_hitpoint_y[i], target_to_aimpoint_x[i], target_to_aimpoint_y[i])
                             number_of_obstacle_L, in_poly_indices = check_ball_in_way(first_poly_2_L, second_poly_2_L, third_poly_2_L, fourth_poly_2_L, objectballx, objectbally)
                             if number_of_obstacle_L <= 1:
-                                route_info = reflected_route([cuex, cuey], [reflect_left_vectors[i][0], reflect_left_vectors[i][1]], 
+                                route_info = reflected_route([cuex, cuey], [reflect_left_vectors[i][0], reflect_left_vectors[i][1]],
                                                              [reflect_left_vectors[i][2], reflect_left_vectors[i][3]], [target_to_aimpoint_x[i], target_to_aimpoint_y[i]])
                                 All_reflected_routes.append(route_info)
 
@@ -678,7 +678,7 @@ def main(objectballx, objectbally, cuex, cuey):
                 else:
                     continue
 
-            # right reflection points and vectors 
+            # right reflection points and vectors
             cue_right_and_cue_target_angle = angle_between_vector([reflect_right_vectors[i][0], reflect_right_vectors[i][1]], [objectballx[0]-cuex, objectbally[0]-cuey])
             right_target_and_target_aim_angle = angle_between_vector([reflect_right_vectors[i][2], reflect_right_vectors[i][3]], [target_to_aimpoint_x[i], target_to_aimpoint_y[i]])
             if  cue_right_and_cue_target_angle< 135 and right_target_and_target_aim_angle < 80:
@@ -692,7 +692,7 @@ def main(objectballx, objectbally, cuex, cuey):
                             first_poly_2_R, second_poly_2_R, third_poly_2_R, fourth_poly_2_R = vector_mask(target_hitpoint_x[i], target_hitpoint_y[i], target_to_aimpoint_x[i], target_to_aimpoint_y[i])
                             number_of_obstacle_R, in_poly_indices = check_ball_in_way(first_poly_2_R, second_poly_2_R, third_poly_2_R, fourth_poly_2_R, objectballx, objectbally)
                             if number_of_obstacle_R <= 1:
-                                route_info = reflected_route([cuex, cuey], [reflect_right_vectors[i][0], reflect_right_vectors[i][1]], 
+                                route_info = reflected_route([cuex, cuey], [reflect_right_vectors[i][0], reflect_right_vectors[i][1]],
                                                              [reflect_right_vectors[i][2], reflect_right_vectors[i][3]], [target_to_aimpoint_x[i], target_to_aimpoint_y[i]])
                                 All_reflected_routes.append(route_info)
 
@@ -709,7 +709,7 @@ def main(objectballx, objectbally, cuex, cuey):
                 else:
                     continue
 
-    
+
 
     if len(All_reflected_routes) > 0:
         # route return this -> score, cue_to_wall_v, [final_hitpoint_x, final_hitpoint_y]
@@ -717,28 +717,28 @@ def main(objectballx, objectbally, cuex, cuey):
         for route in All_reflected_routes:
             tempscore = route[0]
             score.append(tempscore)
-        
+
         print("ALL REFLECTED ROUTE SCORE:", score)
         best_route_index = score.index(max(score))
         print("Best reflected Route:", All_reflected_routes[best_route_index])
         score, cuetoi_v, hitpoint = All_reflected_routes[best_route_index]
-        # check obstacle 
+        # check obstacle
         first_poly, second_poly, third_poly, fourth_poly = end_effector_mask(cuex, cuey, cuetoi_v[0], cuetoi_v[1])
-        # check obstacle or outofbound 
+        # check obstacle or outofbound
         out_flag = outofbound(hitpoint[0], hitpoint[1])
         obstacle_flag, points_in_poly = check_obstacle(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
         print("obstacle flag:", obstacle_flag)
         DISPLAY_MASK(first_poly, second_poly, third_poly, fourth_poly)
         DISPLAY_OBSTACLE_BALL(who_in_cue_to_target_way, who_in_target_to_aim_way, objectballx, objectbally)
         DISPLAY_POOL_TABLE(objectballx, objectbally, cuex, cuey)
-        plt.title("sim pool table") 
+        plt.title("sim pool table")
         plt.axis([0, tablewidth, 0, tableheight])
         plt.axis("equal")
         plt.show(block=False)
         input("Enter to continue...")
         plt.pause(0.5)
         plt.cla()
-        
+
         # return best reflected route
         return [0, cuetoi_v[0], cuetoi_v[1], obstacle_flag, hitpoint[0], hitpoint[1]]
     else:
@@ -748,7 +748,7 @@ def main(objectballx, objectbally, cuex, cuey):
         dis, vx, vy = disandvec(objectballx[0], objectbally[0], cuex, cuey)
         hitpointx, hitpointy = findhitpoint(cuex, cuey, vx, vy)
         first_poly, second_poly, third_poly, fourth_poly = end_effector_mask(cuex, cuey, vx, vy)
-        # check obstacle or outofbound 
+        # check obstacle or outofbound
         out_flag = outofbound(hitpointx, hitpointy)
         obstacle_flag, points_in_poly = check_obstacle(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
         obstacle_flag = obstacle_flag or out_flag
@@ -757,7 +757,7 @@ def main(objectballx, objectbally, cuex, cuey):
         return [0, vx, vy, obstacle_flag, hitpointx, hitpointy]
 
 if __name__ == '__main__':
-      
+
     illogical = 1
     while illogical:
         cuex, cuey, objectballx, objectbally, n = generateballs(5)
@@ -781,17 +781,15 @@ if __name__ == '__main__':
             k=k+1
         print("distance between each balls:",dis)
 
-        flag = 0
         lengh = len(dis)
         mindis = min(dis)
         print("minimum in distance:",mindis)
         for i in range(0,lengh):
             if dis[i] < 2*r and dis[i] != 0:
-                flag = flag + 1
-        if flag == 0:
-            illogical = 0
-        else:
-            illogical = 1
+                illogical = 1
+            else:
+                illogical = 0
+
     #############################
     '''
     objectballx.append(cuex)
