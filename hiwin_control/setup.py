@@ -21,6 +21,11 @@ setup(
     entry_points={
         'console_scripts': [
             'arm_controller = hiwin_control.arm_controller:main',
+            'team_selection = hiwin_control.team_selection:main',
+            'testbeat_arm_controller = hiwin_control.testbeat_arm_controller:main',
+            'nine_arm_controller = hiwin_control.nine_arm_controller:main',
+            'rush_arm_controller = hiwin_control.rush_arm_controller:main',
+            'yyy_arm_controller = hiwin_control.yyy_arm_controller:main',
             'stream_rs = hiwin_control.stream_rs:main',
         ],
     },

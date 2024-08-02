@@ -325,7 +325,6 @@ class Hiwin_Controller(Node):
         elif state == States.LOCK_INFO:
             time.sleep(1)
             self.ball_pose = []
-            input("press enter to lock info...")
             self.get_logger().info('LOCKING INFO FOR STRATEGY AND CALIBRATION...')
             self.ball_pose_buffer = self.all_ball_pose
             self.label_buffer = self.all_label

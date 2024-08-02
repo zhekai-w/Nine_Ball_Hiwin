@@ -76,7 +76,9 @@ class ImagePublisher(Node):
 
         # Read camera_calibration.ini
         current_dir = os.getcwd()
-        filepath = current_dir + '/camera_calibration.ini'
+        print("Current dir", current_dir)
+        filepath = current_dir + '/src/hiwin_control/hiwin_control/camera_calibration.ini'
+        print("filepath", filepath)
         self.camera_matrix, self.dist_coeffs = read_camera_config(filepath)
 
     def timer_callback(self):

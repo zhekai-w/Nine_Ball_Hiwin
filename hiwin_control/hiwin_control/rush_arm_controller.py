@@ -16,8 +16,8 @@ import numpy as np
 import math
 import quaternion as qtn
 import hiwin_control.transformations as transformations
-import hiwin_control.nine_ball_strat as table2
 import matplotlib.pyplot as plt
+import hiwin_control.team_selection as table2
 
 CUE_TOOL = 12
 
@@ -194,7 +194,7 @@ class Hiwin_Controller(Node):
 
     def yolo_callback(self, msg):
         self.all_ball_pose = msg.data
-        self.target_cue = [self.all_ball_pose[:2], self.all_ball_pose[-2:]]
+        self.target_cue = [self.all_ball_pose[:2]]
         # self.cue = self.all_ball_pose[-2:]
         # self.target_ball = self.all_ball_pose[:2]
 
@@ -312,7 +312,7 @@ class Hiwin_Controller(Node):
             self.label_buffer = self.all_label
             if 'white' in self.label_buffer:
                 print("white ball seen")
-                temp_ball_pose_mm = pixel_mm_convert(CAM_TO_TABLE, self.ball_pose_buffer[-2:])
+                temp_ball_pose_mm = pixel_mm_convert(CAM_TO_TABLE, self.ball_pose_buffer[0:2])
                 temp_actual_pose = convert_arm_pose(temp_ball_pose_mm, self.fix_check_point)
                 self.ball_pose[1] = temp_actual_pose
                 self.fix_check_point = FIX_ABS_CAM
@@ -325,11 +325,10 @@ class Hiwin_Controller(Node):
         elif state == States.LOCK_INFO:
             time.sleep(1)
             self.ball_pose = []
-            input("press enter to lock info...")
             self.get_logger().info('LOCKING INFO FOR STRATEGY AND CALIBRATION...')
             self.ball_pose_buffer = self.all_ball_pose
             self.label_buffer = self.all_label
-            self.target_cue = [self.ball_pose_buffer[:2], self.ball_pose_buffer[-2:]]
+            self.target_cue = [self.ball_pose_buffer[:2]]
             print("target and cue:", self.target_cue)
             if 'white' in self.label_buffer:
                 print("Cue ball seen")
@@ -482,7 +481,7 @@ class Hiwin_Controller(Node):
 
             self.get_logger().info('CALCULATE PATH')
             # table.main returns -> [bestscore, bestvx, bestvy, countobs, final_self.hitpointx, final_self.hitpointy]
-            self.strategy_info = table2.main(actual_x[:-1], actual_y[:-1], cuex, cuey)
+            self.strategy_info = table2.main(cuex, cuey)
             print("strategy info:", self.strategy_info)
             nest_state = States.HITPOINT_TOP
 
@@ -520,7 +519,7 @@ class Hiwin_Controller(Node):
             self.hitpointy = self.strategy_info[5]
             vx = self.strategy_info[1]
             vy = self.strategy_info[2]
-            yaw, _ = yaw_angle(vx, vy)
+            yaw, _ = yaw_angle(-vx, vy)
             pose = Twist()
             [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx, self.hitpointy, -70.0]
             if self.obstacle == 0:
@@ -572,12 +571,8 @@ class Hiwin_Controller(Node):
                 nest_state = None
 
         elif state == States.HITBALL:
-            if self.score <= 2000 or self.score == 0:
-                hitpin = HITHEAVY_PIN
-            elif self.score > 2000 and self.score <=4000:
-                hitpin = HITMID_PIN
-            else:
-                hitpin = HITSOFT_PIN
+            hitpin = HITHEAVY_PIN
+
             # input("Press Enter to Hitball")
             self.get_logger().info('OPEN PIN TO HIT BALL')
             print("hit pin IO:", hitpin)

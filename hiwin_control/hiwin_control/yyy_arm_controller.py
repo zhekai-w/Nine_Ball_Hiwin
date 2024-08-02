@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 import time
-
-from matplotlib import tempfile
 import rclpy
 from enum import Enum
 from threading import Thread
@@ -19,30 +17,35 @@ import hiwin_control.transformations as transformations
 import hiwin_control.nine_ball_strat as table2
 import matplotlib.pyplot as plt
 
-CUE_TOOL = 12
+CUE_TOOL = 12 #撞球末段點(製具句換長度)
 
-DEFAULT_VELOCITY = 50
+
+DEFAULT_VELOCITY = 50 #速度(感覺可改成直接可以打的方式)
 DEFAULT_ACCELERATION = 50
 
-LIGHT_PIN = 6
-HITSOFT_PIN = 4
-HITMID_PIN = 5
-HITHEAVY_PIN = 1
-HEAVY_PIN = 2
+LIGHT_PIN = 6 #開控燈
+HITSOFT_PIN = 4 #擊球力道大
+HITMID_PIN = 5 #擊球力道中
+HITHEAVY_PIN = 1 #擊球力道小
+HEAVY_PIN = 2 #充電
+
+#加上控制開關的pin腳P.684
+#igital_input_pin=
 
 tablewidth = 1920
 tableheight = 932 #914
 
 # [1.5683861280265246, -0.0021305364693475553, -3.056812207597806]
-FIX_ABS_CAM = [36.326, 376.998, 411.897, 180.0, 0.0, 90.0]
-FIX_ABS_RIGHT_CAM = [186.326, 376.998, 411.897, 180.0, 0.0, 90.0]
-FIX_ABS_LEFT_CAM = [-114.326, 376.998, 411.897, 180.0, 0.0, 90.0]
+FIX_ABS_CAM = [36.326, 376.998, 411.897, 180.0, 0.0, 90.0] #原本手臂拍照的點位
+FIX_ABS_RIGHT_CAM = [186.326, 376.998, 411.897, 180.0, 0.0, 90.0] #手臂拍照右 x加減150
+FIX_ABS_LEFT_CAM = [-114.326, 376.998, 411.897, 180.0, 0.0, 90.0] #手臂拍照左
 END_TURN_RIGHT = [90.00, 0.00, 0.00, 0.00, -90.00, 0.00] #手臂TURN右
 # tool_to_cam = [-34.829, 126.788, -66.624]
-tool_to_cam = [-36.715, 77.5046, -68.49]
+tool_to_cam = [-36.715, 77.5046, -68.49] #末端點到相機的位移 
 
-CAM_TO_TABLE = 480
-CALI_HIGHT = 80.0
+CAM_TO_TABLE = 480 #相機到桌子的高度 單位:mm
+# CAM_TO_TABLE = 500
+CALI_HIGHT = 80.0 #二次校正的高度
 
 
 class States(Enum):
@@ -65,6 +68,7 @@ class States(Enum):
     FIX_LEFT_PHOTO_POSE = 16
     FIX_RIGHT_PHOTO_POSE = 17
     LOCK_CUE = 18
+    MOVE_TO_REPARE_POSE = 19
 
 def check_mid_pose(all_ball_pose):
     mid_error = []
@@ -81,7 +85,7 @@ def check_mid_pose(all_ball_pose):
 
     return mid_x, mid_y
 
-def mid_point_error(mid_ball: list) -> float:
+def mid_point_error(mid_ball: list) -> list:
     dev_x = mid_ball[0] - 1920/2
     dev_y = mid_ball[1] - 1080/2
     mid_error = math.sqrt((dev_x)**2+(dev_y)**2)
@@ -168,6 +172,7 @@ def convert_arm_pose(ball_pose, arm_pose):
 
     return calibrated_ball_pose
 
+#開始控手臂程式
 class Hiwin_Controller(Node):
     def __init__(self):
         super().__init__('hiwin_controller')
@@ -185,7 +190,7 @@ class Hiwin_Controller(Node):
         self.label_buffer = []
         self.fix_z = 90.
         self.table_z = FIX_ABS_CAM[2] + tool_to_cam[2] - CAM_TO_TABLE
-
+    
     # def strategy_callback(self, msg):
     #     _ = msg.data
 
@@ -198,9 +203,12 @@ class Hiwin_Controller(Node):
         # self.cue = self.all_ball_pose[-2:]
         # self.target_ball = self.all_ball_pose[:2]
 
-
     def _state_machine(self, state: States) -> States:
         if state == States.INIT:
+            self.get_logger().info('INIT/TURNING LIGHTS ON')
+
+            nest_state = States.MOVE_TO_REPARE_POSE
+        elif state == States.MOVE_TO_REPARE_POSE:
             self.get_logger().info('MOVING TO PREPARE POSE...')
             # joints=[float('inf')]*6,
             print("fix cam joint", END_TURN_RIGHT)
@@ -211,63 +219,53 @@ class Hiwin_Controller(Node):
                 #hold=Flase
                 )
             res = self.call_hiwin(req)
-            """
-            need to place arm in initial position.
-            1) first joint 90 degrees to the left or right
-            2) fifth joint is on top of first joint
-            """
-            self.get_logger().info('INIT/WAIT FOR BUTTON')
-            req = self.generate_robot_request(
-                cmd_mode = RobotCommand.Request.READ_DI,
-                digital_input_pin = 1
-            )
-            res = self.call_hiwin(req)
-            last_state = res.digital_state
-            while True:
-                res = self.call_hiwin(req)
-                current_state = res.digital_state
-                if current_state != last_state:
-                    break
-                else:
-                    continue
-            nest_state = States.MOVE_TO_PHOTO_POSE
-
+            if res.arm_state == RobotCommand.Response.IDLE: #讓手臂狀態停止才去做下一件事情
+                nest_state = States.MOVE_TO_PHOTO_POSE #存一份topic傳送來的資料
+                print("fix cam pose", States)
+            else:
+                nest_state = None
         elif state == States.MOVE_TO_PHOTO_POSE:
             # value need to be reset every time
             self.updated_target_cue = []
             self.index = 0
 
-            self.get_logger().info('TUNING LIGHTS ON/MOVING TO CAMERA POSE...')
+            self.get_logger().info('MOVING TO CAMERA POSE...')
+            #用到下面generate_robot_reques就要這樣做
+            #這裡主要較手臂開燈
             req = self.generate_robot_request(
                 cmd_mode = RobotCommand.Request.DIGITAL_OUTPUT,
                 digital_output_cmd = RobotCommand.Request.DIGITAL_ON,
                 digital_output_pin = LIGHT_PIN
             )
-            self.call_hiwin(req)
-            pose = Twist()
+            self.call_hiwin(req) #把上面一整個設定給手臂 call_hiwin
+            pose = Twist() #給值之前一定初始化資料型態
             [pose.linear.x, pose.linear.y, pose.linear.z] = FIX_ABS_CAM[0:3]
             [pose.angular.x, pose.angular.y, pose.angular.z] = FIX_ABS_CAM[3:6]
             print("fix cam pose", FIX_ABS_CAM)
             req = self.generate_robot_request(
                 cmd_mode = RobotCommand.Request.PTP,
                 pose = pose
+                #不想讓手臂停止才做事(下面if/else不用，直接給下一步的狀態就好)
+                #hold=Flase
                 )
             res = self.call_hiwin(req)
-            if res.arm_state == RobotCommand.Response.IDLE:
-                nest_state = States.LOCK_INFO
+            if res.arm_state == RobotCommand.Response.IDLE: #讓手臂狀態停止才去做下一件事情
+                nest_state = States.LOCK_INFO #存一份topic傳送來的資料
+                print("fix cam pose", States)
             else:
                 nest_state = None
-
+        #如果去右邊看球
         elif state == States.FIX_RIGHT_PHOTO_POSE:
             self.fix_check_point = []
             self.get_logger().info('MOVING TO RIGHT PHOTO POSE...')
+            #開燈
             req = self.generate_robot_request(
                 cmd_mode = RobotCommand.Request.DIGITAL_OUTPUT,
                 digital_output_cmd = RobotCommand.Request.DIGITAL_ON,
                 digital_output_pin = LIGHT_PIN
             )
             self.call_hiwin(req)
-            self.fix_check_point = FIX_ABS_RIGHT_CAM
+            self.fix_check_point = FIX_ABS_RIGHT_CAM #把右邊的點位給手臂
             pose = Twist()
             [pose.linear.x, pose.linear.y, pose.linear.z] = self.fix_check_point[0:3]
             [pose.angular.x, pose.angular.y, pose.angular.z] = self.fix_check_point[3:6]
@@ -277,7 +275,7 @@ class Hiwin_Controller(Node):
                 )
             res = self.call_hiwin(req)
             if res.arm_state == RobotCommand.Response.IDLE:
-                nest_state = States.LOCK_CUE
+                nest_state = States.LOCK_CUE #把白球點位鎖住
             else:
                 nest_state = None
 
@@ -303,9 +301,8 @@ class Hiwin_Controller(Node):
                 nest_state = States.LOCK_CUE
             else:
                 nest_state = None
-
+        #如果鎖定到球就去做動態較正
         elif state == States.LOCK_CUE:
-            
             time.sleep(0.3)
             self.get_logger().info('LOCKING CUE BALL INFO...')
             self.ball_pose_buffer = self.all_ball_pose
@@ -317,29 +314,31 @@ class Hiwin_Controller(Node):
                 self.ball_pose[1] = temp_actual_pose
                 self.fix_check_point = FIX_ABS_CAM
                 nest_state = States.DYNAMIC_CALI
-
+        
             else:
                 print("MOVING TO FIX LEFT POSE...")
                 nest_state = States.FIX_LEFT_PHOTO_POSE
-
+            
         elif state == States.LOCK_INFO:
             time.sleep(1)
             self.ball_pose = []
-            input("press enter to lock info...")
+            # input("press enter to lock info...")
             self.get_logger().info('LOCKING INFO FOR STRATEGY AND CALIBRATION...')
-            self.ball_pose_buffer = self.all_ball_pose
+            self.ball_pose_buffer = self.all_ball_pose #所有按照順序
             self.label_buffer = self.all_label
-            self.target_cue = [self.ball_pose_buffer[:2], self.ball_pose_buffer[-2:]]
+            self.target_cue = [self.ball_pose_buffer[:2], self.ball_pose_buffer[-2:]] #x,y,x,y擺第一顆球和最後一個球
             print("target and cue:", self.target_cue)
+            #確認是否有白球
             if 'white' in self.label_buffer:
                 print("Cue ball seen")
                 for target in self.target_cue:
                     print("target:", target)
-                    temp_ball_pose_mm = pixel_mm_convert(CAM_TO_TABLE, target)
-                    temp_actual_pose = convert_arm_pose(temp_ball_pose_mm, FIX_ABS_CAM)
+                    #相機點位轉到手臂點位:做temp的動作
+                    temp_ball_pose_mm = pixel_mm_convert(CAM_TO_TABLE, target) #從球相對相機點位
+                    temp_actual_pose = convert_arm_pose(temp_ball_pose_mm, FIX_ABS_CAM) #手臂的姿態轉換為手臂的點位
                     self.ball_pose.append(temp_actual_pose[0:2])
                 nest_state = States.DYNAMIC_CALI
-
+            #沒有白球
             else:
                 print("Fuck Cue ball")
                 for target in self.target_cue:
@@ -349,34 +348,38 @@ class Hiwin_Controller(Node):
                     self.ball_pose.append(temp_actual_pose[0:2])
                 nest_state = States.FIX_RIGHT_PHOTO_POSE
 
-
-
-
+            
+          
+        #開始做動態校正
         elif state == States.DYNAMIC_CALI:
             Kp = 0.25 # Proportion constant, P controller
+            #這裡把燈關掉
             req = self.generate_robot_request(
                 cmd_mode = RobotCommand.Request.DIGITAL_OUTPUT,
-                digital_output_cmd = RobotCommand.Request.DIGITAL_OFF,
+                digital_output_cmd = RobotCommand.Request.DIGITAL_OFF,#再看看開著官著哪個會比較好
                 digital_output_pin = LIGHT_PIN
             )
             self.call_hiwin(req)
-            if self.index < len(self.target_cue):
+            #開始校正兩顆球(長度小於2)
+            if self.index < len(self.target_cue): #初始index=0;target_cue=>2*2矩正
                 self.get_logger().info('MOVING TO CALIBRATION POSE...')
                 self.get_logger().info('Camera moving to index_{} ball'.format(self.index))
                 pose = Twist()
+                #先看目標球，直直下去看
                 [pose.linear.x, pose.linear.y, pose.linear.z] = [self.ball_pose[self.index][0] - tool_to_cam[0],
                                                                  self.ball_pose[self.index][1] - tool_to_cam[1],
                                                                  self.fix_z]
                 # change
                 [pose.angular.x, pose.angular.y, pose.angular.z] = FIX_ABS_CAM[3:6]
                 print("Pose:", pose)
+                # input("Press Enter to continue...")
 
                 req = self.generate_robot_request(
                     cmd_mode = RobotCommand.Request.DIGITAL_OUTPUT,
                     digital_output_cmd = RobotCommand.Request.DIGITAL_ON,
-                    digital_output_pin = HEAVY_PIN
+                    digital_output_pin = HEAVY_PIN #在動態校正的時候就開始為了擊大力的球充電
                 )
-                res = self.call_hiwin(req)
+                res = self.call_hiwin(req) #手臂開始下去
 
                 req = self.generate_robot_request(
                 cmd_mode=RobotCommand.Request.PTP,
@@ -385,24 +388,33 @@ class Hiwin_Controller(Node):
                 res = self.call_hiwin(req)
                 if res.arm_state == RobotCommand.Response.IDLE:
                     print("START DYNAMIC CALIBRATION")
-
+                
+                #檢查手臂姿態位置 res可以檢查姿態
                 req = self.generate_robot_request(cmd_mode=RobotCommand.Request.CHECK_POSE)
                 res = self.call_hiwin(req)
-                second_photo = res.current_position
+                second_photo = res.current_position 
 
-                while True:
-                    mid_x, mid_y = check_mid_pose(self.all_ball_pose)
+                #進迴圈到誤差值小於多少
+                while True:    
+                    # req = self.generate_robot_request(cmd_mode=RobotCommand.Request.CHECK_POSE)
+                    # res = self.call_hiwin(req)
+                    # second_photo = res.current_position 
+
+                    #check_mid_pose看相機裡面所有球哪一個點離我的相機點位最近
+                    #可以直接改成較傳送出點位的那一顆球(學長好像有試過，好像不行)而且校正都校正對ㄟ
+                    mid_x, mid_y = check_mid_pose(self.all_ball_pose) 
                     mid_error = mid_point_error([mid_x, mid_y])
+                    #傳換成相對於相機相差的長度 
                     ball_relative_cam = pixel_mm_convert(self.fix_z - abs(tool_to_cam[2]) + abs(self.table_z), [mid_x, mid_y])
 
                     # mid_error = mid_point_error(self.target_cue[self.index])
                     # ball_relative_cam = pixel_mm_convert(self.fix_z - abs(tool_to_cam[2]) + abs(self.table_z), self.target_cue[self.index])
-
+                    #x相加y相減
                     [pose.linear.x, pose.linear.y, pose.linear.z] = [second_photo[0] + Kp*ball_relative_cam[0],
                                                                     second_photo[1] - Kp*ball_relative_cam[1],
                                                                     self.fix_z]
                     [pose.angular.x, pose.angular.y, pose.angular.z] = FIX_ABS_CAM[3:6]
-
+                    
                     # input("Press Enter to continue...")
                     req = self.generate_robot_request(
                     cmd_mode=RobotCommand.Request.PTP,
@@ -411,29 +423,32 @@ class Hiwin_Controller(Node):
                     )
                     res = self.call_hiwin(req)
 
-                    second_photo[0] += Kp*ball_relative_cam[0]
+                    second_photo[0] += Kp*ball_relative_cam[0] #kp目前0.25
                     second_photo[1] -= Kp*ball_relative_cam[1]
 
                     # finish calibration condition
-                    if abs(mid_error) <= 3:
+                    if abs(mid_error) <= 3: #誤差小於3跳出點位的動作
                         # cv2.destroyAllWindows()
                         break
-
+                
                 # update ball position
                 ball_relative_cam = pixel_mm_convert(self.fix_z - abs(tool_to_cam[2]) + abs(self.table_z), self.target_cue[self.index])
                 req = self.generate_robot_request(cmd_mode=RobotCommand.Request.CHECK_POSE)
                 res = self.call_hiwin(req)
-                update_ball = res.current_position
-                self.updated_target_cue.append(update_ball[0] + tool_to_cam[0] + ball_relative_cam[0])
-                self.updated_target_cue.append(update_ball[1] + tool_to_cam[1] - ball_relative_cam[1])
-
+                #second_photo代替update_ball
+                self.updated_target_cue.append(second_photo[0] + tool_to_cam[0] + ball_relative_cam[0])
+                self.updated_target_cue.append(second_photo[1] + tool_to_cam[1] - ball_relative_cam[1])
+                #update_ball = res.current_position
+                # #self.updated_target_cue.append(update_ball[0] + tool_to_cam[0] + ball_relative_cam[0])
+                #self.updated_target_cue.append(update_ball[1] + tool_to_cam[1] - ball_relative_cam[1])
+               
                 self.index += 1
 
                 if res.arm_state == RobotCommand.Response.IDLE and self.index < len(self.target_cue):
                     nest_state = States.DYNAMIC_CALI
                 else:
                     nest_state = States.OPEN_SEC_IO
-
+        
         elif state == States.OPEN_SEC_IO:
             self.get_logger().info('Opening second IO\n')
             req = self.generate_robot_request(
@@ -447,7 +462,9 @@ class Hiwin_Controller(Node):
                 nest_state = States.STRATEGY
             else:
                 nest_state = None
-
+         #開始用撞球程式
+         #maybe this is a big trouble 
+         #決策是用手臂坐標系      
         elif state == States.STRATEGY:
             req = self.generate_robot_request(
                 cmd_mode = RobotCommand.Request.DIGITAL_OUTPUT,
@@ -459,7 +476,7 @@ class Hiwin_Controller(Node):
             actual_y = []
             self.get_logger().info('UPDATE BALL POSITION')
             for i in range(0, len(self.ball_pose_buffer), 2):
-                i_rela_to_cam = pixel_mm_convert(CAM_TO_TABLE, self.ball_pose_buffer[i:i+2])
+                i_rela_to_cam = pixel_mm_convert(CAM_TO_TABLE, self.ball_pose_buffer[i:i+2]) #把球轉成手臂坐標系
                 actual_ball_pose = convert_arm_pose(i_rela_to_cam, FIX_ABS_CAM)
                 actual_x.append(actual_ball_pose[0])
                 actual_y.append(actual_ball_pose[1])
@@ -467,25 +484,44 @@ class Hiwin_Controller(Node):
             print("before cali y:", actual_y)
             print("\n")
 
-
+            #剛剛更新的球點位
             actual_x[0] = self.updated_target_cue[0]
             actual_y[0] = self.updated_target_cue[1]
             actual_x[-1] = self.updated_target_cue[-2]
             actual_y[-1] =  self.updated_target_cue[-1]
             print("after cali x:", actual_x)
             print("after cali y:", actual_y)
-            '''
-            check before and after update
-            '''
             ballcount = len(actual_x) - 1
             cuex, cuey = self.updated_target_cue[-2], self.updated_target_cue[-1]
-
+            
             self.get_logger().info('CALCULATE PATH')
-            # table.main returns -> [bestscore, bestvx, bestvy, countobs, final_self.hitpointx, final_self.hitpointy]
+            # table.main return this [bestscore, bestvx, bestvy, countobs, final_self.hitpointx, final_self.hitpointy]
             self.strategy_info = table2.main(actual_x[:-1], actual_y[:-1], cuex, cuey)
             print("strategy info:", self.strategy_info)
+            # for j in range(len(actual_x)-1):
+            #     if j == 0:
+            #         aimpoint = plt.Circle((actual_x[j], actual_y[j]),
+            #                         16, color="green")
+            #     else:
+            #         aimpoint = plt.Circle((actual_x[j], actual_y[j]),
+            #                         16, color="red")
+            #     # plt.text(aimpointx[j],aimpointy[j],j,color='red',fontsize=15)
+            #     plt.gca().add_patch(aimpoint)
+            # plt.gca().add_patch(plt.Circle((cuex, cuey), 16, color='blue'))
+            # plt.gca().add_patch(plt.Circle((self.strategy_info[4], self.strategy_info[5]), 3, color='black'))
+            # # plt.quiver(cuex, cuey,-self.strategy_info[1], -self.strategy_info[2],color='black',units="xy",angles="xy",scale_units="xy",scale=1, width=2,alpha=0.5)
+            # plt.quiver(self.strategy_info[4], self.strategy_info[5],-self.strategy_info[1], -self.strategy_info[2],
+            #            color='black',units="xy",angles="xy",scale_units="xy",scale=1, width=2,alpha=0.5)
+            # plt.title("sim pool table") 
+            # plt.axis([0, tablewidth, 0, tableheight])
+            # # plt.autoscale(enable=True, axis='both', tight=None) 
+            # plt.axis("equal")
+            # plt.show(block=False)
+            # input("Enter to close plot...")
+            # plt.cla()
+            # plt.close()
             nest_state = States.HITPOINT_TOP
-
+            
         elif state == States.HITPOINT_TOP:
             self.score = self.strategy_info[0]
             self.obstacle = self.strategy_info[3]
@@ -570,7 +606,7 @@ class Hiwin_Controller(Node):
                 nest_state = States.HITBALL
             else:
                 nest_state = None
-
+        
         elif state == States.HITBALL:
             if self.score <= 2000 or self.score == 0:
                 hitpin = HITHEAVY_PIN
@@ -638,7 +674,7 @@ class Hiwin_Controller(Node):
                 pose = pose
             )
             res = self.call_hiwin(req)
-            nest_state = States.INIT
+            nest_state = States.MOVE_TO_PHOTO_POSE
             # if res.arm_state == RobotCommand.Response.IDLE:
             #     nest_state = States.MOVE_TO_PHOTO_POSE
             # else:
@@ -673,20 +709,20 @@ class Hiwin_Controller(Node):
                 self.get_logger().error('Wait for service timeout!')
                 return False
         return True
-
+    
     def generate_robot_request(
-            self,
-            holding=True,
+            self, 
+            holding=True, #可以控制是否間斷程式
             cmd_mode=RobotCommand.Request.PTP,
             cmd_type=RobotCommand.Request.POSE_CMD,
             velocity=DEFAULT_VELOCITY,
             acceleration=DEFAULT_ACCELERATION,
             tool=1,
             base=0,
-            digital_input_pin=0,
+            digital_input_pin=0, #改成按按鈕
             digital_output_pin=0,
-            digital_output_cmd=RobotCommand.Request.DIGITAL_OFF,
-            pose=Twist(),
+            digital_output_cmd=RobotCommand.Request.DIGITAL_OFF, #開燈
+            pose=Twist(), #x,y,z,row,peach,r
             joints=[float('inf')]*6,
             circ_s=[],
             circ_end=[],
@@ -712,6 +748,7 @@ class Hiwin_Controller(Node):
         request.pose = pose
         return request
 
+#確定有跑手臂那包
     def call_hiwin(self, req):
         while not self.hiwin_client.wait_for_service(timeout_sec=2.0):
             self.get_logger().info('service not available, waiting again...')
