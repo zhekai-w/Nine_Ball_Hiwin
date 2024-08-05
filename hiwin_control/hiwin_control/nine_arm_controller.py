@@ -16,7 +16,7 @@ import numpy as np
 import math
 import quaternion as qtn
 import hiwin_control.transformations as transformations
-import hiwin_control.nine_ball_strat as table2
+import hiwin_control.nine_ball_pool0805 as table2
 import matplotlib.pyplot as plt
 
 CUE_TOOL = 12
@@ -402,7 +402,6 @@ class Hiwin_Controller(Node):
                                                                     self.fix_z]
                     [pose.angular.x, pose.angular.y, pose.angular.z] = FIX_ABS_CAM[3:6]
 
-                    # input("Press Enter to continue...")
                     req = self.generate_robot_request(
                     cmd_mode=RobotCommand.Request.PTP,
                     # holding = False,
@@ -463,7 +462,7 @@ class Hiwin_Controller(Node):
                 actual_x.append(actual_ball_pose[0])
                 actual_y.append(actual_ball_pose[1])
             print("before cali x:", actual_x)
-            print("before cali y:", actual_y)
+            print("before cali y:", actual_y)   
             print("\n")
 
 
@@ -481,7 +480,8 @@ class Hiwin_Controller(Node):
 
             self.get_logger().info('CALCULATE PATH')
             # table.main returns -> [bestscore, bestvx, bestvy, countobs, final_self.hitpointx, final_self.hitpointy]
-            self.strategy_info = table2.main(actual_x[:-1], actual_y[:-1], cuex, cuey)
+            self.method_instance = table2.method_choice(actual_x[:-1], actual_y[:-1], ballcount, cuex, cuey)
+            self.strategy_info = self.method_instance.main()
             print("strategy info:", self.strategy_info)
             nest_state = States.HITPOINT_TOP
 
@@ -571,13 +571,13 @@ class Hiwin_Controller(Node):
                 nest_state = None
 
         elif state == States.HITBALL:
-            if self.score <= 2000 or self.score == 0:
-                hitpin = HITHEAVY_PIN
-            elif self.score > 2000 and self.score <=4000:
-                hitpin = HITMID_PIN
-            else:
-                hitpin = HITSOFT_PIN
-            # input("Press Enter to Hitball")
+            hitpin = HITHEAVY_PIN
+            # if self.score <= 2000 or self.score == 0:
+            #     hitpin = HITHEAVY_PIN
+            # elif self.score > 2000 and self.score <=4000:
+            #     hitpin = HITMID_PIN
+            # else:
+            #     hitpin = HITSOFT_PIN
             self.get_logger().info('OPEN PIN TO HIT BALL')
             print("hit pin IO:", hitpin)
             req = self.generate_robot_request(

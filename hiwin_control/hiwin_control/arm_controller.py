@@ -325,7 +325,6 @@ class Hiwin_Controller(Node):
         elif state == States.LOCK_INFO:
             time.sleep(1)
             self.ball_pose = []
-            input("press enter to lock info...")
             self.get_logger().info('LOCKING INFO FOR STRATEGY AND CALIBRATION...')
             self.ball_pose_buffer = self.all_ball_pose
             self.label_buffer = self.all_label
@@ -403,7 +402,6 @@ class Hiwin_Controller(Node):
                                                                     self.fix_z]
                     [pose.angular.x, pose.angular.y, pose.angular.z] = FIX_ABS_CAM[3:6]
 
-                    # input("Press Enter to continue...")
                     req = self.generate_robot_request(
                     cmd_mode=RobotCommand.Request.PTP,
                     # holding = False,
@@ -578,7 +576,6 @@ class Hiwin_Controller(Node):
                 hitpin = HITMID_PIN
             else:
                 hitpin = HITSOFT_PIN
-            # input("Press Enter to Hitball")
             self.get_logger().info('OPEN PIN TO HIT BALL')
             print("hit pin IO:", hitpin)
             req = self.generate_robot_request(
