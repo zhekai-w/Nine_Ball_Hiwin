@@ -17,6 +17,7 @@ import math
 import quaternion as qtn
 import hiwin_control.transformations as transformations
 import hiwin_control.nine_ball_strat as table2
+import hiwin_control.pool_strat_v2 as pool
 import matplotlib.pyplot as plt
 
 CUE_TOOL = 12
@@ -305,7 +306,7 @@ class Hiwin_Controller(Node):
                 nest_state = None
 
         elif state == States.LOCK_CUE:
-            
+
             time.sleep(0.3)
             self.get_logger().info('LOCKING CUE BALL INFO...')
             self.ball_pose_buffer = self.all_ball_pose
@@ -347,9 +348,6 @@ class Hiwin_Controller(Node):
                     temp_actual_pose = convert_arm_pose(temp_ball_pose_mm, FIX_ABS_CAM)
                     self.ball_pose.append(temp_actual_pose[0:2])
                 nest_state = States.FIX_RIGHT_PHOTO_POSE
-
-
-
 
         elif state == States.DYNAMIC_CALI:
             Kp = 0.25 # Proportion constant, P controller

@@ -286,7 +286,7 @@ class ReflectPointsVectors:
 
 def simple_route(cue=[0, 0], cuetoivector=[0, 0], itok2vector=[0, 0] ,k2tok1vector=[0, 0], toholevector=[0, 0],n=0):
     #fix cuefinalvector
-
+    score = None
     if n == 0 or n == -1:
         if n == 0:
             cuefinalvector = [cuetoivector[0]-toholevector[0], cuetoivector[1]-toholevector[1]]
