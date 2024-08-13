@@ -237,9 +237,10 @@ def draw_end_effector_shadow(ballx, bally, vectorx, vectory):
     return first_poly, second_poly, third_poly, fourth_poly
 
 
-def main(cuex, cuey, objectballx, objectbally, n):
+def main(objectballx, objectbally, cuex, cuey):
     start_time = time.time()
     inholeindex = []
+    n = len(objectballx)
     for i in range(0,n): #because cue ball is in objectball[-1]
         distohole = ballinhole(objectballx[i], objectbally[i])
         if distohole < rb:
@@ -838,9 +839,6 @@ def main(cuex, cuey, objectballx, objectbally, n):
     return [score, vx, vy, obstacle_flag, hitpointx, hitpointy]
 
 if __name__ == '__main__':
-    '''
-    cuex, cuey, objectballx, objectbally, n = generateballs(10, r)
-    '''
     # # objectball[-1] is cue ball
     # objectballx = [300,300,300,300,300,300+2*r,300+2*r,300+2*r,300+2*r,300+4*r,300+4*r,300+4*r,300+6*r,300+6*r,300+8*r]
     # objectbally = [457,457+2*r,457+4*r,457-2*r,457-4*r,457+r,457+3*r,457-r,457-3*r,457,457+2*r,457-2*r,457+r,457-r,457]
@@ -892,7 +890,7 @@ if __name__ == '__main__':
     objectballx.append(cuex)
     objectbally.append(cuey)
     '''
-    score, vx, vy, obstacle_flag, hitpointx, hitpointy = main(cuex, cuey, objectballx, objectbally, n)
+    score, vx, vy, obstacle_flag, hitpointx, hitpointy = main(objectballx, objectbally, cuex, cuey)
     print('Route Score:', score)
     print(f'Vector[{vx},{vy}]')
     print(f'Hit points[{hitpointx},{hitpointy}]')
