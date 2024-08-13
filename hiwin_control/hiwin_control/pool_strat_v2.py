@@ -832,11 +832,7 @@ def main(objectballx, objectbally, cuex, cuey):
     # end_time = time.time()
     # print("Execution time:", end_time - start_time, "seconds")
 
-
-    # Process route for newer arm controller
-    score, vx, vy, obstacle_flag, hitpointx, hitpointy = route_process(ValidRoute, bestrouteindex, obstacle_flag)
-
-    return [score, vx, vy, obstacle_flag, hitpointx, hitpointy]
+    return ValidRoute, bestrouteindex, obstacle_flag
 
 if __name__ == '__main__':
     # # objectball[-1] is cue ball
@@ -890,7 +886,9 @@ if __name__ == '__main__':
     objectballx.append(cuex)
     objectbally.append(cuey)
     '''
-    score, vx, vy, obstacle_flag, hitpointx, hitpointy = main(objectballx, objectbally, cuex, cuey)
+    ValidRoute, bestrouteindex, obstacle_flag = main(objectballx, objectbally, cuex, cuey)
+    # Process route for newer arm controller
+    score, vx, vy, obstacle_flag, hitpointx, hitpointy = route_process(ValidRoute, bestrouteindex, obstacle_flag)
     print('Route Score:', score)
     print(f'Vector[{vx},{vy}]')
     print(f'Hit points[{hitpointx},{hitpointy}]')

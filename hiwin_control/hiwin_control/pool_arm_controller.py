@@ -53,7 +53,7 @@ class States(Enum):
     INIT = 0
     FINISH = 1
     MOVE_TO_PHOTO_POSE = 2
-    DYNAMIC_CALI = 3
+    STEP_CALI = 3
     STRATEGY = 4
     HITPOINT_TOP = 5
     HITPOINT_ANGLE = 6
@@ -239,6 +239,8 @@ class Hiwin_Controller(Node):
         elif state == States.MOVE_TO_PHOTO_POSE:
             # value need to be reset every time
             self.updated_target_cue = []
+            self.updated_balls_x = []
+            self.updated_balls_y = []
             self.index = 0
 
             self.get_logger().info('TUNING LIGHTS ON/MOVING TO CAMERA POSE...')
@@ -309,7 +311,6 @@ class Hiwin_Controller(Node):
                 nest_state = None
 
         elif state == States.LOCK_CUE:
-
             time.sleep(0.3)
             self.get_logger().info('LOCKING CUE BALL INFO...')
             self.ball_pose_buffer = self.all_ball_pose
@@ -318,7 +319,7 @@ class Hiwin_Controller(Node):
                 print("white ball seen")
                 temp_ball_pose_mm = pixel_mm_convert(CAM_TO_TABLE, self.ball_pose_buffer[-2:])
                 temp_actual_pose = convert_arm_pose(temp_ball_pose_mm, self.fix_check_point)
-                self.ball_pose[1] = temp_actual_pose
+                self.ball_pose.append(temp_actual_pose)
                 self.fix_check_point = FIX_ABS_CAM
                 nest_state = States.DYNAMIC_CALI
 
@@ -335,48 +336,70 @@ class Hiwin_Controller(Node):
             self.target_cue = [self.ball_pose_buffer[:2], self.ball_pose_buffer[-2:]]
             print("target and cue:", self.target_cue)
             if 'white' in self.label_buffer:
-                print("Cue ball seen")
-                for target in self.target_cue:
-                    print("target:", target)
-                    temp_ball_pose_mm = pixel_mm_convert(CAM_TO_TABLE, target)
+                for ball in self.ball_pose_buffer:
+                    temp_ball_pose_mm = pixel_mm_convert(CAM_TO_TABLE, ball)
                     temp_actual_pose = convert_arm_pose(temp_ball_pose_mm, FIX_ABS_CAM)
-                    self.ball_pose.append(temp_actual_pose[0:2])
+                    self.ball_pose.append(temp_actual_pose)
+
                 nest_state = States.DYNAMIC_CALI
 
             else:
                 print("Fuck Cue ball")
-                for target in self.target_cue:
-                    print("target:", target)
-                    temp_ball_pose_mm = pixel_mm_convert(CAM_TO_TABLE, target)
+                for ball in self.ball_pose_buffer:
+                    print("target:", ball)
+                    temp_ball_pose_mm = pixel_mm_convert(CAM_TO_TABLE, ball)
                     temp_actual_pose = convert_arm_pose(temp_ball_pose_mm, FIX_ABS_CAM)
                     self.ball_pose.append(temp_actual_pose[0:2])
                 nest_state = States.FIX_RIGHT_PHOTO_POSE
 
-        elif state == States.DYNAMIC_CALI:
-            Kp = 0.25 # Proportion constant, P controller
+        elif state == States.STEP_CALI:
+            self.get_logger().info('STEP CALI FOR TEST STRATEGY...')
+            obj_ballx = []
+            obj_bally = []
+            cuex = None
+            cuey = None
+            ball_to_cali = []
+            for i in range(0,len(self.ball_pose)-2,2):
+                obj_ballx.append(self.ball_pose[i])
+                obj_bally.append(self.ball_pose[i+1])
+            cuex = self.ball_pose[-2]
+            cuey = self.ball_pose[-1]
+
+            # Route returns
+            # score,cuefinalvector,cue,cuetoivector, objectballi, itok2vector, objectballk2 ,k2tok1vector, objectballk1, toholevector,n
+            valid_route, bestrouteindex, obstacle_flag = pool.main(obj_ballx, obj_bally, cuex, cuey)
+            best_route = valid_route[bestrouteindex]
+            interrupt_ball_n = best_route[-1]
+            if interrupt_ball_n == 0:
+                ball_to_cali.append(best_route[4])
+                ball_to_cali.append([cuex, cuey])
+            elif interrupt_ball_n == 1:
+                ball_to_cali.append(best_route[4])
+                ball_to_cali.append(best_route[6])
+                ball_to_cali.append([cuex, cuey])
+            elif interrupt_ball_n == 2:
+                ball_to_cali.append(best_route[4])
+                ball_to_cali.append(best_route[6])
+                ball_to_cali.append(best_route[8])
+                ball_to_cali.append([cuex, cuey])
+
+            # Turn off light
             req = self.generate_robot_request(
                 cmd_mode = RobotCommand.Request.DIGITAL_OUTPUT,
                 digital_output_cmd = RobotCommand.Request.DIGITAL_OFF,
                 digital_output_pin = LIGHT_PIN
             )
             self.call_hiwin(req)
-            if self.index < len(self.target_cue):
+
+            if self.index < len(ball_to_cali):
                 self.get_logger().info('MOVING TO CALIBRATION POSE...')
                 self.get_logger().info('Camera moving to index_{} ball'.format(self.index))
                 pose = Twist()
-                [pose.linear.x, pose.linear.y, pose.linear.z] = [self.ball_pose[self.index][0] - tool_to_cam[0],
-                                                                 self.ball_pose[self.index][1] - tool_to_cam[1],
+                [pose.linear.x, pose.linear.y, pose.linear.z] = [ball_to_cali[self.index][0] - tool_to_cam[0],
+                                                                 ball_to_cali[self.index][1] - tool_to_cam[1],
                                                                  self.fix_z]
                 # change
                 [pose.angular.x, pose.angular.y, pose.angular.z] = FIX_ABS_CAM[3:6]
-                print("Pose:", pose)
-
-                req = self.generate_robot_request(
-                    cmd_mode = RobotCommand.Request.DIGITAL_OUTPUT,
-                    digital_output_cmd = RobotCommand.Request.DIGITAL_ON,
-                    digital_output_pin = HEAVY_PIN
-                )
-                res = self.call_hiwin(req)
 
                 req = self.generate_robot_request(
                 cmd_mode=RobotCommand.Request.PTP,
@@ -384,52 +407,21 @@ class Hiwin_Controller(Node):
                 )
                 res = self.call_hiwin(req)
                 if res.arm_state == RobotCommand.Response.IDLE:
-                    print("START DYNAMIC CALIBRATION")
+                    print('STEP CALIBRATION...')
 
                 req = self.generate_robot_request(cmd_mode=RobotCommand.Request.CHECK_POSE)
                 res = self.call_hiwin(req)
-                second_photo = res.current_position
+                cali_point = res.current_position
 
-                while True:
-                    mid_x, mid_y = check_mid_pose(self.all_ball_pose)
-                    mid_error = mid_point_error([mid_x, mid_y])
-                    ball_relative_cam = pixel_mm_convert(self.fix_z - abs(tool_to_cam[2]) + abs(self.table_z), [mid_x, mid_y])
+                mid_x, mid_y = check_mid_pose(self.all_ball_pose)
+                mid_mm = pixel_mm_convert(self.fix_z - abs(tool_to_cam[2]) + abs(self.table_z), [mid_x, mid_y])
 
-                    # mid_error = mid_point_error(self.target_cue[self.index])
-                    # ball_relative_cam = pixel_mm_convert(self.fix_z - abs(tool_to_cam[2]) + abs(self.table_z), self.target_cue[self.index])
-
-                    [pose.linear.x, pose.linear.y, pose.linear.z] = [second_photo[0] + Kp*ball_relative_cam[0],
-                                                                    second_photo[1] - Kp*ball_relative_cam[1],
-                                                                    self.fix_z]
-                    [pose.angular.x, pose.angular.y, pose.angular.z] = FIX_ABS_CAM[3:6]
-
-                    req = self.generate_robot_request(
-                    cmd_mode=RobotCommand.Request.PTP,
-                    # holding = False,
-                    pose = pose
-                    )
-                    res = self.call_hiwin(req)
-
-                    second_photo[0] += Kp*ball_relative_cam[0]
-                    second_photo[1] -= Kp*ball_relative_cam[1]
-
-                    # finish calibration condition
-                    if abs(mid_error) <= 3:
-                        # cv2.destroyAllWindows()
-                        break
-
-                # update ball position
-                ball_relative_cam = pixel_mm_convert(self.fix_z - abs(tool_to_cam[2]) + abs(self.table_z), self.target_cue[self.index])
-                req = self.generate_robot_request(cmd_mode=RobotCommand.Request.CHECK_POSE)
-                res = self.call_hiwin(req)
-                update_ball = res.current_position
-                self.updated_target_cue.append(update_ball[0] + tool_to_cam[0] + ball_relative_cam[0])
-                self.updated_target_cue.append(update_ball[1] + tool_to_cam[1] - ball_relative_cam[1])
-
+                self.updated_balls_x.append(cali_point[0] + tool_to_cam[0] + mid_mm[0])
+                self.updated_balls_y.append(cali_point[1] + tool_to_cam[1] - mid_mm[1])
                 self.index += 1
 
-                if res.arm_state == RobotCommand.Response.IDLE and self.index < len(self.target_cue):
-                    nest_state = States.DYNAMIC_CALI
+                if res.arm_state == RobotCommand.Response.IDLE and self.index < len(ball_to_cali):
+                    nest_state = States.STEP_CALI
                 else:
                     nest_state = States.OPEN_SEC_IO
 
@@ -454,34 +446,12 @@ class Hiwin_Controller(Node):
                 digital_output_pin = LIGHT_PIN
             )
             self.call_hiwin(req)
-            actual_x = []
-            actual_y = []
-            self.get_logger().info('UPDATE BALL POSITION')
-            for i in range(0, len(self.ball_pose_buffer), 2):
-                i_rela_to_cam = pixel_mm_convert(CAM_TO_TABLE, self.ball_pose_buffer[i:i+2])
-                actual_ball_pose = convert_arm_pose(i_rela_to_cam, FIX_ABS_CAM)
-                actual_x.append(actual_ball_pose[0])
-                actual_y.append(actual_ball_pose[1])
-            print("before cali x:", actual_x)
-            print("before cali y:", actual_y)
-            print("\n")
-
-
-            actual_x[0] = self.updated_target_cue[0]
-            actual_y[0] = self.updated_target_cue[1]
-            actual_x[-1] = self.updated_target_cue[-2]
-            actual_y[-1] =  self.updated_target_cue[-1]
-            print("after cali x:", actual_x)
-            print("after cali y:", actual_y)
-            '''
-            check before and after update
-            '''
-            ballcount = len(actual_x) - 1
-            cuex, cuey = self.updated_target_cue[-2], self.updated_target_cue[-1]
 
             self.get_logger().info('CALCULATE PATH')
-            # table.main returns -> [bestscore, bestvx, bestvy, countobs, final_self.hitpointx, final_self.hitpointy]
-            self.strategy_info = table2.main(actual_x[:-1], actual_y[:-1], cuex, cuey)
+            # pool.main returns -> [bestscore, bestvx, bestvy, countobs, final_self.hitpointx, final_self.hitpointy]
+            ValidRoute, bestrouteindex, obstacle_flag = pool.main(self.updated_balls_x[:-1], self.updated_balls_y[:-1],
+                                            self.updated_balls_x[-1], self.updated_balls_y[-1])
+            self.strategy_info = pool.route_process(ValidRoute, bestrouteindex, obstacle_flag)
             print("strategy info:", self.strategy_info)
             nest_state = States.HITPOINT_TOP
 
