@@ -826,13 +826,8 @@ def main(objectballx, objectbally, cuex, cuey):
     plt.axis([0, tablewidth, 0, tableheight])
     plt.axis("equal")
     plt.show(block=False)
-<<<<<<< HEAD
     plt.pause(0.5)
     # input("Enter to continue...")
-=======
-    input("Enter to continue...")
-    # plt.pause(0.5)
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
     plt.cla()
     # end_time = time.time()
     # print("Execution time:", end_time - start_time, "seconds")
@@ -897,8 +892,4 @@ if __name__ == '__main__':
     print('Route Score:', score)
     print(f'Vector[{vx},{vy}]')
     print(f'Hit points[{hitpointx},{hitpointy}]')
-<<<<<<< HEAD
     print('Obstacle Flag:', obstacle_flag)
-=======
-    print('Obstacle Flag:', obstacle_flag)
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498

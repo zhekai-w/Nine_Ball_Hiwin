@@ -36,7 +36,6 @@
 # camera_matrix, dist_coeffs = read_camera_config(filepath)
 # print(camera_matrix)
 # print(dist_coeffs)
-<<<<<<< HEAD
 import numpy as np 
 
 test_list = [1,2,3,4,5,6,7,8]
@@ -45,8 +44,3 @@ tuple_sdad = ([1,3,3],["hello"],[4])
 
 for item in tuple_sdad:
     print(item)
-=======
-
-for i in range(0,8,2):
-    print(i)
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
