@@ -1,0 +1,60 @@
+running egg_info
+creating ../../build/hiwin_example/hiwin_example.egg-info
+writing ../../build/hiwin_example/hiwin_example.egg-info/PKG-INFO
+writing dependency_links to ../../build/hiwin_example/hiwin_example.egg-info/dependency_links.txt
+writing entry points to ../../build/hiwin_example/hiwin_example.egg-info/entry_points.txt
+writing requirements to ../../build/hiwin_example/hiwin_example.egg-info/requires.txt
+writing top-level names to ../../build/hiwin_example/hiwin_example.egg-info/top_level.txt
+writing manifest file '../../build/hiwin_example/hiwin_example.egg-info/SOURCES.txt'
+reading manifest file '../../build/hiwin_example/hiwin_example.egg-info/SOURCES.txt'
+writing manifest file '../../build/hiwin_example/hiwin_example.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/yvonne/work/src/build/hiwin_example/build
+creating /home/yvonne/work/src/build/hiwin_example/build/lib
+creating /home/yvonne/work/src/build/hiwin_example/build/lib/hiwin_example
+copying hiwin_example/__init__.py -> /home/yvonne/work/src/build/hiwin_example/build/lib/hiwin_example
+copying hiwin_example/YoloDetector.py -> /home/yvonne/work/src/build/hiwin_example/build/lib/hiwin_example
+copying hiwin_example/transformations.py -> /home/yvonne/work/src/build/hiwin_example/build/lib/hiwin_example
+copying hiwin_example/YoloDetector_class_node.py -> /home/yvonne/work/src/build/hiwin_example/build/lib/hiwin_example
+copying hiwin_example/strategy_example.py -> /home/yvonne/work/src/build/hiwin_example/build/lib/hiwin_example
+copying hiwin_example/hand_in_eye_calibration.py -> /home/yvonne/work/src/build/hiwin_example/build/lib/hiwin_example
+copying hiwin_example/three_points_calibration_example.py -> /home/yvonne/work/src/build/hiwin_example/build/lib/hiwin_example
+running install
+running install_lib
+creating /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example
+copying /home/yvonne/work/src/build/hiwin_example/build/lib/hiwin_example/__init__.py -> /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example
+copying /home/yvonne/work/src/build/hiwin_example/build/lib/hiwin_example/YoloDetector.py -> /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example
+copying /home/yvonne/work/src/build/hiwin_example/build/lib/hiwin_example/transformations.py -> /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example
+copying /home/yvonne/work/src/build/hiwin_example/build/lib/hiwin_example/YoloDetector_class_node.py -> /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example
+copying /home/yvonne/work/src/build/hiwin_example/build/lib/hiwin_example/strategy_example.py -> /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example
+copying /home/yvonne/work/src/build/hiwin_example/build/lib/hiwin_example/hand_in_eye_calibration.py -> /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example
+copying /home/yvonne/work/src/build/hiwin_example/build/lib/hiwin_example/three_points_calibration_example.py -> /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example
+byte-compiling /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example/__init__.py to __init__.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example/YoloDetector.py to YoloDetector.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example/transformations.py to transformations.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example/YoloDetector_class_node.py to YoloDetector_class_node.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example/strategy_example.py to strategy_example.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example/hand_in_eye_calibration.py to hand_in_eye_calibration.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example/three_points_calibration_example.py to three_points_calibration_example.cpython-310.pyc
+running install_data
+creating /home/yvonne/work/src/install/hiwin_example/share/ament_index
+creating /home/yvonne/work/src/install/hiwin_example/share/ament_index/resource_index
+creating /home/yvonne/work/src/install/hiwin_example/share/ament_index/resource_index/packages
+copying resource/hiwin_example -> /home/yvonne/work/src/install/hiwin_example/share/ament_index/resource_index/packages
+copying package.xml -> /home/yvonne/work/src/install/hiwin_example/share/hiwin_example
+creating /home/yvonne/work/src/install/hiwin_example/share/hiwin_example/launch
+copying launch/bag_three_points_calibration.launch.py -> /home/yvonne/work/src/install/hiwin_example/share/hiwin_example/launch
+copying launch/cup_three_points_calibration.launch.py -> /home/yvonne/work/src/install/hiwin_example/share/hiwin_example/launch
+creating /home/yvonne/work/src/install/hiwin_example/share/hiwin_example/config
+copying config/cup_cali_pose.yaml -> /home/yvonne/work/src/install/hiwin_example/share/hiwin_example/config
+copying config/bag_cali_pose.yaml -> /home/yvonne/work/src/install/hiwin_example/share/hiwin_example/config
+copying config/cup_cam.yaml -> /home/yvonne/work/src/install/hiwin_example/share/hiwin_example/config
+copying config/bag_cam.yaml -> /home/yvonne/work/src/install/hiwin_example/share/hiwin_example/config
+running install_egg_info
+Copying ../../build/hiwin_example/hiwin_example.egg-info to /home/yvonne/work/src/install/hiwin_example/lib/python3.10/site-packages/hiwin_example-0.0.0-py3.10.egg-info
+running install_scripts
+Installing hand_in_eye_calibration script to /home/yvonne/work/src/install/hiwin_example/lib/hiwin_example
+Installing strategy_example script to /home/yvonne/work/src/install/hiwin_example/lib/hiwin_example
+Installing three_points_calibration_example script to /home/yvonne/work/src/install/hiwin_example/lib/hiwin_example
+writing list of installed files to '/home/yvonne/work/src/build/hiwin_example/install.log'

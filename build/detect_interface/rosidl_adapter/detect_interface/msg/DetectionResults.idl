@@ -1,0 +1,25 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from detect_interface/msg/DetectionResults.msg
+// generated code does not contain a copyright notice
+
+#include "detect_interface/msg/BoundingBox.idl"
+
+module detect_interface {
+  module msg {
+    @verbatim (language="comment", text=
+      "DetectionResults.msg")
+    struct DetectionResults {
+      @verbatim (language="comment", text=
+        "Array of object labels")
+      sequence<string> labels;
+
+      @verbatim (language="comment", text=
+        "Array of object confidence scores")
+      sequence<float> scores;
+
+      @verbatim (language="comment", text=
+        "Array of bounding boxes")
+      sequence<detect_interface::msg::BoundingBox> bounding_boxes;
+    };
+  };
+};

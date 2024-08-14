@@ -1,0 +1,17 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/hiwin_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/hiwin_interfaces/srv/detail/hiwinmodbus__type_support.cpp.o"
+  "CMakeFiles/hiwin_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/hiwin_interfaces/srv/detail/hiwinmodbus__type_support.cpp.o.d"
+  "CMakeFiles/hiwin_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/hiwin_interfaces/srv/detail/robot_command__type_support.cpp.o"
+  "CMakeFiles/hiwin_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/hiwin_interfaces/srv/detail/robot_command__type_support.cpp.o.d"
+  "libhiwin_interfaces__rosidl_typesupport_introspection_cpp.pdb"
+  "libhiwin_interfaces__rosidl_typesupport_introspection_cpp.so"
+  "rosidl_typesupport_introspection_cpp/hiwin_interfaces/srv/detail/hiwinmodbus__rosidl_typesupport_introspection_cpp.hpp"
+  "rosidl_typesupport_introspection_cpp/hiwin_interfaces/srv/detail/hiwinmodbus__type_support.cpp"
+  "rosidl_typesupport_introspection_cpp/hiwin_interfaces/srv/detail/robot_command__rosidl_typesupport_introspection_cpp.hpp"
+  "rosidl_typesupport_introspection_cpp/hiwin_interfaces/srv/detail/robot_command__type_support.cpp"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/hiwin_interfaces__rosidl_typesupport_introspection_cpp.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

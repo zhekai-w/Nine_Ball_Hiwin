@@ -1,0 +1,3 @@
+[console_scripts]
+object_detection = yolov7_obj_detect.object_detection:main
+

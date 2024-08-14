@@ -1,0 +1,39 @@
+// generated from rosidl_adapter/resource/srv.idl.em
+// with input from hiwin_interfaces/srv/Hiwinmodbus.srv
+// generated code does not contain a copyright notice
+
+
+module hiwin_interfaces {
+  module srv {
+    struct Hiwinmodbus_Request {
+      string mode;
+
+      boolean holding;
+
+      int32 type;
+
+      int32 vel;
+
+      int32 acc;
+
+      int32 digital_output;
+
+      int32 onoff;
+
+      @verbatim (language="comment", text=
+        "Digital_output[DO_Num, 0or1]")
+      sequence<double> pose;
+
+      sequence<double> circ_s;
+
+      sequence<double> circ_end;
+
+      int32 joint;
+
+      int32 dir;
+    };
+    struct Hiwinmodbus_Response {
+      int32 arm_state;
+    };
+  };
+};

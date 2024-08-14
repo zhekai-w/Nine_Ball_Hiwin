@@ -1,0 +1,6 @@
+source;share/yolov7_obj_detect/hook/pythonpath.ps1
+source;share/yolov7_obj_detect/hook/pythonpath.dsv
+source;share/yolov7_obj_detect/hook/pythonpath.sh
+source;share/yolov7_obj_detect/hook/ament_prefix_path.ps1
+source;share/yolov7_obj_detect/hook/ament_prefix_path.dsv
+source;share/yolov7_obj_detect/hook/ament_prefix_path.sh

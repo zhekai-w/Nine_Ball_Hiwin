@@ -1,0 +1,31 @@
+package.xml
+setup.cfg
+setup.py
+../../build/center/center.egg-info/PKG-INFO
+../../build/center/center.egg-info/SOURCES.txt
+../../build/center/center.egg-info/dependency_links.txt
+../../build/center/center.egg-info/entry_points.txt
+../../build/center/center.egg-info/requires.txt
+../../build/center/center.egg-info/top_level.txt
+../../build/center/center.egg-info/zip-safe
+center/__init__.py
+center/arm_controller_v2.py
+center/boss_strategy_client.py
+center/control.py
+center/just_pool_think0524.py
+center/just_pool_think0709.py
+center/publisher_dection_boxes (copy).py
+center/publisher_dection_boxes.py
+center/strategy copy 2.py
+center/strategy copy.py
+center/strategy.py
+center/tableball (copy).py
+center/tableball.py
+center/tableball0520.py
+center/test.py
+center/transformations.py
+center/yyy_arm_controller.py
+resource/center
+test/test_copyright.py
+test/test_flake8.py
+test/test_pep257.py

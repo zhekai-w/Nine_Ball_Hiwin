@@ -1,0 +1,79 @@
+running egg_info
+creating ../build/hiwin_control/hiwin_control.egg-info
+writing ../build/hiwin_control/hiwin_control.egg-info/PKG-INFO
+writing dependency_links to ../build/hiwin_control/hiwin_control.egg-info/dependency_links.txt
+writing entry points to ../build/hiwin_control/hiwin_control.egg-info/entry_points.txt
+writing requirements to ../build/hiwin_control/hiwin_control.egg-info/requires.txt
+writing top-level names to ../build/hiwin_control/hiwin_control.egg-info/top_level.txt
+writing manifest file '../build/hiwin_control/hiwin_control.egg-info/SOURCES.txt'
+reading manifest file '../build/hiwin_control/hiwin_control.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file '../build/hiwin_control/hiwin_control.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/yvonne/work/src/build/hiwin_control/build
+creating /home/yvonne/work/src/build/hiwin_control/build/lib
+creating /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control
+copying hiwin_control/nine_ball_pool0805.py -> /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control
+copying hiwin_control/__init__.py -> /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control
+copying hiwin_control/nine_arm_controller.py -> /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control
+copying hiwin_control/yyy_arm_controller.py -> /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control
+copying hiwin_control/transformations.py -> /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control
+copying hiwin_control/test_function.py -> /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control
+copying hiwin_control/testbeat_arm_controller.py -> /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control
+copying hiwin_control/nine_ball_strat.py -> /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control
+copying hiwin_control/arm_controller.py -> /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control
+copying hiwin_control/team_selection.py -> /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control
+copying hiwin_control/pool_strat_v2.py -> /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control
+copying hiwin_control/rush_arm_controller.py -> /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control
+copying hiwin_control/pool_arm_controller.py -> /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control
+copying hiwin_control/stream_rs.py -> /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control
+running install
+running install_lib
+creating /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control
+copying /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control/nine_ball_pool0805.py -> /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control
+copying /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control/__init__.py -> /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control
+copying /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control/nine_arm_controller.py -> /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control
+copying /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control/yyy_arm_controller.py -> /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control
+copying /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control/transformations.py -> /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control
+copying /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control/test_function.py -> /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control
+copying /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control/testbeat_arm_controller.py -> /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control
+copying /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control/nine_ball_strat.py -> /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control
+copying /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control/arm_controller.py -> /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control
+copying /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control/team_selection.py -> /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control
+copying /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control/pool_strat_v2.py -> /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control
+copying /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control/rush_arm_controller.py -> /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control
+copying /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control/pool_arm_controller.py -> /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control
+copying /home/yvonne/work/src/build/hiwin_control/build/lib/hiwin_control/stream_rs.py -> /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control
+byte-compiling /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control/nine_ball_pool0805.py to nine_ball_pool0805.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control/__init__.py to __init__.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control/nine_arm_controller.py to nine_arm_controller.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control/yyy_arm_controller.py to yyy_arm_controller.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control/transformations.py to transformations.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control/test_function.py to test_function.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control/testbeat_arm_controller.py to testbeat_arm_controller.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control/nine_ball_strat.py to nine_ball_strat.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control/arm_controller.py to arm_controller.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control/team_selection.py to team_selection.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control/pool_strat_v2.py to pool_strat_v2.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control/rush_arm_controller.py to rush_arm_controller.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control/pool_arm_controller.py to pool_arm_controller.cpython-310.pyc
+byte-compiling /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control/stream_rs.py to stream_rs.cpython-310.pyc
+running install_data
+creating /home/yvonne/work/src/install/hiwin_control/share/ament_index
+creating /home/yvonne/work/src/install/hiwin_control/share/ament_index/resource_index
+creating /home/yvonne/work/src/install/hiwin_control/share/ament_index/resource_index/packages
+copying resource/hiwin_control -> /home/yvonne/work/src/install/hiwin_control/share/ament_index/resource_index/packages
+copying package.xml -> /home/yvonne/work/src/install/hiwin_control/share/hiwin_control
+running install_egg_info
+Copying ../build/hiwin_control/hiwin_control.egg-info to /home/yvonne/work/src/install/hiwin_control/lib/python3.10/site-packages/hiwin_control-0.0.0-py3.10.egg-info
+running install_scripts
+Installing arm_controller script to /home/yvonne/work/src/install/hiwin_control/lib/hiwin_control
+Installing nine_arm_controller script to /home/yvonne/work/src/install/hiwin_control/lib/hiwin_control
+Installing pool_arm_controller script to /home/yvonne/work/src/install/hiwin_control/lib/hiwin_control
+Installing rush_arm_controller script to /home/yvonne/work/src/install/hiwin_control/lib/hiwin_control
+Installing stream_rs script to /home/yvonne/work/src/install/hiwin_control/lib/hiwin_control
+Installing team_selection script to /home/yvonne/work/src/install/hiwin_control/lib/hiwin_control
+Installing testbeat_arm_controller script to /home/yvonne/work/src/install/hiwin_control/lib/hiwin_control
+Installing yyy_arm_controller script to /home/yvonne/work/src/install/hiwin_control/lib/hiwin_control
+writing list of installed files to '/home/yvonne/work/src/build/hiwin_control/install.log'

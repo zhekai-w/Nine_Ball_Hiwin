@@ -1,0 +1,151 @@
+[0.009s] Invoking command in '/home/yvonne/work/src/build/realsense2_camera': AMENT_PREFIX_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/yvonne/work/src/install/realsense2_camera_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/yvonne/work/src/pool/realsense-ros/realsense2_camera -DCMAKE_INSTALL_PREFIX=/home/yvonne/work/src/install/realsense2_camera
+[0.056s] -- The C compiler identification is GNU 11.4.0
+[0.111s] -- The CXX compiler identification is GNU 11.4.0
+[0.118s] -- Detecting C compiler ABI info
+[0.173s] -- Detecting C compiler ABI info - done
+[0.177s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.177s] -- Detecting C compile features
+[0.178s] -- Detecting C compile features - done
+[0.179s] -- Detecting CXX compiler ABI info
+[0.231s] -- Detecting CXX compiler ABI info - done
+[0.236s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.237s] -- Detecting CXX compile features
+[0.237s] -- Detecting CXX compile features - done
+[0.237s] -- Create Release Build.
+[0.239s] -- Found ament_cmake: 1.3.8 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.336s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.390s] -- Found builtin_interfaces: 1.2.1 (/opt/ros/humble/share/builtin_interfaces/cmake)
+[0.410s] -- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.413s] -- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.420s] -- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.427s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.440s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.451s] -- Found cv_bridge: 3.2.1 (/opt/ros/humble/share/cv_bridge/cmake)
+[0.584s] -- Found image_transport: 3.1.9 (/opt/ros/humble/share/image_transport/cmake)
+[0.625s] -- Found rmw_implementation_cmake: 6.1.1 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.626s] -- Found rmw_cyclonedds_cpp: 1.3.4 (/opt/ros/humble/share/rmw_cyclonedds_cpp/cmake)
+[0.646s] -- Using RMW implementation 'rmw_cyclonedds_cpp' as default
+[0.653s] -- Looking for pthread.h
+[0.695s] -- Looking for pthread.h - found
+[0.695s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[0.742s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[0.743s] -- Found Threads: TRUE  
+[0.868s] -- Found rclcpp_components: 16.0.8 (/opt/ros/humble/share/rclcpp_components/cmake)
+[0.903s] -- Found realsense2_camera_msgs: 4.54.1 (/home/yvonne/work/src/install/realsense2_camera_msgs/share/realsense2_camera_msgs/cmake)
+[0.966s] -- Found nav_msgs: 4.2.3 (/opt/ros/humble/share/nav_msgs/cmake)
+[1.018s] -- Found tf2_ros: 0.25.6 (/opt/ros/humble/share/tf2_ros/cmake)
+[1.196s] -- Found diagnostic_updater: 3.1.2 (/opt/ros/humble/share/diagnostic_updater/cmake)
+[1.240s] -- Found OpenCV: /usr (found version "4.5.4") found components: core 
+[1.241s] -- Build for ROS2 Humble
+[1.245s] -- Found ament_cmake_gtest: 1.3.8 (/opt/ros/humble/share/ament_cmake_gtest/cmake)
+[1.246s] -- Found gtest sources under '/opt/ros/humble/src/gtest_vendor': C++ tests using 'Google Test' will be built
+[1.252s] -- Found ament_cmake_pytest: 1.3.8 (/opt/ros/humble/share/ament_cmake_pytest/cmake)
+[3.851s] -- rs_device_info:
+[3.851s] -- Device Name                   Serial Number       Firmware Version    
+[3.851s] Intel RealSense D435I         844212070032        5.16.0.1            
+[3.852s] 
+[3.852s] -- D455 device found
+[5.843s] -- Configuring done
+[5.864s] -- Generating done
+[5.865s] -- Build files have been written to: /home/yvonne/work/src/build/realsense2_camera
+[5.878s] Invoked command in '/home/yvonne/work/src/build/realsense2_camera' returned '0': AMENT_PREFIX_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/yvonne/work/src/install/realsense2_camera_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/yvonne/work/src/pool/realsense-ros/realsense2_camera -DCMAKE_INSTALL_PREFIX=/home/yvonne/work/src/install/realsense2_camera
+[5.879s] Invoking command in '/home/yvonne/work/src/build/realsense2_camera': AMENT_PREFIX_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/yvonne/work/src/install/realsense2_camera_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/yvonne/work/src/build/realsense2_camera -- -j16 -l16
+[5.922s] [ 13%] [32mBuilding CXX object CMakeFiles/realsense2_camera_node.dir/rclcpp_components/node_main_realsense2_camera_node.cpp.o[0m
+[5.922s] [ 13%] [32mBuilding CXX object gtest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o[0m
+[5.922s] [ 18%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/parameters.cpp.o[0m
+[5.923s] [ 18%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/named_filter.cpp.o[0m
+[5.923s] [ 22%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/ros_sensor.cpp.o[0m
+[5.923s] [ 31%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/realsense_node_factory.cpp.o[0m
+[5.923s] [ 36%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/rs_node_setup.cpp.o[0m
+[5.923s] [ 36%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/dynamic_params.cpp.o[0m
+[5.924s] [ 40%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/ros_utils.cpp.o[0m
+[5.926s] [ 50%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/base_realsense_node.cpp.o[0m
+[5.926s] [ 50%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/sensor_params.cpp.o[0m
+[5.928s] [ 54%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/profile_manager.cpp.o[0m
+[5.928s] [ 59%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/tfs.cpp.o[0m
+[5.928s] [ 63%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/ros_param_backend.cpp.o[0m
+[5.930s] [ 68%] [32mBuilding CXX object gtest/CMakeFiles/gtest.dir/src/gtest-all.cc.o[0m
+[5.934s] [ 72%] [32mBuilding CXX object CMakeFiles/realsense2_camera.dir/src/image_publisher.cpp.o[0m
+[6.879s] [ 77%] [32m[1mLinking CXX static library libgtest_main.a[0m
+[7.002s] [ 77%] Built target gtest_main
+[11.541s] [ 81%] [32m[1mLinking CXX executable realsense2_camera_node[0m
+[11.894s] [ 81%] Built target realsense2_camera_node
+[15.078s] [ 86%] [32m[1mLinking CXX static library libgtest.a[0m
+[15.105s] [ 86%] Built target gtest
+[15.119s] [ 90%] [32mBuilding CXX object CMakeFiles/gtest_template.dir/test/gtest_template.cpp.o[0m
+[15.643s] [ 95%] [32m[1mLinking CXX executable gtest_template[0m
+[15.714s] [ 95%] Built target gtest_template
+[21.236s] [100%] [32m[1mLinking CXX shared library librealsense2_camera.so[0m
+[21.471s] [100%] Built target realsense2_camera
+[21.483s] Invoked command in '/home/yvonne/work/src/build/realsense2_camera' returned '0': AMENT_PREFIX_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/yvonne/work/src/install/realsense2_camera_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/yvonne/work/src/build/realsense2_camera -- -j16 -l16
+[21.513s] Invoking command in '/home/yvonne/work/src/build/realsense2_camera': AMENT_PREFIX_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/yvonne/work/src/install/realsense2_camera_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/yvonne/work/src/build/realsense2_camera
+[21.517s] -- Install configuration: "Release"
+[21.517s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/lib/realsense2_camera/realsense2_camera_node
+[21.518s] -- Set runtime path of "/home/yvonne/work/src/install/realsense2_camera/lib/realsense2_camera/realsense2_camera_node" to ""
+[21.518s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/lib/librealsense2_camera.so
+[21.519s] -- Set runtime path of "/home/yvonne/work/src/install/realsense2_camera/lib/librealsense2_camera.so" to ""
+[21.519s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/include
+[21.519s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/include/sensor_params.h
+[21.519s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/include/named_filter.h
+[21.519s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/include/ros_param_backend.h
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/include/gl_window.h
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/include/profile_manager.h
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/include/ros_sensor.h
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/include/base_realsense_node.h
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/include/dynamic_params.h
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/include/ros_utils.h
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/include/image_publisher.h
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/include/constants.h
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/include/realsense_node_factory.h
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/launch
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/launch/rs_multi_camera_launch.py
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/launch/rs_intra_process_demo_launch.py
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/launch/rs_launch.py
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/launch/default.rviz
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples
+[21.520s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/launch_params_from_file
+[21.521s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/launch_params_from_file/config
+[21.521s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/launch_params_from_file/config/config.yaml
+[21.521s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/launch_params_from_file/rs_launch_get_params_from_yaml.py
+[21.521s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/launch_params_from_file/README.md
+[21.521s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/dual_camera
+[21.521s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/dual_camera/rviz
+[21.521s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/dual_camera/rviz/dual_camera_pointcloud.rviz
+[21.521s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/dual_camera/README.md
+[21.521s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/dual_camera/rs_dual_camera_launch.py
+[21.522s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/pointcloud
+[21.522s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/pointcloud/rviz
+[21.522s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/pointcloud/rviz/pointcloud.rviz
+[21.522s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/pointcloud/rviz/urdf_pointcloud.rviz
+[21.522s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/pointcloud/rs_d455_pointcloud_launch.py
+[21.522s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/pointcloud/rs_d405_pointcloud_launch.py
+[21.522s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/pointcloud/README.md
+[21.522s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/pointcloud/rs_pointcloud_launch.py
+[21.522s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/align_depth
+[21.522s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/align_depth/rs_align_depth_launch.py
+[21.522s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/align_depth/README.md
+[21.523s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/launch_from_rosbag
+[21.523s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/launch_from_rosbag/rs_launch_from_rosbag.py
+[21.523s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/examples/launch_from_rosbag/README.md
+[21.523s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/environment/library_path.sh
+[21.523s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/environment/library_path.dsv
+[21.523s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/ament_index/resource_index/package_run_dependencies/realsense2_camera
+[21.523s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/ament_index/resource_index/parent_prefix_path/realsense2_camera
+[21.523s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/environment/ament_prefix_path.sh
+[21.523s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/environment/ament_prefix_path.dsv
+[21.523s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/environment/path.sh
+[21.523s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/environment/path.dsv
+[21.524s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/local_setup.bash
+[21.524s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/local_setup.sh
+[21.524s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/local_setup.zsh
+[21.524s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/local_setup.dsv
+[21.524s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/package.dsv
+[21.524s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/ament_index/resource_index/packages/realsense2_camera
+[21.524s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/ament_index/resource_index/rclcpp_components/realsense2_camera
+[21.524s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/cmake/ament_cmake_export_include_directories-extras.cmake
+[21.524s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/cmake/ament_cmake_export_libraries-extras.cmake
+[21.524s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/cmake/ament_cmake_export_dependencies-extras.cmake
+[21.525s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/cmake/realsense2_cameraConfig.cmake
+[21.525s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/cmake/realsense2_cameraConfig-version.cmake
+[21.525s] -- Installing: /home/yvonne/work/src/install/realsense2_camera/share/realsense2_camera/package.xml
+[21.526s] Invoked command in '/home/yvonne/work/src/build/realsense2_camera' returned '0': AMENT_PREFIX_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/yvonne/work/src/install/realsense2_camera_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/yvonne/work/src/install/realsense2_camera_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/yvonne/work/src/build/realsense2_camera

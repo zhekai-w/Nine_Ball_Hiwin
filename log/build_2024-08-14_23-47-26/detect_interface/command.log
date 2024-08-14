@@ -1,0 +1,6 @@
+Invoking command in '/home/yvonne/work/src/build/detect_interface': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/yvonne/work/src/pool/detect/detect_interface -DCMAKE_INSTALL_PREFIX=/home/yvonne/work/src/install/detect_interface
+Invoked command in '/home/yvonne/work/src/build/detect_interface' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/yvonne/work/src/pool/detect/detect_interface -DCMAKE_INSTALL_PREFIX=/home/yvonne/work/src/install/detect_interface
+Invoking command in '/home/yvonne/work/src/build/detect_interface': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/yvonne/work/src/build/detect_interface -- -j16 -l16
+Invoked command in '/home/yvonne/work/src/build/detect_interface' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/yvonne/work/src/build/detect_interface -- -j16 -l16
+Invoking command in '/home/yvonne/work/src/build/detect_interface': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/yvonne/work/src/build/detect_interface
+Invoked command in '/home/yvonne/work/src/build/detect_interface' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/yvonne/work/src/build/detect_interface

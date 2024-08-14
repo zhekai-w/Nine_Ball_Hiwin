@@ -1,0 +1,134 @@
+[0.667s] Invoking command in '/home/yvonne/work/src/pool/detect/yolov7_obj_detect': AMENT_PREFIX_PATH=/home/yvonne/work/src/install/detect_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/yvonne/work/src/install/detect_interface LD_LIBRARY_PATH=/home/yvonne/work/src/install/detect_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/yvonne/work/src/build/yolov7_obj_detect/prefix_override:/home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages:/home/yvonne/work/src/install/detect_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/yolov7_obj_detect build --build-base /home/yvonne/work/src/build/yolov7_obj_detect/build install --record /home/yvonne/work/src/build/yolov7_obj_detect/install.log --single-version-externally-managed install_data
+[0.823s] running egg_info
+[0.823s] creating ../../../build/yolov7_obj_detect/yolov7_obj_detect.egg-info
+[0.823s] writing ../../../build/yolov7_obj_detect/yolov7_obj_detect.egg-info/PKG-INFO
+[0.824s] writing dependency_links to ../../../build/yolov7_obj_detect/yolov7_obj_detect.egg-info/dependency_links.txt
+[0.824s] writing entry points to ../../../build/yolov7_obj_detect/yolov7_obj_detect.egg-info/entry_points.txt
+[0.824s] writing requirements to ../../../build/yolov7_obj_detect/yolov7_obj_detect.egg-info/requires.txt
+[0.824s] writing top-level names to ../../../build/yolov7_obj_detect/yolov7_obj_detect.egg-info/top_level.txt
+[0.824s] writing manifest file '../../../build/yolov7_obj_detect/yolov7_obj_detect.egg-info/SOURCES.txt'
+[0.825s] reading manifest file '../../../build/yolov7_obj_detect/yolov7_obj_detect.egg-info/SOURCES.txt'
+[0.826s] writing manifest file '../../../build/yolov7_obj_detect/yolov7_obj_detect.egg-info/SOURCES.txt'
+[0.826s] running build
+[0.826s] running build_py
+[0.826s] creating /home/yvonne/work/src/build/yolov7_obj_detect/build
+[0.826s] creating /home/yvonne/work/src/build/yolov7_obj_detect/build/lib
+[0.826s] creating /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/models
+[0.826s] copying models/__init__.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/models
+[0.826s] copying models/yolo.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/models
+[0.826s] copying models/common.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/models
+[0.827s] copying models/experimental.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/models
+[0.827s] creating /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/yolov7_obj_detect
+[0.827s] copying yolov7_obj_detect/__init__.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/yolov7_obj_detect
+[0.827s] copying yolov7_obj_detect/len.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/yolov7_obj_detect
+[0.827s] copying yolov7_obj_detect/object_detection.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/yolov7_obj_detect
+[0.827s] creating /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils
+[0.827s] copying utils/__init__.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils
+[0.827s] copying utils/activations.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils
+[0.827s] copying utils/loss.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils
+[0.828s] copying utils/datasets.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils
+[0.828s] copying utils/google_utils.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils
+[0.828s] copying utils/autoanchor.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils
+[0.828s] copying utils/plots.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils
+[0.828s] copying utils/general.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils
+[0.828s] copying utils/metrics.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils
+[0.828s] copying utils/add_nms.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils
+[0.828s] copying utils/torch_utils.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils
+[0.828s] creating /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/wandb_logging
+[0.828s] copying utils/wandb_logging/wandb_utils.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/wandb_logging
+[0.829s] copying utils/wandb_logging/__init__.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/wandb_logging
+[0.829s] copying utils/wandb_logging/log_dataset.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/wandb_logging
+[0.829s] creating /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/aws
+[0.829s] copying utils/aws/__init__.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/aws
+[0.829s] copying utils/aws/resume.py -> /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/aws
+[0.829s] running install
+[0.829s] running install_lib
+[0.829s] creating /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/models
+[0.830s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/models/__init__.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/models
+[0.830s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/models/yolo.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/models
+[0.830s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/models/common.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/models
+[0.830s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/models/experimental.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/models
+[0.830s] creating /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/yolov7_obj_detect
+[0.831s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/yolov7_obj_detect/__init__.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/yolov7_obj_detect
+[0.831s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/yolov7_obj_detect/len.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/yolov7_obj_detect
+[0.831s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/yolov7_obj_detect/object_detection.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/yolov7_obj_detect
+[0.831s] creating /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils
+[0.831s] creating /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/wandb_logging
+[0.831s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/wandb_logging/wandb_utils.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/wandb_logging
+[0.831s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/wandb_logging/__init__.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/wandb_logging
+[0.831s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/wandb_logging/log_dataset.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/wandb_logging
+[0.831s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/__init__.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils
+[0.831s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/activations.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils
+[0.831s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/loss.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils
+[0.831s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/datasets.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils
+[0.831s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/google_utils.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils
+[0.831s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/autoanchor.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils
+[0.832s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/plots.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils
+[0.832s] creating /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/aws
+[0.832s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/aws/__init__.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/aws
+[0.832s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/aws/resume.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/aws
+[0.832s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/general.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils
+[0.832s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/metrics.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils
+[0.832s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/add_nms.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils
+[0.832s] copying /home/yvonne/work/src/build/yolov7_obj_detect/build/lib/utils/torch_utils.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils
+[0.832s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/models/__init__.py to __init__.cpython-310.pyc
+[0.832s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/models/yolo.py to yolo.cpython-310.pyc
+[0.836s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/models/common.py to common.cpython-310.pyc
+[0.847s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/models/experimental.py to experimental.cpython-310.pyc
+[0.849s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/yolov7_obj_detect/__init__.py to __init__.cpython-310.pyc
+[0.849s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/yolov7_obj_detect/len.py to len.cpython-310.pyc
+[0.849s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/yolov7_obj_detect/object_detection.py to object_detection.cpython-310.pyc
+[0.850s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/wandb_logging/wandb_utils.py to wandb_utils.cpython-310.pyc
+[0.852s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/wandb_logging/__init__.py to __init__.cpython-310.pyc
+[0.852s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/wandb_logging/log_dataset.py to log_dataset.cpython-310.pyc
+[0.852s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/__init__.py to __init__.cpython-310.pyc
+[0.852s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/activations.py to activations.cpython-310.pyc
+[0.853s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/loss.py to loss.cpython-310.pyc
+[0.861s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/datasets.py to datasets.cpython-310.pyc
+[0.867s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/google_utils.py to google_utils.cpython-310.pyc
+[0.868s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/autoanchor.py to autoanchor.cpython-310.pyc
+[0.869s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/plots.py to plots.cpython-310.pyc
+[0.872s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/aws/__init__.py to __init__.cpython-310.pyc
+[0.873s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/aws/resume.py to resume.cpython-310.pyc
+[0.873s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/general.py to general.cpython-310.pyc
+[0.875s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/metrics.py to metrics.cpython-310.pyc
+[0.877s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/add_nms.py to add_nms.cpython-310.pyc
+[0.877s] byte-compiling /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/utils/torch_utils.py to torch_utils.cpython-310.pyc
+[0.879s] running install_data
+[0.879s] creating /home/yvonne/work/src/install/yolov7_obj_detect/share/ament_index
+[0.879s] creating /home/yvonne/work/src/install/yolov7_obj_detect/share/ament_index/resource_index
+[0.879s] creating /home/yvonne/work/src/install/yolov7_obj_detect/share/ament_index/resource_index/packages
+[0.879s] copying resource/yolov7_obj_detect -> /home/yvonne/work/src/install/yolov7_obj_detect/share/ament_index/resource_index/packages
+[0.879s] copying package.xml -> /home/yvonne/work/src/install/yolov7_obj_detect/share/yolov7_obj_detect
+[0.879s] creating /home/yvonne/work/src/install/yolov7_obj_detect/share/yolov7_obj_detect/launch
+[0.880s] copying launch/object_detection_launch.py -> /home/yvonne/work/src/install/yolov7_obj_detect/share/yolov7_obj_detect/launch
+[0.880s] creating /home/yvonne/work/src/install/yolov7_obj_detect/share/yolov7_obj_detect/weights
+[0.880s] copying weights/first.pt -> /home/yvonne/work/src/install/yolov7_obj_detect/share/yolov7_obj_detect/weights
+[0.918s] copying weights/first_best.pt -> /home/yvonne/work/src/install/yolov7_obj_detect/share/yolov7_obj_detect/weights
+[0.955s] copying weights/c8_best.pt -> /home/yvonne/work/src/install/yolov7_obj_detect/share/yolov7_obj_detect/weights
+[0.993s] copying weights/third_best.pt -> /home/yvonne/work/src/install/yolov7_obj_detect/share/yolov7_obj_detect/weights
+[1.030s] copying weights/alldone.pt -> /home/yvonne/work/src/install/yolov7_obj_detect/share/yolov7_obj_detect/weights
+[1.065s] copying weights/best.pt -> /home/yvonne/work/src/install/yolov7_obj_detect/share/yolov7_obj_detect/weights
+[1.100s] copying weights/yolov7.pt -> /home/yvonne/work/src/install/yolov7_obj_detect/share/yolov7_obj_detect/weights
+[1.136s] creating /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect
+[1.136s] creating /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect/models
+[1.136s] copying models/experimental.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect/models/
+[1.137s] copying models/common.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect/models/
+[1.137s] copying models/yolo.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect/models/
+[1.137s] creating /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect/utils
+[1.137s] copying utils/general.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect/utils/
+[1.137s] copying utils/torch_utils.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect/utils/
+[1.137s] copying utils/plots.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect/utils/
+[1.137s] copying utils/datasets.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect/utils/
+[1.137s] copying utils/google_utils.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect/utils/
+[1.137s] copying utils/activations.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect/utils/
+[1.137s] copying utils/add_nms.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect/utils/
+[1.138s] copying utils/autoanchor.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect/utils/
+[1.138s] copying utils/loss.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect/utils/
+[1.138s] copying utils/metrics.py -> /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect/utils/
+[1.138s] running install_egg_info
+[1.138s] Copying ../../../build/yolov7_obj_detect/yolov7_obj_detect.egg-info to /home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages/yolov7_obj_detect-0.0.0-py3.10.egg-info
+[1.138s] running install_scripts
+[1.149s] Installing object_detection script to /home/yvonne/work/src/install/yolov7_obj_detect/lib/yolov7_obj_detect
+[1.150s] writing list of installed files to '/home/yvonne/work/src/build/yolov7_obj_detect/install.log'
+[1.166s] Invoked command in '/home/yvonne/work/src/pool/detect/yolov7_obj_detect' returned '0': AMENT_PREFIX_PATH=/home/yvonne/work/src/install/detect_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/yvonne/work/src/install/detect_interface LD_LIBRARY_PATH=/home/yvonne/work/src/install/detect_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/yvonne/work/src/build/yolov7_obj_detect/prefix_override:/home/yvonne/work/src/install/yolov7_obj_detect/lib/python3.10/site-packages:/home/yvonne/work/src/install/detect_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/yolov7_obj_detect build --build-base /home/yvonne/work/src/build/yolov7_obj_detect/build install --record /home/yvonne/work/src/build/yolov7_obj_detect/install.log --single-version-externally-managed install_data

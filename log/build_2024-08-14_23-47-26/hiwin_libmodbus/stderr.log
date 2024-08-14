@@ -1,0 +1,60 @@
+[0mLibmodbus path dir = /home/yvonne/work/src/Hiwin_libmodbus/libmodbus[0m
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-rtu.c:[m[K In function ‘[01m[K_modbus_rtu_prepare_response_tid[m[K’:
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-rtu.c:132:60:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kreq[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  132 | static int _modbus_rtu_prepare_response_tid([01;35m[Kconst uint8_t *req[m[K, int *req_length)
+      |                                             [01;35m[K~~~~~~~~~~~~~~~^~~[m[K
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-rtu.c:[m[K In function ‘[01m[K_modbus_rtu_pre_check_confirmation[m[K’:
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-rtu.c:328:51:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krsp_length[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  328 |                                               [01;35m[Kint rsp_length[m[K)
+      |                                               [01;35m[K~~~~^~~~~~~~~~[m[K
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-rtu.c:[m[K In function ‘[01m[K_modbus_rtu_select[m[K’:
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-rtu.c:1133:73:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Klength_to_read[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+ 1133 | _modbus_rtu_select(modbus_t *ctx, fd_set *rset, struct timeval *tv, [01;35m[Kint length_to_read[m[K)
+      |                                                                     [01;35m[K~~~~^~~~~~~~~~~~~~[m[K
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-tcp.c:[m[K In function ‘[01m[K_modbus_tcp_prepare_response_tid[m[K’:
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-tcp.c:154:70:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kreq_length[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  154 | static int _modbus_tcp_prepare_response_tid(const uint8_t *req, [01;35m[Kint *req_length[m[K)
+      |                                                                 [01;35m[K~~~~~^~~~~~~~~~[m[K
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-tcp.c:[m[K In function ‘[01m[K_modbus_tcp_check_integrity[m[K’:
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-tcp.c:189:50:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kctx[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  189 | static int _modbus_tcp_check_integrity([01;35m[Kmodbus_t *ctx[m[K, uint8_t *msg, const int msg_length)
+      |                                        [01;35m[K~~~~~~~~~~^~~[m[K
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-tcp.c:189:64:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kmsg[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  189 | static int _modbus_tcp_check_integrity(modbus_t *ctx, [01;35m[Kuint8_t *msg[m[K, const int msg_length)
+      |                                                       [01;35m[K~~~~~~~~~^~~[m[K
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-tcp.c:[m[K In function ‘[01m[K_modbus_tcp_pre_check_confirmation[m[K’:
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-tcp.c:197:51:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krsp_length[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  197 |                                               [01;35m[Kint rsp_length[m[K)
+      |                                               [01;35m[K~~~~^~~~~~~~~~[m[K
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-tcp.c:[m[K In function ‘[01m[Kmodbus_tcp_accept[m[K’:
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-tcp.c:706:14:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kaccept4[m[K’; did you mean ‘[01m[Kaccept[m[K’? [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration-Wimplicit-function-declaration]8;;[m[K]
+  706 |     ctx->s = [01;35m[Kaccept4[m[K(*s, (struct sockaddr *) &addr, &addrlen, SOCK_CLOEXEC);
+      |              [01;35m[K^~~~~~~[m[K
+      |              [32m[Kaccept[m[K
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-tcp.c:[m[K In function ‘[01m[K_modbus_tcp_select[m[K’:
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus-tcp.c:762:73:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Klength_to_read[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  762 | _modbus_tcp_select(modbus_t *ctx, fd_set *rset, struct timeval *tv, [01;35m[Kint length_to_read[m[K)
+      |                                                                     [01;35m[K~~~~^~~~~~~~~~~~~~[m[K
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus.c:[m[K In function ‘[01m[K_modbus_receive_msg[m[K’:
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus.c:487:20:[m[K [01;35m[Kwarning: [m[Kthis statement may fall through [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-fallthrough=-Wimplicit-fallthrough=]8;;[m[K]
+  487 |                 if [01;35m[K([m[Klength_to_read != 0) {
+      |                    [01;35m[K^[m[K
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/libmodbus/src/modbus.c:491:13:[m[K [01;36m[Knote: [m[Khere
+  491 |             [01;36m[Kcase[m[K _STEP_META:
+      |             [01;36m[K^~~~[m[K
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/hiwin_libmodbus/src/hiwinlibmodbus_server.cpp:[m[K In member function ‘[01m[Kvoid HiwinlibmodbusServiceServer::hiwinmodbus_execute(std::shared_ptr<hiwin_interfaces::srv::RobotCommand_Request_<std::allocator<void> > >, std::shared_ptr<hiwin_interfaces::srv::RobotCommand_Response_<std::allocator<void> > >)[m[K’:
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/hiwin_libmodbus/src/hiwinlibmodbus_server.cpp:113:34:[m[K [01;35m[Kwarning: [m[Kvalue computed is not used [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-value-Wunused-value]8;;[m[K]
+  113 |                 [01;35m[Krequest->holding == false[m[K;
+      |                 [01;35m[K~~~~~~~~~~~~~~~~~^~~~~~~~[m[K
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/hiwin_libmodbus/src/hiwinlibmodbus_server.cpp:146:34:[m[K [01;35m[Kwarning: [m[Kvalue computed is not used [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-value-Wunused-value]8;;[m[K]
+  146 |                 [01;35m[Krequest->holding == false[m[K;
+      |                 [01;35m[K~~~~~~~~~~~~~~~~~^~~~~~~~[m[K
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/hiwin_libmodbus/src/hiwinlibmodbus_server.cpp:152:34:[m[K [01;35m[Kwarning: [m[Kvalue computed is not used [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-value-Wunused-value]8;;[m[K]
+  152 |                 [01;35m[Krequest->holding == false[m[K;
+      |                 [01;35m[K~~~~~~~~~~~~~~~~~^~~~~~~~[m[K
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/hiwin_libmodbus/src/hiwinlibmodbus_server.cpp:158:34:[m[K [01;35m[Kwarning: [m[Kvalue computed is not used [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-value-Wunused-value]8;;[m[K]
+  158 |                 [01;35m[Krequest->holding == false[m[K;
+      |                 [01;35m[K~~~~~~~~~~~~~~~~~^~~~~~~~[m[K
+[01m[K/home/yvonne/work/src/Hiwin_libmodbus/hiwin_libmodbus/src/hiwinlibmodbus_server.cpp:162:34:[m[K [01;35m[Kwarning: [m[Kvalue computed is not used [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-value-Wunused-value]8;;[m[K]
+  162 |                 [01;35m[Krequest->holding == false[m[K;
+      |                 [01;35m[K~~~~~~~~~~~~~~~~~^~~~~~~~[m[K

@@ -1,0 +1,89 @@
+[0.663s] Invoking command in '/home/yvonne/work/src/pool/center': AMENT_PREFIX_PATH=/home/yvonne/work/src/install/detect_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/yvonne/work/src/install/detect_interface LD_LIBRARY_PATH=/home/yvonne/work/src/install/detect_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/yvonne/work/src/build/center/prefix_override:/home/yvonne/work/src/install/center/lib/python3.10/site-packages:/home/yvonne/work/src/install/detect_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/center build --build-base /home/yvonne/work/src/build/center/build install --record /home/yvonne/work/src/build/center/install.log --single-version-externally-managed install_data
+[0.801s] running egg_info
+[0.801s] creating ../../build/center/center.egg-info
+[0.801s] writing ../../build/center/center.egg-info/PKG-INFO
+[0.801s] writing dependency_links to ../../build/center/center.egg-info/dependency_links.txt
+[0.801s] writing entry points to ../../build/center/center.egg-info/entry_points.txt
+[0.801s] writing requirements to ../../build/center/center.egg-info/requires.txt
+[0.802s] writing top-level names to ../../build/center/center.egg-info/top_level.txt
+[0.802s] writing manifest file '../../build/center/center.egg-info/SOURCES.txt'
+[0.803s] reading manifest file '../../build/center/center.egg-info/SOURCES.txt'
+[0.804s] writing manifest file '../../build/center/center.egg-info/SOURCES.txt'
+[0.804s] running build
+[0.804s] running build_py
+[0.804s] creating /home/yvonne/work/src/build/center/build
+[0.805s] creating /home/yvonne/work/src/build/center/build/lib
+[0.805s] creating /home/yvonne/work/src/build/center/build/lib/center
+[0.805s] copying center/tableball.py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.805s] copying center/__init__.py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.805s] copying center/yyy_arm_controller.py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.806s] copying center/boss_strategy_client.py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.806s] copying center/transformations.py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.806s] copying center/publisher_dection_boxes.py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.806s] copying center/arm_controller_v2.py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.806s] copying center/strategy copy.py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.806s] copying center/just_pool_think0524.py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.806s] copying center/publisher_dection_boxes (copy).py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.806s] copying center/tableball0520.py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.806s] copying center/strategy.py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.806s] copying center/test.py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.806s] copying center/strategy copy 2.py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.807s] copying center/tableball (copy).py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.807s] copying center/control.py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.807s] copying center/just_pool_think0709.py -> /home/yvonne/work/src/build/center/build/lib/center
+[0.807s] running install
+[0.807s] running install_lib
+[0.808s] creating /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.808s] copying /home/yvonne/work/src/build/center/build/lib/center/tableball.py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.808s] copying /home/yvonne/work/src/build/center/build/lib/center/__init__.py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.808s] copying /home/yvonne/work/src/build/center/build/lib/center/yyy_arm_controller.py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.808s] copying /home/yvonne/work/src/build/center/build/lib/center/boss_strategy_client.py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.808s] copying /home/yvonne/work/src/build/center/build/lib/center/transformations.py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.808s] copying /home/yvonne/work/src/build/center/build/lib/center/publisher_dection_boxes.py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.808s] copying /home/yvonne/work/src/build/center/build/lib/center/arm_controller_v2.py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.808s] copying /home/yvonne/work/src/build/center/build/lib/center/strategy copy.py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.808s] copying /home/yvonne/work/src/build/center/build/lib/center/just_pool_think0524.py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.809s] copying /home/yvonne/work/src/build/center/build/lib/center/publisher_dection_boxes (copy).py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.809s] copying /home/yvonne/work/src/build/center/build/lib/center/tableball0520.py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.809s] copying /home/yvonne/work/src/build/center/build/lib/center/strategy.py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.809s] copying /home/yvonne/work/src/build/center/build/lib/center/test.py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.809s] copying /home/yvonne/work/src/build/center/build/lib/center/strategy copy 2.py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.809s] copying /home/yvonne/work/src/build/center/build/lib/center/tableball (copy).py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.809s] copying /home/yvonne/work/src/build/center/build/lib/center/control.py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.809s] copying /home/yvonne/work/src/build/center/build/lib/center/just_pool_think0709.py -> /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center
+[0.809s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/tableball.py to tableball.cpython-310.pyc
+[0.809s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/__init__.py to __init__.cpython-310.pyc
+[0.809s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/yyy_arm_controller.py to yyy_arm_controller.cpython-310.pyc
+[0.812s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/boss_strategy_client.py to boss_strategy_client.cpython-310.pyc
+[0.814s]   File "/home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/boss_strategy_client.py", line 377
+[0.814s]     res = self.call_hiwin(req)撞球末段點(製具句換長度)D_IO:
+[0.814s]                               ^^^^^^^^^^^^^^^
+[0.814s] SyntaxError: invalid syntax
+[0.814s] 
+[0.814s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/transformations.py to transformations.cpython-310.pyc
+[0.819s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/publisher_dection_boxes.py to publisher_dection_boxes.cpython-310.pyc
+[0.819s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/arm_controller_v2.py to arm_controller_v2.cpython-310.pyc
+[0.821s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/strategy copy.py to strategy copy.cpython-310.pyc
+[0.821s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/just_pool_think0524.py to just_pool_think0524.cpython-310.pyc
+[0.824s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/publisher_dection_boxes (copy).py to publisher_dection_boxes (copy).cpython-310.pyc
+[0.824s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/tableball0520.py to tableball0520.cpython-310.pyc
+[0.826s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/strategy.py to strategy.cpython-310.pyc
+[0.827s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/test.py to test.cpython-310.pyc
+[0.827s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/strategy copy 2.py to strategy copy 2.cpython-310.pyc
+[0.828s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/tableball (copy).py to tableball (copy).cpython-310.pyc
+[0.829s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/control.py to control.cpython-310.pyc
+[0.830s] byte-compiling /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/just_pool_think0709.py to just_pool_think0709.cpython-310.pyc
+[0.834s] running install_data
+[0.835s] creating /home/yvonne/work/src/install/center/share/ament_index
+[0.835s] creating /home/yvonne/work/src/install/center/share/ament_index/resource_index
+[0.835s] creating /home/yvonne/work/src/install/center/share/ament_index/resource_index/packages
+[0.835s] copying resource/center -> /home/yvonne/work/src/install/center/share/ament_index/resource_index/packages
+[0.835s] copying package.xml -> /home/yvonne/work/src/install/center/share/center
+[0.835s] running install_egg_info
+[0.837s] Copying ../../build/center/center.egg-info to /home/yvonne/work/src/install/center/lib/python3.10/site-packages/center-0.0.0-py3.10.egg-info
+[0.837s] running install_scripts
+[0.847s] Installing publisher_dection_boxes script to /home/yvonne/work/src/install/center/lib/center
+[0.847s] Installing strategy script to /home/yvonne/work/src/install/center/lib/center
+[0.847s] Installing team_selection script to /home/yvonne/work/src/install/center/lib/center
+[0.847s] writing list of installed files to '/home/yvonne/work/src/build/center/install.log'
+[0.869s] Invoked command in '/home/yvonne/work/src/pool/center' returned '0': AMENT_PREFIX_PATH=/home/yvonne/work/src/install/detect_interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/yvonne/work/src/install/detect_interface LD_LIBRARY_PATH=/home/yvonne/work/src/install/detect_interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/yvonne/work/src/build/center/prefix_override:/home/yvonne/work/src/install/center/lib/python3.10/site-packages:/home/yvonne/work/src/install/detect_interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/center build --build-base /home/yvonne/work/src/build/center/build install --record /home/yvonne/work/src/build/center/install.log --single-version-externally-managed install_data

@@ -1,0 +1,15 @@
+string mode
+bool holding
+int32 type
+int32 vel 
+int32 acc 
+int32 digital_output 
+int32 onoff
+#Digital_output[DO_Num, 0or1]
+float64[] pose
+float64[] circ_s
+float64[] circ_end
+int32 joint
+int32 dir
+---
+int32 arm_state
