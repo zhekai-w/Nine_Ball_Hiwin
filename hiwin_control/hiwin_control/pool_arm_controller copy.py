@@ -39,7 +39,6 @@ FIX_ABS_CAM = [36.326, 376.998, 411.897, 180.0, 0.0, 90.0]
 FIX_ABS_RIGHT_CAM = [186.326, 376.998, 411.897, 180.0, 0.0, 90.0]
 FIX_ABS_LEFT_CAM = [-114.326, 376.998, 411.897, 180.0, 0.0, 90.0]
 END_TURN_RIGHT = [90.00, 0.00, 0.00, 0.00, -90.00, 0.00] #手臂TURN右
-END_TURN_HALL=[0.00, 44.832, 408.491, -179.999, -30.972, 89.998]
 # tool_to_cam = [-34.829, 126.788, -66.624]
 tool_to_cam = [-36.715, 77.5046, -68.49]
 
@@ -209,20 +208,11 @@ class Hiwin_Controller(Node):
             self.get_logger().info('MOVING TO PREPARE POSE...')
             # joints=[float('inf')]*6,
             print("fix cam joint", END_TURN_RIGHT)
-            # req = self.generate_robot_request(
-            #     cmd_type=RobotCommand.Request.JOINTS_CMD,
-            #     joints = END_TURN_RIGHT,
-            #     #不想讓手臂停止才做事(下面if/else不用，直接給下一步的狀態就好)
-            #     #hold=Flase
-            #     )
-            # res = self.call_hiwin(req)
-            pose = Twist()
-            [pose.linear.x, pose.linear.y, pose.linear.z] = END_TURN_HALL[0:3]
-            [pose.angular.x, pose.angular.y, pose.angular.z] = END_TURN_HALL[3:6]
-            print("fix cam pose", END_TURN_HALL)
             req = self.generate_robot_request(
-                cmd_mode = RobotCommand.Request.PTP,
-                pose = pose
+                cmd_type=RobotCommand.Request.JOINTS_CMD,
+                joints = END_TURN_RIGHT,
+                #不想讓手臂停止才做事(下面if/else不用，直接給下一步的狀態就好)
+                #hold=Flase
                 )
             res = self.call_hiwin(req)
             """
