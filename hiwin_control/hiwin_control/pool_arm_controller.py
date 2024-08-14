@@ -22,13 +22,8 @@ import matplotlib.pyplot as plt
 
 CUE_TOOL = 12
 
-<<<<<<< HEAD
 DEFAULT_VELOCITY = 100
 DEFAULT_ACCELERATION = 100
-=======
-DEFAULT_VELOCITY = 50
-DEFAULT_ACCELERATION = 50
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
 
 LIGHT_PIN = 6
 HITSOFT_PIN = 4
@@ -228,12 +223,8 @@ class Hiwin_Controller(Node):
             self.get_logger().info('INIT/WAIT FOR BUTTON')
             req = self.generate_robot_request(
                 cmd_mode = RobotCommand.Request.READ_DI,
-<<<<<<< HEAD
                 digital_input_pin = 1,
                 holding=True,
-=======
-                digital_input_pin = 1
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
             )
             res = self.call_hiwin(req)
             last_state = res.digital_state
@@ -323,10 +314,7 @@ class Hiwin_Controller(Node):
         elif state == States.LOCK_CUE:
             time.sleep(0.3)
             self.get_logger().info('LOCKING CUE BALL INFO...')
-<<<<<<< HEAD
             
-=======
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
             self.ball_pose_buffer = self.all_ball_pose
             self.label_buffer = self.all_label
             if 'white' in self.label_buffer:
@@ -335,11 +323,7 @@ class Hiwin_Controller(Node):
                 temp_actual_pose = convert_arm_pose(temp_ball_pose_mm, self.fix_check_point)
                 self.ball_pose.append(temp_actual_pose)
                 self.fix_check_point = FIX_ABS_CAM
-<<<<<<< HEAD
                 nest_state = States.STEP_CALI
-=======
-                nest_state = States.DYNAMIC_CALI
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
 
             else:
                 print("MOVING TO FIX LEFT POSE...")
@@ -349,32 +333,19 @@ class Hiwin_Controller(Node):
             time.sleep(1)
             self.ball_pose = []
             self.get_logger().info('LOCKING INFO FOR STRATEGY AND CALIBRATION...')
-<<<<<<< HEAD
             # input("Enter to continue...")
             self.ball_pose_buffer_1d = np.array(self.all_ball_pose)
             n = int(len(self.ball_pose_buffer_1d)/2)
             self.ball_pose_buffer = self.ball_pose_buffer_1d.reshape(n,2)
             print("All array ball:", self.ball_pose_buffer)
             self.label_buffer = self.all_label
-=======
-            self.ball_pose_buffer = self.all_ball_pose
-            self.label_buffer = self.all_label
-            self.target_cue = [self.ball_pose_buffer[:2], self.ball_pose_buffer[-2:]]
-            print("target and cue:", self.target_cue)
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
             if 'white' in self.label_buffer:
                 for ball in self.ball_pose_buffer:
                     temp_ball_pose_mm = pixel_mm_convert(CAM_TO_TABLE, ball)
                     temp_actual_pose = convert_arm_pose(temp_ball_pose_mm, FIX_ABS_CAM)
-<<<<<<< HEAD
                     self.ball_pose.append(temp_actual_pose[0:2])
 
                 nest_state = States.STEP_CALI
-=======
-                    self.ball_pose.append(temp_actual_pose)
-
-                nest_state = States.DYNAMIC_CALI
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
 
             else:
                 print("Fuck Cue ball")
@@ -386,7 +357,6 @@ class Hiwin_Controller(Node):
                 nest_state = States.FIX_RIGHT_PHOTO_POSE
 
         elif state == States.STEP_CALI:
-<<<<<<< HEAD
             print("Actual ball pose:", self.ball_pose)
             self.get_logger().info('STEP CALI FOR TEST STRATEGY...')
             self.obj_ballx = []
@@ -420,42 +390,12 @@ class Hiwin_Controller(Node):
                 ball_to_cali.append([cuex, cuey])
             elif self.interrupt_ball_n == 2:
                 print("WWWWWWWWWWWWWWWWWWWWWWW")
-=======
-            self.get_logger().info('STEP CALI FOR TEST STRATEGY...')
-            obj_ballx = []
-            obj_bally = []
-            cuex = None
-            cuey = None
-            ball_to_cali = []
-            for i in range(0,len(self.ball_pose)-2,2):
-                obj_ballx.append(self.ball_pose[i])
-                obj_bally.append(self.ball_pose[i+1])
-            cuex = self.ball_pose[-2]
-            cuey = self.ball_pose[-1]
-
-            # Route returns
-            # score,cuefinalvector,cue,cuetoivector, objectballi, itok2vector, objectballk2 ,k2tok1vector, objectballk1, toholevector,n
-            valid_route, bestrouteindex, obstacle_flag = pool.main(obj_ballx, obj_bally, cuex, cuey)
-            best_route = valid_route[bestrouteindex]
-            interrupt_ball_n = best_route[-1]
-            if interrupt_ball_n == 0:
-                ball_to_cali.append(best_route[4])
-                ball_to_cali.append([cuex, cuey])
-            elif interrupt_ball_n == 1:
-                ball_to_cali.append(best_route[4])
-                ball_to_cali.append(best_route[6])
-                ball_to_cali.append([cuex, cuey])
-            elif interrupt_ball_n == 2:
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
                 ball_to_cali.append(best_route[4])
                 ball_to_cali.append(best_route[6])
                 ball_to_cali.append(best_route[8])
                 ball_to_cali.append([cuex, cuey])
-<<<<<<< HEAD
             else:
                 ball_to_cali.append([cuex, cuey])
-=======
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
 
             # Turn off light
             req = self.generate_robot_request(
@@ -464,11 +404,7 @@ class Hiwin_Controller(Node):
                 digital_output_pin = LIGHT_PIN
             )
             self.call_hiwin(req)
-<<<<<<< HEAD
             print(ball_to_cali)
-=======
-
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
             if self.index < len(ball_to_cali):
                 self.get_logger().info('MOVING TO CALIBRATION POSE...')
                 self.get_logger().info('Camera moving to index_{} ball'.format(self.index))
@@ -485,10 +421,7 @@ class Hiwin_Controller(Node):
                 )
                 res = self.call_hiwin(req)
                 if res.arm_state == RobotCommand.Response.IDLE:
-<<<<<<< HEAD
                     time.sleep(0.3)
-=======
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
                     print('STEP CALIBRATION...')
 
                 req = self.generate_robot_request(cmd_mode=RobotCommand.Request.CHECK_POSE)
@@ -496,17 +429,10 @@ class Hiwin_Controller(Node):
                 cali_point = res.current_position
 
                 mid_x, mid_y = check_mid_pose(self.all_ball_pose)
-<<<<<<< HEAD
                 self.mid_mm = pixel_mm_convert(self.fix_z - abs(tool_to_cam[2]) + abs(self.table_z), [mid_x, mid_y])
 
                 self.updated_balls_x.append(cali_point[0] + tool_to_cam[0] + self.mid_mm[0])
                 self.updated_balls_y.append(cali_point[1] + tool_to_cam[1] - self.mid_mm[1])
-=======
-                mid_mm = pixel_mm_convert(self.fix_z - abs(tool_to_cam[2]) + abs(self.table_z), [mid_x, mid_y])
-
-                self.updated_balls_x.append(cali_point[0] + tool_to_cam[0] + mid_mm[0])
-                self.updated_balls_y.append(cali_point[1] + tool_to_cam[1] - mid_mm[1])
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
                 self.index += 1
 
                 if res.arm_state == RobotCommand.Response.IDLE and self.index < len(ball_to_cali):
@@ -538,7 +464,6 @@ class Hiwin_Controller(Node):
 
             self.get_logger().info('CALCULATE PATH')
             # pool.main returns -> [bestscore, bestvx, bestvy, countobs, final_self.hitpointx, final_self.hitpointy]
-<<<<<<< HEAD
             print(self.updated_balls_x)
             print(self.updated_balls_y)
             if self.interrupt_ball_n == -1:
@@ -549,9 +474,6 @@ class Hiwin_Controller(Node):
                                             self.updated_balls_x[0], self.updated_balls_y[0])
             else:
                 ValidRoute, bestrouteindex, obstacle_flag = pool.main(self.updated_balls_x[:-1], self.updated_balls_y[:-1],
-=======
-            ValidRoute, bestrouteindex, obstacle_flag = pool.main(self.updated_balls_x[:-1], self.updated_balls_y[:-1],
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
                                             self.updated_balls_x[-1], self.updated_balls_y[-1])
             self.strategy_info = pool.route_process(ValidRoute, bestrouteindex, obstacle_flag)
             print("strategy info:", self.strategy_info)
@@ -569,15 +491,9 @@ class Hiwin_Controller(Node):
             pose = Twist()
             [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx, self.hitpointy, -70.0]
             if self.obstacle == 0:
-<<<<<<< HEAD
                 [pose.angular.x, pose.angular.y, pose.angular.z] = [-180., 10., 90.]
             else:
                 [pose.angular.x, pose.angular.y, pose.angular.z] = [-180., 20., 90.]
-=======
-                [pose.angular.x, pose.angular.y, pose.angular.z] = [-180., 0., 90.]
-            else:
-                [pose.angular.x, pose.angular.y, pose.angular.z] = [-180., 17., 90.]
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
             req = self.generate_robot_request(
                 cmd_mode = RobotCommand.Request.PTP,
                 holding=False,
@@ -633,15 +549,9 @@ class Hiwin_Controller(Node):
             self.get_logger().info('GOING TO HIT BALL...')
             pose = Twist()
             if self.obstacle == 0:
-<<<<<<< HEAD
                 [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx+5, self.hitpointy, -133.]
             else:
                 [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx+3, self.hitpointy, -120.642]
-=======
-                [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx, self.hitpointy, -112.]
-            else:
-                [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx, self.hitpointy, -106.642]
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
             [pose.angular.x, pose.angular.y, pose.angular.z] = self.current_pose[3:6]
             req = self.generate_robot_request(
                 cmd_mode = RobotCommand.Request.PTP,
@@ -655,15 +565,9 @@ class Hiwin_Controller(Node):
                 nest_state = None
 
         elif state == States.HITBALL:
-<<<<<<< HEAD
             if self.score <= 3000 or self.score == 0:
                 hitpin = HITHEAVY_PIN
             elif self.score > 3000 and self.score <=6000:
-=======
-            if self.score <= 2000 or self.score == 0:
-                hitpin = HITHEAVY_PIN
-            elif self.score > 2000 and self.score <=4000:
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
                 hitpin = HITMID_PIN
             else:
                 hitpin = HITSOFT_PIN
@@ -825,8 +729,4 @@ def main(args=None):
     rclpy.shutdown()
 
 if __name__ == "__main__":
-<<<<<<< HEAD
     main()
-=======
-    main()
->>>>>>> 177521c405314ba9ee4cd2ebc2e34b35f32a9498
