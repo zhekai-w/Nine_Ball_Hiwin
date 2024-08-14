@@ -28,6 +28,7 @@ setup(
             'rush_arm_controller = hiwin_control.rush_arm_controller:main',
             'yyy_arm_controller = hiwin_control.yyy_arm_controller:main',
             'stream_rs = hiwin_control.stream_rs:main',
+            'pool_arm_controller = hiwin_control.pool_arm_controller:main',
         ],
     },
 )

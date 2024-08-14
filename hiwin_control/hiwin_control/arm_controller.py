@@ -17,6 +17,7 @@ import math
 import quaternion as qtn
 import hiwin_control.transformations as transformations
 import hiwin_control.nine_ball_strat as table2
+import hiwin_control.pool_strat_v2 as pool
 import matplotlib.pyplot as plt
 
 CUE_TOOL = 12
@@ -43,6 +44,9 @@ tool_to_cam = [-36.715, 77.5046, -68.49]
 
 CAM_TO_TABLE = 480
 CALI_HIGHT = 80.0
+
+def __INIT__() -> None:
+    return None
 
 
 class States(Enum):
@@ -206,7 +210,7 @@ class Hiwin_Controller(Node):
             print("fix cam joint", END_TURN_RIGHT)
             req = self.generate_robot_request(
                 cmd_type=RobotCommand.Request.JOINTS_CMD,
-                joints = END_TURN_RIGHT, 
+                joints = END_TURN_RIGHT,
                 #不想讓手臂停止才做事(下面if/else不用，直接給下一步的狀態就好)
                 #hold=Flase
                 )
@@ -305,7 +309,7 @@ class Hiwin_Controller(Node):
                 nest_state = None
 
         elif state == States.LOCK_CUE:
-            
+
             time.sleep(0.3)
             self.get_logger().info('LOCKING CUE BALL INFO...')
             self.ball_pose_buffer = self.all_ball_pose
@@ -347,9 +351,6 @@ class Hiwin_Controller(Node):
                     temp_actual_pose = convert_arm_pose(temp_ball_pose_mm, FIX_ABS_CAM)
                     self.ball_pose.append(temp_actual_pose[0:2])
                 nest_state = States.FIX_RIGHT_PHOTO_POSE
-
-
-
 
         elif state == States.DYNAMIC_CALI:
             Kp = 0.25 # Proportion constant, P controller
