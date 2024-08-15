@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import time
 
-from matplotlib import tempfile
 import rclpy
 from enum import Enum
 from threading import Thread
@@ -30,9 +29,6 @@ HITSOFT_PIN = 4
 HITMID_PIN = 5
 HITHEAVY_PIN = 1
 HEAVY_PIN = 2
-
-tablewidth = 1920
-tableheight = 932 #914
 
 # [1.5683861280265246, -0.0021305364693475553, -3.056812207597806]
 FIX_ABS_CAM = [36.326, 376.998, 411.897, 180.0, 0.0, 90.0]

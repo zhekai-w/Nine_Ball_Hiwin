@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import time
+import yaml
+import configparser
 
-from matplotlib import tempfile
-from numpy.linalg.linalg import _2Tuple
 import rclpy
 from enum import Enum
 from threading import Thread
@@ -32,24 +32,32 @@ HITMID_PIN = 5
 HITHEAVY_PIN = 1
 HEAVY_PIN = 2
 
-tablewidth = 1920
-tableheight = 932 #914
-
-# [1.5683861280265246, -0.0021305364693475553, -3.056812207597806]
-FIX_ABS_CAM = [36.326, 376.998, 411.897, 180.0, 0.0, 90.0]
-FIX_ABS_RIGHT_CAM = [186.326, 376.998, 411.897, 180.0, 0.0, 90.0]
-FIX_ABS_LEFT_CAM = [-114.326, 376.998, 411.897, 180.0, 0.0, 90.0]
+# FIX_ABS_CAM = [36.326, 376.998, 411.897, 180.0, 0.0, 90.0]
+# FIX_ABS_RIGHT_CAM = [186.326, 376.998, 411.897, 180.0, 0.0, 90.0]
+# FIX_ABS_LEFT_CAM = [-114.326, 376.998, 411.897, 180.0, 0.0, 90.0]
 END_TURN_RIGHT = [90.00, 0.00, 0.00, 0.00, -90.00, 0.00] #手臂TURN右
 END_TURN_HALL=[0.00, 44.832, 408.491, -179.999, -30.972, 89.998]
-# tool_to_cam = [-34.829, 126.788, -66.624]
-tool_to_cam = [-36.715, 77.5046, -68.49]
+TOOL_TO_CAM = [-36.715, 77.5046, -68.49]
 
-CAM_TO_TABLE = 480
+# CAM_TO_TABLE = 480
 CALI_HIGHT = 80.0
 
-def __INIT__() -> None:
-    return None
+# Read tool to camera vector
+config = configparser.ConfigParser()
+config.read('eye_in_hand_calibration.ini')
+tm = config['hand_eye_calibration']
+TOOL_TO_CAM[0] = float(tm['y'])*1000
+TOOL_TO_CAM[1] = float(tm['x'])*1000
+TOOL_TO_CAM[2] = -float(tm['z'])*1000
 
+# Read table pot hole position and camera to table height
+with open('arm.yaml', 'r') as file:
+    data = yaml.safe_load(file)
+
+FIX_ABS_CAM = data['armpos']
+FIX_ABS_RIGHT_CAM = [FIX_ABS_CAM[0]+150, 376.998, 411.897, 180.0, 0.0, 90.0]
+FIX_ABS_LEFT_CAM = [FIX_ABS_CAM[0]-150, 376.998, 411.897, 180.0, 0.0, 90.0]
+CAM_TO_TABLE = data['zoff']
 
 class States(Enum):
     INIT = 0
@@ -190,7 +198,7 @@ class Hiwin_Controller(Node):
         self.all_label = []
         self.label_buffer = []
         self.fix_z = 90.
-        self.table_z = FIX_ABS_CAM[2] + tool_to_cam[2] - CAM_TO_TABLE
+        self.table_z = FIX_ABS_CAM[2] + TOOL_TO_CAM[2] - CAM_TO_TABLE
 
     # def strategy_callback(self, msg):
     #     _ = msg.data
@@ -395,21 +403,26 @@ class Hiwin_Controller(Node):
             print("OBJ bally:", self.obj_bally)
             best_route = valid_route[bestrouteindex]
             self.interrupt_ball_n = best_route[-1]
-            print(self.interrupt_ball_n)
-            if self.interrupt_ball_n == 0:
-                ball_to_cali.append(best_route[4])
-                ball_to_cali.append([cuex, cuey])
-            elif self.interrupt_ball_n == 1:
-                ball_to_cali.append(best_route[4])
-                ball_to_cali.append(best_route[6])
-                ball_to_cali.append([cuex, cuey])
-            elif self.interrupt_ball_n == 2:
-                ball_to_cali.append(best_route[4])
-                ball_to_cali.append(best_route[6])
-                ball_to_cali.append(best_route[8])
-                ball_to_cali.append([cuex, cuey])
-            else:
-                ball_to_cali.append([cuex, cuey])
+            # print(self.interrupt_ball_n)
+            # if self.interrupt_ball_n == 0:
+            #     ball_to_cali.append(best_route[4])
+            #     ball_to_cali.append([cuex, cuey])
+            # elif self.interrupt_ball_n == 1:
+            #     ball_to_cali.append(best_route[4])
+            #     ball_to_cali.append(best_route[6])
+            #     ball_to_cali.append([cuex, cuey])
+            # elif self.interrupt_ball_n == 2:
+            #     ball_to_cali.append(best_route[4])
+            #     ball_to_cali.append(best_route[6])
+            #     ball_to_cali.append(best_route[8])
+            #     ball_to_cali.append([cuex, cuey])
+            # else:
+            #     ball_to_cali.append([cuex, cuey])
+
+            '''
+            Only calibrate cueball
+            '''
+            ball_to_cali = [cuex, cuey]
 
             # Turn off light
             req = self.generate_robot_request(
@@ -423,8 +436,8 @@ class Hiwin_Controller(Node):
                 self.get_logger().info('MOVING TO CALIBRATION POSE...')
                 self.get_logger().info('Camera moving to index_{} ball'.format(self.index))
                 pose = Twist()
-                [pose.linear.x, pose.linear.y, pose.linear.z] = [ball_to_cali[self.index][0] - tool_to_cam[0],
-                                                                 ball_to_cali[self.index][1] - tool_to_cam[1],
+                [pose.linear.x, pose.linear.y, pose.linear.z] = [ball_to_cali[self.index][0] - TOOL_TO_CAM[0],
+                                                                 ball_to_cali[self.index][1] - TOOL_TO_CAM[1],
                                                                  self.fix_z]
                 # change
                 [pose.angular.x, pose.angular.y, pose.angular.z] = FIX_ABS_CAM[3:6]
@@ -444,10 +457,10 @@ class Hiwin_Controller(Node):
 
                 self.data_recieved.wait()
                 mid_x, mid_y = check_mid_pose(self.all_ball_pose)
-                self.mid_mm = pixel_mm_convert(self.fix_z - abs(tool_to_cam[2]) + abs(self.table_z), [mid_x, mid_y])
+                self.mid_mm = pixel_mm_convert(self.fix_z - abs(TOOL_TO_CAM[2]) + abs(self.table_z), [mid_x, mid_y])
 
-                self.updated_balls_x.append(cali_point[0] + tool_to_cam[0] + self.mid_mm[0])
-                self.updated_balls_y.append(cali_point[1] + tool_to_cam[1] - self.mid_mm[1])
+                self.updated_balls_x.append(cali_point[0] + TOOL_TO_CAM[0] + self.mid_mm[0])
+                self.updated_balls_y.append(cali_point[1] + TOOL_TO_CAM[1] - self.mid_mm[1])
                 self.index += 1
 
                 if res.arm_state == RobotCommand.Response.IDLE and self.index < len(ball_to_cali):
@@ -481,26 +494,40 @@ class Hiwin_Controller(Node):
             # pool.main returns -> [bestscore, bestvx, bestvy, countobs, final_self.hitpointx, final_self.hitpointy]
             print(self.updated_balls_x)
             print(self.updated_balls_y)
-            if self.interrupt_ball_n == -1:
-                for i in range(len(self.obj_ballx[:-1])):
-                    self.obj_ballx[i] += self.mid_mm[0]
-                    self.obj_bally[i] -= self.mid_mm[1]
-                valid_route, bestrouteindex, obstacle_flag = pool.main(self.obj_ballx[:-1], self.obj_bally[:-1],
-                                            self.updated_balls_x[0], self.updated_balls_y[0])
-                updated_strategy_info = pool.route_process(valid_route, bestrouteindex, obstacle_flag)
-                self.updated_hitpointx = updated_strategy_info[4]
-                self.updated_hitpointy = updated_strategy_info[5]
-                self.updated_vx = updated_strategy_info[1]
-                self.updated_vy = updated_strategy_info[2]
+            # if self.interrupt_ball_n == -1:
+            #     for i in range(len(self.obj_ballx[:-1])):
+            #         self.obj_ballx[i] += self.mid_mm[0]
+            #         self.obj_bally[i] -= self.mid_mm[1]
+            #     valid_route, bestrouteindex, obstacle_flag = pool.main(self.obj_ballx[:-1], self.obj_bally[:-1],
+            #                                 self.updated_balls_x[0], self.updated_balls_y[0])
+            #     updated_strategy_info = pool.route_process(valid_route, bestrouteindex, obstacle_flag)
+            #     self.updated_hitpointx = updated_strategy_info[4]
+            #     self.updated_hitpointy = updated_strategy_info[5]
+            #     self.updated_vx = updated_strategy_info[1]
+            #     self.updated_vy = updated_strategy_info[2]
 
-            else:
-                valid_route, bestrouteindex, obstacle_flag = pool.main(self.updated_balls_x[:-1], self.updated_balls_y[:-1],
-                                            self.updated_balls_x[-1], self.updated_balls_y[-1])
-                updated_strategy_info = pool.route_process(valid_route, bestrouteindex, obstacle_flag)
-                self.updated_hitpointx = updated_strategy_info[4]
-                self.updated_hitpointy = updated_strategy_info[5]
-                self.updated_vx = updated_strategy_info[1]
-                self.updated_vy = updated_strategy_info[2]
+            # else:
+            #     valid_route, bestrouteindex, obstacle_flag = pool.main(self.updated_balls_x[:-1], self.updated_balls_y[:-1],
+            #                                 self.updated_balls_x[-1], self.updated_balls_y[-1])
+            #     updated_strategy_info = pool.route_process(valid_route, bestrouteindex, obstacle_flag)
+            #     self.updated_hitpointx = updated_strategy_info[4]
+            #     self.updated_hitpointy = updated_strategy_info[5]
+            #     self.updated_vx = updated_strategy_info[1]
+            #     self.updated_vy = updated_strategy_info[2]
+
+            '''
+            Only calibrate cueball
+            '''
+            for i in range(len(self.obj_ballx[:-1])):
+                self.obj_ballx[i] += self.mid_mm[0]
+                self.obj_bally[i] -= self.mid_mm[1]
+            valid_route, bestrouteindex, obstacle_flag = pool.main(self.obj_ballx[:-1], self.obj_bally[:-1],
+                                        self.updated_balls_x[0], self.updated_balls_y[0])
+            updated_strategy_info = pool.route_process(valid_route, bestrouteindex, obstacle_flag)
+            self.updated_hitpointx = updated_strategy_info[4]
+            self.updated_hitpointy = updated_strategy_info[5]
+            self.updated_vx = updated_strategy_info[1]
+            self.updated_vy = updated_strategy_info[2]
 
             nest_state = States.HITPOINT_TOP
 
