@@ -7,6 +7,7 @@ import numpy as np
 import math
 import time
 from typing import Tuple
+import yaml
 
 '''
 measure in mm
@@ -35,6 +36,28 @@ aimpointy = [TOP_LEFT[1]-r,             TOP_LEFT[1]-tableheight+r, TOP_LEFT[1]-t
              TOP_LEFT[1]-tableheight+r, TOP_LEFT[1]-r,             TOP_LEFT[1]-r]
 aimtoholex = [-r,-r,0,r,r,0]
 aimtoholey = [r,-r,-r,-r,r,r]
+
+def SET_TABLE(config_file:str) -> None:
+    '''
+    Base on robot arm coordinate
+    '''
+    config_file = 'arm.yaml'
+    with open(config_file, 'r') as file:
+        data = yaml.safe_load(file)
+
+    hole_0 = np.array(data['pot0'][0:2])
+    hole_1 = np.array(data['pot3'][0:2])
+    hole_3 = np.array(data['pot2'][0:2])
+    hole_4 = np.array(data['pot1'][0:2])
+    vx = hole_4 - hole_0
+    vx_lengh = np.sqrt(vx[0]**2 + vx[1]**2)
+    unit_vx = vx/vx_lengh
+    hole_2 = hole_1 + vx*(vx_lengh/2)
+    hole_5 = hole_0 +vx*(vx_lengh/2)
+    vy = hole_1 - hole_0
+    vy_lengh = np.sqrt(vy[0]**2 + vy[1]**2)
+    unit_vy = vy/vy_lengh
+
 
 # DISTANCE BETWEEN TWO BALLS
 def disandvec(toballx, tobally, fromballx, frombally):

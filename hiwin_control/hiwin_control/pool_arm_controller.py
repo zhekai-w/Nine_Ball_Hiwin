@@ -2,6 +2,7 @@
 import time
 
 from matplotlib import tempfile
+from numpy.linalg.linalg import _2Tuple
 import rclpy
 from enum import Enum
 from threading import Thread
@@ -197,10 +198,12 @@ class Hiwin_Controller(Node):
         self.all_label = eval(msg.data)
 
     def yolo_callback(self, msg):
-        self.all_ball_pose = msg.data
-        self.target_cue = [self.all_ball_pose[:2], self.all_ball_pose[-2:]]
-        # self.cue = self.all_ball_pose[-2:]
-        # self.target_ball = self.all_ball_pose[:2]
+        if not msg.data:
+            rclpy.logwarn("Received empty data in yolo_callback")
+        else:
+            self.all_ball_pose = msg.data
+            self.target_cue = [self.all_ball_pose[:2], self.all_ball_pose[-2:]]
+            self.data_received.set()
 
 
     def _state_machine(self, state: States) -> States:
@@ -228,9 +231,12 @@ class Hiwin_Controller(Node):
             )
             res = self.call_hiwin(req)
             last_state = res.digital_state
+
             while True:
                 res = self.call_hiwin(req)
                 current_state = res.digital_state
+                self.get_logger().info('CURRENT STATE:%d'%current_state)
+                self.get_logger().info('LAST STATE:%d'%last_state)
                 if current_state != last_state:
                     break
                 else:
@@ -314,7 +320,7 @@ class Hiwin_Controller(Node):
         elif state == States.LOCK_CUE:
             time.sleep(0.3)
             self.get_logger().info('LOCKING CUE BALL INFO...')
-            
+
             self.ball_pose_buffer = self.all_ball_pose
             self.label_buffer = self.all_label
             if 'white' in self.label_buffer:
@@ -373,23 +379,21 @@ class Hiwin_Controller(Node):
             # Route returns
             # score,cuefinalvector,cue,cuetoivector, objectballi, itok2vector, objectballk2 ,k2tok1vector, objectballk1, toholevector,n
             valid_route, bestrouteindex, obstacle_flag = pool.main(self.obj_ballx[:-1], self.obj_bally[:-1], cuex, cuey)
-            
+            self.strategy_info = pool.route_process(valid_route, bestrouteindex, obstacle_flag)
+
             print("OBJ ballx:", self.obj_ballx)
             print("OBJ bally:", self.obj_bally)
             best_route = valid_route[bestrouteindex]
             self.interrupt_ball_n = best_route[-1]
             print(self.interrupt_ball_n)
             if self.interrupt_ball_n == 0:
-                print("-----------------------------")
                 ball_to_cali.append(best_route[4])
                 ball_to_cali.append([cuex, cuey])
             elif self.interrupt_ball_n == 1:
-                print("?????????????")
                 ball_to_cali.append(best_route[4])
                 ball_to_cali.append(best_route[6])
                 ball_to_cali.append([cuex, cuey])
             elif self.interrupt_ball_n == 2:
-                print("WWWWWWWWWWWWWWWWWWWWWWW")
                 ball_to_cali.append(best_route[4])
                 ball_to_cali.append(best_route[6])
                 ball_to_cali.append(best_route[8])
@@ -428,6 +432,7 @@ class Hiwin_Controller(Node):
                 res = self.call_hiwin(req)
                 cali_point = res.current_position
 
+                self.data_recieved.wait()
                 mid_x, mid_y = check_mid_pose(self.all_ball_pose)
                 self.mid_mm = pixel_mm_convert(self.fix_z - abs(tool_to_cam[2]) + abs(self.table_z), [mid_x, mid_y])
 
@@ -470,23 +475,34 @@ class Hiwin_Controller(Node):
                 for i in range(len(self.obj_ballx[:-1])):
                     self.obj_ballx[i] += self.mid_mm[0]
                     self.obj_bally[i] -= self.mid_mm[1]
-                ValidRoute, bestrouteindex, obstacle_flag = pool.main(self.obj_ballx[:-1], self.obj_bally[:-1],
+                valid_route, bestrouteindex, obstacle_flag = pool.main(self.obj_ballx[:-1], self.obj_bally[:-1],
                                             self.updated_balls_x[0], self.updated_balls_y[0])
+                updated_strategy_info = pool.route_process(valid_route, bestrouteindex, obstacle_flag)
+                self.updated_hitpointx = updated_strategy_info[4]
+                self.updated_hitpointy = updated_strategy_info[5]
+                self.updated_vx = updated_strategy_info[1]
+                self.updated_vy = updated_strategy_info[2]
+
             else:
-                ValidRoute, bestrouteindex, obstacle_flag = pool.main(self.updated_balls_x[:-1], self.updated_balls_y[:-1],
+                valid_route, bestrouteindex, obstacle_flag = pool.main(self.updated_balls_x[:-1], self.updated_balls_y[:-1],
                                             self.updated_balls_x[-1], self.updated_balls_y[-1])
-            self.strategy_info = pool.route_process(ValidRoute, bestrouteindex, obstacle_flag)
-            print("strategy info:", self.strategy_info)
+                updated_strategy_info = pool.route_process(valid_route, bestrouteindex, obstacle_flag)
+                self.updated_hitpointx = updated_strategy_info[4]
+                self.updated_hitpointy = updated_strategy_info[5]
+                self.updated_vx = updated_strategy_info[1]
+                self.updated_vy = updated_strategy_info[2]
+
             nest_state = States.HITPOINT_TOP
 
         elif state == States.HITPOINT_TOP:
             self.score = self.strategy_info[0]
             self.obstacle = self.strategy_info[3]
             self.get_logger().info('MOVING TO HITPOINT TOP...')
-            self.hitpointx = self.strategy_info[4]
-            self.hitpointy = self.strategy_info[5]
-            vx = self.strategy_info[1]
-            vy = self.strategy_info[2]
+            self.hitpointx = self.updated_hitpointx
+            self.hitpointy = self.updated_hitpointy
+            vx = self.updated_vx
+            vy = self.updated_vy
+
             # yaw, _ = yaw_angle(vx, vy)
             pose = Twist()
             [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx, self.hitpointy, -70.0]
@@ -549,9 +565,9 @@ class Hiwin_Controller(Node):
             self.get_logger().info('GOING TO HIT BALL...')
             pose = Twist()
             if self.obstacle == 0:
-                [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx+5, self.hitpointy, -133.]
+                [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx, self.hitpointy, -133.]
             else:
-                [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx+3, self.hitpointy, -120.642]
+                [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx, self.hitpointy, -120.642]
             [pose.angular.x, pose.angular.y, pose.angular.z] = self.current_pose[3:6]
             req = self.generate_robot_request(
                 cmd_mode = RobotCommand.Request.PTP,
