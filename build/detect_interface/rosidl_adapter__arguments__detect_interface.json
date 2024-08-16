@@ -1,7 +1,0 @@
-{
-  "package_name": "detect_interface",
-  "non_idl_tuples": [
-    "/home/yvonne/work/src/pool/detect/detect_interface:msg/DetectionResults.msg",
-    "/home/yvonne/work/src/pool/detect/detect_interface:msg/BoundingBox.msg"
-  ]
-}

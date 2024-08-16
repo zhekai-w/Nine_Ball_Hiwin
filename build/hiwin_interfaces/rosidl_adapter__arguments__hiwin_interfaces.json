@@ -1,7 +1,0 @@
-{
-  "package_name": "hiwin_interfaces",
-  "non_idl_tuples": [
-    "/home/yvonne/work/src/Hiwin_libmodbus/hiwin_interfaces:srv/Hiwinmodbus.srv",
-    "/home/yvonne/work/src/Hiwin_libmodbus/hiwin_interfaces:srv/RobotCommand.srv"
-  ]
-}

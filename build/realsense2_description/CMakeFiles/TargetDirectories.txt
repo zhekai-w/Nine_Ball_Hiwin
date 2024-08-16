@@ -1,9 +1,0 @@
-/home/yvonne/work/src/build/realsense2_description/CMakeFiles/uninstall.dir
-/home/yvonne/work/src/build/realsense2_description/CMakeFiles/realsense2_description_uninstall.dir
-/home/yvonne/work/src/build/realsense2_description/CMakeFiles/test.dir
-/home/yvonne/work/src/build/realsense2_description/CMakeFiles/edit_cache.dir
-/home/yvonne/work/src/build/realsense2_description/CMakeFiles/rebuild_cache.dir
-/home/yvonne/work/src/build/realsense2_description/CMakeFiles/list_install_components.dir
-/home/yvonne/work/src/build/realsense2_description/CMakeFiles/install.dir
-/home/yvonne/work/src/build/realsense2_description/CMakeFiles/install/local.dir
-/home/yvonne/work/src/build/realsense2_description/CMakeFiles/install/strip.dir

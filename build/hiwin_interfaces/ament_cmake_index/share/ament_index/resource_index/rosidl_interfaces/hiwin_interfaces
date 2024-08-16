@@ -1,8 +1,0 @@
-srv/Hiwinmodbus.idl
-srv/Hiwinmodbus.srv
-srv/Hiwinmodbus_Request.msg
-srv/Hiwinmodbus_Response.msg
-srv/RobotCommand.idl
-srv/RobotCommand.srv
-srv/RobotCommand_Request.msg
-srv/RobotCommand_Response.msg

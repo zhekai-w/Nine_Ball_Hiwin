@@ -1,3 +1,0 @@
-models
-utils
-yolov7_obj_detect

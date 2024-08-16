@@ -1,5 +1,0 @@
-  File "/home/yvonne/work/src/install/center/lib/python3.10/site-packages/center/boss_strategy_client.py", line 377
-    res = self.call_hiwin(req)撞球末段點(製具句換長度)D_IO:
-                              ^^^^^^^^^^^^^^^
-SyntaxError: invalid syntax
-

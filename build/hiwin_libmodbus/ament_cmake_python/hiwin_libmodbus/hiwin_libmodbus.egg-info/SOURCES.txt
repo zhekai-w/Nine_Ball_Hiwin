@@ -1,7 +1,0 @@
-setup.py
-hiwin_libmodbus/__init__.py
-hiwin_libmodbus/hiwin_libmodbus.py
-hiwin_libmodbus.egg-info/PKG-INFO
-hiwin_libmodbus.egg-info/SOURCES.txt
-hiwin_libmodbus.egg-info/dependency_links.txt
-hiwin_libmodbus.egg-info/top_level.txt

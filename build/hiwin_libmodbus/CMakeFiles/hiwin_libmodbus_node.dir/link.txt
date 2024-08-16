@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/hiwin_libmodbus_node.dir/src/hiwin_libmodbus_node.cpp.o -o hiwin_libmodbus_node  -Wl,-rpath,/home/yvonne/work/src/build/hiwin_libmodbus: libhiwin_libmodbus.so 
