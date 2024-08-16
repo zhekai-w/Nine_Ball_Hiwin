@@ -1,0 +1,13 @@
+# FOR ARUCO TABLE CALIBRATION
+ros2 run hiwin_libmodbus hiwinlibmodbus_server
+# in hiwin_control/hiwin_control
+python3 aruco_table_cali.py
+
+# latest instructions (you can use "ros2 launch realsense2_camera rs_launch.py rgb_camera.color_profile:=1920x1080x30" instead of "ros2 run hiwin_control stream_rs")
+# in docker container
+ros2 run hiwin_control stream_rs
+ros2 launch yolov7_obj_detect object_detection_launch.py
+ros2 run center publisher_dection_boxes
+ros2 run hiwin_libmodbus hiwinlibmodbus_server
+ros2 run hiwin_control arm_controller
+
