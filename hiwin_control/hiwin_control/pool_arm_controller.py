@@ -2,6 +2,7 @@
 import time
 import yaml
 import configparser
+import os
 
 import rclpy
 from enum import Enum
@@ -44,14 +45,14 @@ CALI_HIGHT = 80.0
 
 # Read tool to camera vector
 config = configparser.ConfigParser()
-config.read('eye_in_hand_calibration.ini')
+config.read('/home/zack/work/yolov7_hiwin_ws/src/hiwin_control/hiwin_control/eye_in_hand_calibration.ini')
 tm = config['hand_eye_calibration']
 TOOL_TO_CAM[0] = float(tm['y'])*1000
 TOOL_TO_CAM[1] = float(tm['x'])*1000
 TOOL_TO_CAM[2] = -float(tm['z'])*1000
 
 # Read table pot hole position and camera to table height
-with open('arm.yaml', 'r') as file:
+with open('/home/zack/work/yolov7_hiwin_ws/src/hiwin_control/hiwin_control/arm.yaml', 'r') as file:
     data = yaml.safe_load(file)
 
 FIX_ABS_CAM = data['armpos']
@@ -208,11 +209,13 @@ class Hiwin_Controller(Node):
 
     def yolo_callback(self, msg):
         if not msg.data:
-            rclpy.logwarn("Received empty data in yolo_callback")
+            # self.get_logger().info("Received empty data in yolo_callback")
+            self.data_flag = 0
         else:
             self.all_ball_pose = msg.data
             self.target_cue = [self.all_ball_pose[:2], self.all_ball_pose[-2:]]
-            self.data_received.set()
+            # self.data_received.set()
+            self.data_flag = 1
 
 
     def _state_machine(self, state: States) -> States:
@@ -336,7 +339,7 @@ class Hiwin_Controller(Node):
                 nest_state = None
 
         elif state == States.LOCK_CUE:
-            time.sleep(0.3)
+            time.sleep(1)
             self.get_logger().info('LOCKING CUE BALL INFO...')
 
             self.ball_pose_buffer = self.all_ball_pose
@@ -403,26 +406,26 @@ class Hiwin_Controller(Node):
             print("OBJ bally:", self.obj_bally)
             best_route = valid_route[bestrouteindex]
             self.interrupt_ball_n = best_route[-1]
-            # print(self.interrupt_ball_n)
-            # if self.interrupt_ball_n == 0:
-            #     ball_to_cali.append(best_route[4])
-            #     ball_to_cali.append([cuex, cuey])
-            # elif self.interrupt_ball_n == 1:
-            #     ball_to_cali.append(best_route[4])
-            #     ball_to_cali.append(best_route[6])
-            #     ball_to_cali.append([cuex, cuey])
-            # elif self.interrupt_ball_n == 2:
-            #     ball_to_cali.append(best_route[4])
-            #     ball_to_cali.append(best_route[6])
-            #     ball_to_cali.append(best_route[8])
-            #     ball_to_cali.append([cuex, cuey])
-            # else:
-            #     ball_to_cali.append([cuex, cuey])
+            print(self.interrupt_ball_n)
+            if self.interrupt_ball_n == 0:
+                ball_to_cali.append(best_route[4])
+                ball_to_cali.append([cuex, cuey])
+            elif self.interrupt_ball_n == 1:
+                ball_to_cali.append(best_route[4])
+                ball_to_cali.append(best_route[6])
+                ball_to_cali.append([cuex, cuey])
+            elif self.interrupt_ball_n == 2:
+                ball_to_cali.append(best_route[4])
+                ball_to_cali.append(best_route[6])
+                ball_to_cali.append(best_route[8])
+                ball_to_cali.append([cuex, cuey])
+            else:
+                ball_to_cali.append([cuex, cuey])
 
-            '''
-            Only calibrate cueball
-            '''
-            ball_to_cali = [cuex, cuey]
+            # '''
+            # Only calibrate cueball
+            # '''
+            # ball_to_cali = [cuex, cuey]
 
             # Turn off light
             req = self.generate_robot_request(
@@ -436,9 +439,14 @@ class Hiwin_Controller(Node):
                 self.get_logger().info('MOVING TO CALIBRATION POSE...')
                 self.get_logger().info('Camera moving to index_{} ball'.format(self.index))
                 pose = Twist()
+                print("tool to cam:", TOOL_TO_CAM[0])
+                print("ball to cali:", ball_to_cali)
                 [pose.linear.x, pose.linear.y, pose.linear.z] = [ball_to_cali[self.index][0] - TOOL_TO_CAM[0],
-                                                                 ball_to_cali[self.index][1] - TOOL_TO_CAM[1],
-                                                                 self.fix_z]
+                                                                ball_to_cali[self.index][1] - TOOL_TO_CAM[1],
+                                                                self.fix_z]
+                # [pose.linear.x, pose.linear.y, pose.linear.z] = [ball_to_cali[0] - TOOL_TO_CAM[0],
+                #                                                 ball_to_cali[1] - TOOL_TO_CAM[1],
+                #                                                 self.fix_z]
                 # change
                 [pose.angular.x, pose.angular.y, pose.angular.z] = FIX_ABS_CAM[3:6]
 
@@ -448,14 +456,18 @@ class Hiwin_Controller(Node):
                 )
                 res = self.call_hiwin(req)
                 if res.arm_state == RobotCommand.Response.IDLE:
-                    time.sleep(0.3)
+                    time.sleep(1)
                     print('STEP CALIBRATION...')
 
                 req = self.generate_robot_request(cmd_mode=RobotCommand.Request.CHECK_POSE)
                 res = self.call_hiwin(req)
                 cali_point = res.current_position
 
-                self.data_recieved.wait()
+                while self.data_flag == 0:
+                    if self.data_flag == 1:
+                        break
+                    else:
+                        continue
                 mid_x, mid_y = check_mid_pose(self.all_ball_pose)
                 self.mid_mm = pixel_mm_convert(self.fix_z - abs(TOOL_TO_CAM[2]) + abs(self.table_z), [mid_x, mid_y])
 
@@ -492,42 +504,49 @@ class Hiwin_Controller(Node):
 
             self.get_logger().info('CALCULATE PATH')
             # pool.main returns -> [bestscore, bestvx, bestvy, countobs, final_self.hitpointx, final_self.hitpointy]
-            print(self.updated_balls_x)
-            print(self.updated_balls_y)
-            # if self.interrupt_ball_n == -1:
-            #     for i in range(len(self.obj_ballx[:-1])):
-            #         self.obj_ballx[i] += self.mid_mm[0]
-            #         self.obj_bally[i] -= self.mid_mm[1]
-            #     valid_route, bestrouteindex, obstacle_flag = pool.main(self.obj_ballx[:-1], self.obj_bally[:-1],
-            #                                 self.updated_balls_x[0], self.updated_balls_y[0])
-            #     updated_strategy_info = pool.route_process(valid_route, bestrouteindex, obstacle_flag)
-            #     self.updated_hitpointx = updated_strategy_info[4]
-            #     self.updated_hitpointy = updated_strategy_info[5]
-            #     self.updated_vx = updated_strategy_info[1]
-            #     self.updated_vy = updated_strategy_info[2]
+            # print(self.updated_balls_x)
+            # print(self.updated_balls_y)
+            self.updated_hitpointx = None
+            self.updated_hitpointy = None
+            self.updated_vx = None
+            self.updated_vy  =None
+            if self.interrupt_ball_n == -1:
+                for i in range(len(self.obj_ballx[:-1])):
+                    self.obj_ballx[i] += self.mid_mm[0]
+                    self.obj_bally[i] -= self.mid_mm[1]
+                valid_route, bestrouteindex, obstacle_flag = pool.main(self.obj_ballx[:-1], self.obj_bally[:-1],
+                                            self.updated_balls_x[0], self.updated_balls_y[0])
+                updated_strategy_info = pool.route_process(valid_route, bestrouteindex, obstacle_flag)
+                self.updated_hitpointx = updated_strategy_info[4]
+                self.updated_hitpointy = updated_strategy_info[5]
+                self.updated_vx = updated_strategy_info[1]
+                self.updated_vy = updated_strategy_info[2]
 
-            # else:
-            #     valid_route, bestrouteindex, obstacle_flag = pool.main(self.updated_balls_x[:-1], self.updated_balls_y[:-1],
-            #                                 self.updated_balls_x[-1], self.updated_balls_y[-1])
-            #     updated_strategy_info = pool.route_process(valid_route, bestrouteindex, obstacle_flag)
-            #     self.updated_hitpointx = updated_strategy_info[4]
-            #     self.updated_hitpointy = updated_strategy_info[5]
-            #     self.updated_vx = updated_strategy_info[1]
-            #     self.updated_vy = updated_strategy_info[2]
+            else:
+                print('valid route reculculate:\n')
+                print('updated objx:',self.updated_balls_x[:-1])
+                print('updated objy:', self.updated_balls_y[:-1])
+                valid_route, bestrouteindex, obstacle_flag = pool.main(self.updated_balls_x[:-1], self.updated_balls_y[:-1],
+                                            self.updated_balls_x[-1], self.updated_balls_y[-1])
+                updated_strategy_info = pool.route_process(valid_route, bestrouteindex, obstacle_flag)
+                self.updated_hitpointx = updated_strategy_info[4]
+                self.updated_hitpointy = updated_strategy_info[5]
+                self.updated_vx = updated_strategy_info[1]
+                self.updated_vy = updated_strategy_info[2]
 
-            '''
-            Only calibrate cueball
-            '''
-            for i in range(len(self.obj_ballx[:-1])):
-                self.obj_ballx[i] += self.mid_mm[0]
-                self.obj_bally[i] -= self.mid_mm[1]
-            valid_route, bestrouteindex, obstacle_flag = pool.main(self.obj_ballx[:-1], self.obj_bally[:-1],
-                                        self.updated_balls_x[0], self.updated_balls_y[0])
-            updated_strategy_info = pool.route_process(valid_route, bestrouteindex, obstacle_flag)
-            self.updated_hitpointx = updated_strategy_info[4]
-            self.updated_hitpointy = updated_strategy_info[5]
-            self.updated_vx = updated_strategy_info[1]
-            self.updated_vy = updated_strategy_info[2]
+            # '''
+            # Only calibrate cueball
+            # '''
+            # for i in range(len(self.obj_ballx[:-1])):
+            #     self.obj_ballx[i] += self.mid_mm[0]
+            #     self.obj_bally[i] -= self.mid_mm[1]
+            # valid_route, bestrouteindex, obstacle_flag = pool.main(self.obj_ballx[:-1], self.obj_bally[:-1],
+            #                             self.updated_balls_x[0], self.updated_balls_y[0])
+            # updated_strategy_info = pool.route_process(valid_route, bestrouteindex, obstacle_flag)
+            # self.updated_hitpointx = updated_strategy_info[4]
+            # self.updated_hitpointy = updated_strategy_info[5]
+            # self.updated_vx = updated_strategy_info[1]
+            # self.updated_vy = updated_strategy_info[2]
 
             nest_state = States.HITPOINT_TOP
 
@@ -562,10 +581,10 @@ class Hiwin_Controller(Node):
 
         elif state == States.HITPOINT_ANGLE:
             self.get_logger().info('TURNINING YAW ANGLE...')
-            self.hitpointx = self.strategy_info[4]
-            self.hitpointy = self.strategy_info[5]
-            vx = self.strategy_info[1]
-            vy = self.strategy_info[2]
+            self.hitpointx = self.updated_hitpointx
+            self.hitpointy = self.updated_hitpointy
+            vx = self.updated_vx
+            vy = self.updated_vy
             yaw, _ = yaw_angle(vx, vy)
             pose = Twist()
             [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx, self.hitpointy, -70.0]
@@ -593,10 +612,10 @@ class Hiwin_Controller(Node):
             res = self.call_hiwin(req)
             self.current_pose = res.current_position
             nest_state = States.HITBALL_POSE
-            # if res.arm_state == RobotCommand.Response.IDLE:
-            #     nest_state = States.HITBALL_POSE
-            # else:
-            #     nest_state = None
+            if res.arm_state == RobotCommand.Response.IDLE:
+                nest_state = States.HITBALL_POSE
+            else:
+                nest_state = None
 
         elif state == States.HITBALL_POSE:
             self.get_logger().info('GOING TO HIT BALL...')

@@ -6,6 +6,7 @@ import random
 import numpy as np
 import math
 import time
+import yaml
 
 # define table height width
 # tablewidth = 1920
@@ -28,19 +29,64 @@ R = 16
 # rb = round(RB)
 rb = 20
 
-TOP_LEFT = [-296.364, 592.533]
+# TOP_LEFT = [-296.364, 592.533]
 
-#define hole locations and aiming point
-holex =     [TOP_LEFT[0],            TOP_LEFT[0],            TOP_LEFT[0]+tablewidth/2,
-             TOP_LEFT[0]+tablewidth, TOP_LEFT[0]+tablewidth, TOP_LEFT[0]+tablewidth/2]
-holey =     [TOP_LEFT[1],             TOP_LEFT[1]-tableheight, TOP_LEFT[1]-tableheight,
-             TOP_LEFT[1]-tableheight, TOP_LEFT[1],             TOP_LEFT[1]]
-aimpointx = [TOP_LEFT[0]+r,            TOP_LEFT[0]+r,            TOP_LEFT[0]+tablewidth/2,
-             TOP_LEFT[0]+tablewidth-r, TOP_LEFT[0]+tablewidth-r, TOP_LEFT[0]+tablewidth/2]
-aimpointy = [TOP_LEFT[1]-r,             TOP_LEFT[1]-tableheight+r, TOP_LEFT[1]-tableheight+r,
-             TOP_LEFT[1]-tableheight+r, TOP_LEFT[1]-r,             TOP_LEFT[1]-r]
-aimtoholex = [-r,-r,0,r,r,0]
-aimtoholey = [r,-r,-r,-r,r,r]
+# #define hole locations and aiming point
+# holex =     [TOP_LEFT[0],            TOP_LEFT[0],            TOP_LEFT[0]+tablewidth/2,
+#              TOP_LEFT[0]+tablewidth, TOP_LEFT[0]+tablewidth, TOP_LEFT[0]+tablewidth/2]
+# holey =     [TOP_LEFT[1],             TOP_LEFT[1]-tableheight, TOP_LEFT[1]-tableheight,
+#              TOP_LEFT[1]-tableheight, TOP_LEFT[1],             TOP_LEFT[1]]
+# aimpointx = [TOP_LEFT[0]+r,            TOP_LEFT[0]+r,            TOP_LEFT[0]+tablewidth/2,
+#              TOP_LEFT[0]+tablewidth-r, TOP_LEFT[0]+tablewidth-r, TOP_LEFT[0]+tablewidth/2]
+# aimpointy = [TOP_LEFT[1]-r,             TOP_LEFT[1]-tableheight+r, TOP_LEFT[1]-tableheight+r,
+#              TOP_LEFT[1]-tableheight+r, TOP_LEFT[1]-r,             TOP_LEFT[1]-r]
+# aimtoholex = [-r,-r,0,r,r,0]
+# aimtoholey = [r,-r,-r,-r,r,r]
+
+'''
+Base on robot arm coordinate
+'''
+config_file = 'arm.yaml'
+with open(config_file, 'r') as file:
+    data = yaml.safe_load(file)
+
+hole_0 = np.array(data['pot0'][0:2])
+hole_1 = np.array(data['pot3'][0:2])
+hole_3 = np.array(data['pot2'][0:2])
+hole_4 = np.array(data['pot1'][0:2])
+vx = hole_4 - hole_0
+vx_lengh = np.sqrt(vx[0]**2 + vx[1]**2)
+unit_vx = vx/vx_lengh
+vy = hole_0 - hole_1
+vy_lengh = np.sqrt(vy[0]**2 + vy[1]**2)
+unit_vy = vy/vy_lengh
+hole_2 = hole_1 + unit_vx*(vx_lengh/2)
+hole_5 = hole_0 +unit_vx*(vx_lengh/2)
+
+
+aimpoint_0 = hole_0 + r*(unit_vx-unit_vy)
+aimpoint_1 = hole_1 + r*(unit_vx+unit_vy)
+aimpoint_2 = hole_2 + r*(unit_vy)
+aimpoint_3 = hole_3 + r*(-unit_vx+unit_vy)
+aimpoint_4 = hole_4 + r*(-unit_vx-unit_vy)
+aimpoint_5 = hole_5 + r*(-unit_vy)
+
+aimtohole = [-r*(unit_vx-unit_vy), -r*(unit_vx+unit_vy), -r*(unit_vy),
+            -r*(-unit_vx+unit_vy),-r*(-unit_vx-unit_vy),-r*(-unit_vy)]
+
+holex = [hole_0[0], hole_1[0], hole_2[0], hole_3[0], hole_4[0], hole_5[0]]
+holey = [hole_0[1], hole_1[1], hole_2[1], hole_3[1], hole_4[1], hole_5[1]]
+aimpointx = [aimpoint_0[0], aimpoint_1[0], aimpoint_2[0], aimpoint_3[0], aimpoint_4[0], aimpoint_5[0]]
+aimpointy = [aimpoint_0[1], aimpoint_1[1], aimpoint_2[1], aimpoint_3[1], aimpoint_4[1], aimpoint_5[1]]
+
+aimtoholex = []
+aimtoholey = []
+for v in aimtohole:
+    aimtoholex.append(v[0])
+    aimtoholey.append(v[1])
+
+TOP_LEFT = hole_0
+
 
 # DISTANCE BETWEEN TWO BALLS
 def disandvec(toballx, tobally, fromballx, frombally):
@@ -238,6 +284,9 @@ def draw_end_effector_shadow(ballx, bally, vectorx, vectory):
 
 
 def main(objectballx, objectbally, cuex, cuey):
+
+    print("HOLE X:", holex)
+    print("HOLE Y:", holey)
     start_time = time.time()
     inholeindex = []
     n = len(objectballx)
