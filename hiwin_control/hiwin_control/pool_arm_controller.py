@@ -44,15 +44,18 @@ TOOL_TO_CAM = [-36.715, 77.5046, -68.49]
 CALI_HIGHT = 80.0
 
 # Read tool to camera vector
+current_dir = os.getcwd()
 config = configparser.ConfigParser()
-config.read('/home/zack/work/yolov7_hiwin_ws/src/hiwin_control/hiwin_control/eye_in_hand_calibration.ini')
+file_path_ini = current_dir + '/hiwin_control/hiwin_control/eye_in_hand_calibration.ini'
+config.read(file_path_ini)
 tm = config['hand_eye_calibration']
 TOOL_TO_CAM[0] = float(tm['y'])*1000
 TOOL_TO_CAM[1] = float(tm['x'])*1000
 TOOL_TO_CAM[2] = -float(tm['z'])*1000
 
 # Read table pot hole position and camera to table height
-with open('/home/zack/work/yolov7_hiwin_ws/src/hiwin_control/hiwin_control/arm.yaml', 'r') as file:
+file_path_yaml = current_dir + '/hiwin_control/hiwin_control/arm.yaml'
+with open(file_path_yaml, 'r') as file:
     data = yaml.safe_load(file)
 
 FIX_ABS_CAM = data['armpos']
