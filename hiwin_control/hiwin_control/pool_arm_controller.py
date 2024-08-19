@@ -47,7 +47,7 @@ CALI_HIGHT = 80.0
 # Read tool to camera vector
 current_dir = os.getcwd()
 config = configparser.ConfigParser()
-file_path_ini = current_dir + '/hiwin_control/hiwin_control/eye_in_hand_calibration.ini'
+file_path_ini = current_dir + '/src/hiwin_control/hiwin_control/eye_in_hand_calibration.ini'
 config.read(file_path_ini)
 tm = config['hand_eye_calibration']
 TOOL_TO_CAM[0] = float(tm['y'])*1000
@@ -55,7 +55,7 @@ TOOL_TO_CAM[1] = float(tm['x'])*1000
 TOOL_TO_CAM[2] = -float(tm['z'])*1000
 
 # Read table pot hole position and camera to table height
-file_path_yaml = current_dir + '/hiwin_control/hiwin_control/arm.yaml'
+file_path_yaml = current_dir + '/src/hiwin_control/hiwin_control/arm.yaml'
 with open(file_path_yaml, 'r') as file:
     data = yaml.safe_load(file)
 
@@ -204,6 +204,10 @@ class Hiwin_Controller(Node):
         self.all_label = []
         self.label_buffer = []
         self.fix_z = 90.
+        self.second_photo = 0.
+        self.hitball_top = 0.
+        self.hitball_obstacle = 0.
+        self.hitball = 0.
         self.table_z = FIX_ABS_CAM[2] + TOOL_TO_CAM[2] - CAM_TO_TABLE
 
     # def strategy_callback(self, msg):
@@ -235,6 +239,14 @@ class Hiwin_Controller(Node):
             #     #hold=Flase
             #     )
             # res = self.call_hiwin(req)
+            # Make sure light is off
+            req = self.generate_robot_request(
+                cmd_mode = RobotCommand.Request.DIGITAL_OUTPUT,
+                digital_output_cmd = RobotCommand.Request.DIGITAL_OFF,
+                digital_output_pin = LIGHT_PIN
+            )
+            self.call_hiwin(req)
+
             pose = Twist()
             [pose.linear.x, pose.linear.y, pose.linear.z] = END_TURN_HALL[0:3]
             [pose.angular.x, pose.angular.y, pose.angular.z] = END_TURN_HALL[3:6]
@@ -331,10 +343,19 @@ class Hiwin_Controller(Node):
                 pose = pose
                 )
             res = self.call_hiwin(req)
-            if res.arm_state == RobotCommand.Response.IDLE:
+            time.sleep(0.5)
+            if 'white' in self.all_label:
+                print("All Label:", self.all_label)
                 nest_state = States.LOCK_CUE
+                pass
             else:
-                nest_state = None
+                print("All Label...", self.all_label)
+                nest_state = States.INIT
+
+            # if res.arm_state == RobotCommand.Response.IDLE:
+            #     nest_state = States.LOCK_CUE
+            # else:
+            #     nest_state = None
 
         elif state == States.LOCK_CUE:
             time.sleep(1)
@@ -617,10 +638,10 @@ class Hiwin_Controller(Node):
         elif state == States.HITPOINT_TOP:
             self.get_logger().info('MOVING TO HITPOINT TOP...')
             self.score = self.strategy_info[0]
-            self.hitpointx = self.strategy_info[4]
-            self.hitpointy = self.strategy_info[5]
-            vx = self.strategy_info[1]
-            vy = self.strategy_info[2]
+            self.hitpointx = self.updated_hitpointx
+            self.hitpointy = self.updated_hitpointy
+            vx = self.updated_vx
+            vy = self.updated_vy
             yaw, _ = yaw_angle(vx, vy)
 
             # req = self.generate_robot_request(
@@ -722,11 +743,11 @@ class Hiwin_Controller(Node):
             self.call_hiwin(req)
 
             self.get_logger().info('MOVING BACK TO HIT POINT TOP WITH YAW ANGLE...')
-            self.hitpointx = self.strategy_info[4]
-            self.hitpointy = self.strategy_info[5]
-            vx = self.strategy_info[1]
-            vy = self.strategy_info[2]
-            yaw, _ = yaw_angle(-vx, -vy)
+            self.hitpointx = self.updated_hitpointx
+            self.hitpointy = self.updated_hitpointy
+            vx = self.updated_vx
+            vy = self.updated_vy
+            yaw, _ = yaw_angle(vx, vy)
             pose = Twist()
             [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx, self.hitpointy, -70.0]
             [pose.angular.x, pose.angular.y] = self.current_tool_pose[3:5]
@@ -757,10 +778,10 @@ class Hiwin_Controller(Node):
 
         elif state == States.AF_HITPOINT_TOP:
             self.get_logger().info('TURNING YAW ANGLE TO HOME...')
-            self.hitpointx = self.strategy_info[4]
-            self.hitpointy = self.strategy_info[5]
-            # vx = self.strategy_info[1]
-            # vy = self.strategy_info[2]
+            self.hitpointx = self.updated_hitpointx
+            self.hitpointy = self.updated_hitpointy
+            # vx = self.updated_vx
+            # vy = self.updated_vy
             # yaw, _ = yaw_angle(-vx, -vy)
             pose = Twist()
             [pose.linear.x, pose.linear.y, pose.linear.z] = [self.hitpointx, self.hitpointy, -70.0]

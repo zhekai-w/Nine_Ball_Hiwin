@@ -250,12 +250,25 @@ def check_obstacle(ballx, bally, vectorx, vectory, objx, objy):
     table_line_2 = [(holex[4], holey[4]), (holex[3], holey[3])]
     table_line_3 = [(holex[1], holey[1]),(holex[3], holey[3])]
     table_line_4 = [(holex[0], holey[0]), (holex[1], holey[1])]
+
+    # table bound
+    table_bound_1 = [(holex[0]-40, holey[0]+40), (holex[4]+40, holey[4]+40)]
+    table_bound_2 = [(holex[4]+40, holey[4]+40), (holex[3]+40, holey[3]-40)]
+    table_bound_3 = [(holex[1]-40, holey[1]-40),(holex[3]+40, holey[3]-40)]
+    table_bound_4 = [(holex[0]-40, holey[0]+40), (holex[1]-40, holey[1]-40)]
+
     #check table intersect with polygon
     line1 = LineString(table_line_1)
     line2 = LineString(table_line_2)
     line3 = LineString(table_line_3)
     line4 = LineString(table_line_4)
-    if line1.intersects(polygon) or line2.intersects(polygon) or line3.intersects(polygon) or line4.intersects(polygon):
+    bound1 = LineString(table_bound_1)
+    bound2 = LineString(table_bound_2)
+    bound3 = LineString(table_bound_3)
+    bound4 = LineString(table_bound_4)
+
+    # if line1.intersects(polygon) or line2.intersects(polygon) or line3.intersects(polygon) or line4.intersects(polygon):
+    if any(line.intersects(polygon) for line in [line1, line2, line3, line4, bound1, bound2, bound3, bound4]):
         obstacle_flag = 1
         points_inside = [(0,0)]
     else:
@@ -796,9 +809,6 @@ def main(objectballx, objectbally, cuex, cuey):
             ValidRoute.append(luckyroute)
         else:
             print("No valid route even lucky route...")
-            """
-
-            """
 
     """
     #Plot table boundry
@@ -847,7 +857,7 @@ def main(objectballx, objectbally, cuex, cuey):
     #plot the best route
     #return score,cuefinalvector,cue,cuetoivector, objectballi, itok2vector, objectballk2 ,k2tok1vector, objectballk1, toholevector,n
     if len(ValidRoute) == 0:
-        bestrouteindex = 0
+        bestrouteindex = []
         obstacle_flag = 1
         return ValidRoute, bestrouteindex, obstacle_flag
     else:
