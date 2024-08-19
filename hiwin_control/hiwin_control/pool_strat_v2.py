@@ -47,7 +47,7 @@ rb = 20
 '''
 Base on robot arm coordinate
 '''
-config_file = 'arm.yaml'
+config_file = '/home/yvonne/work/src/hiwin_control/hiwin_control/arm.yaml'
 with open(config_file, 'r') as file:
     data = yaml.safe_load(file)
 
@@ -708,43 +708,77 @@ def main(objectballx, objectbally, cuex, cuey):
     who = []
     #Check if ValidRoute is empty
     Numberofroute = len(ValidRoute)
+    first_poly = np.array([0,0])
+    second_poly = np.array([0,0])
+    third_poly = np.array([0,0])
+    fourth_poly = np.array([0,0])
     if Numberofroute == 0:
         print("No valid route, start searching for lucky ball")
         #Method: cut table into six portion and look for the most dense area and meximum effort to that area
-        first_poly = hole_0 # first_poly is always the top left poly
+        first_poly = hole_0 + np.array([-r, r]) # first_poly is always the top left poly
         second_poly = first_poly-unit_vy*vy_lengh*2/3
-        third_poly = second_poly+unit_vx*(vx_lengh*3/7)
-        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7)
+        third_poly = second_poly+unit_vx*(vx_lengh*3/7) 
+        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7) 
+
+        polygon_vertices = [first_poly, second_poly, third_poly, fourth_poly]
+        polygon = MatplotlibPolygon(polygon_vertices, closed=True, edgecolor='blue', facecolor='none')
+        plt.gca().add_patch(polygon)
         print("poly", first_poly)
+
         who1, countN[0] = check_ball_area(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
-        first_poly -= unit_vy*vy_lengh*1/3
-        second_poly = first_poly-unit_vy*vy_lengh*2/3
-        third_poly = second_poly+unit_vx*(vx_lengh*3/7)
-        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7)
+        first_poly -= unit_vy*vy_lengh*1/3 
+        second_poly = first_poly-unit_vy*vy_lengh*2/3 + np.array([0, -2*r])
+        third_poly = second_poly+unit_vx*(vx_lengh*3/7) 
+        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7) 
+
+        polygon_vertices = [first_poly, second_poly, third_poly, fourth_poly]
+        polygon = MatplotlibPolygon(polygon_vertices, closed=True, edgecolor='blue', facecolor='none')
+        plt.gca().add_patch(polygon)
+
         print("poly", first_poly)
         who2, countN[1] = check_ball_area(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
-        first_poly += unit_vx*(vx_lengh*2/7)
-        second_poly = first_poly-unit_vy*vy_lengh*2/3
-        third_poly = second_poly+unit_vx*(vx_lengh*3/7)
-        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7)
+        first_poly += unit_vx*(vx_lengh*2/7) 
+        second_poly = first_poly-unit_vy*vy_lengh*2/3 + np.array([0, -2*r])
+        third_poly = second_poly+unit_vx*(vx_lengh*3/7) 
+        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7) 
+
+        polygon_vertices = [first_poly, second_poly, third_poly, fourth_poly]
+        polygon = MatplotlibPolygon(polygon_vertices, closed=True, edgecolor='blue', facecolor='none')
+        plt.gca().add_patch(polygon)
+
         print("poly", first_poly)
         who3, countN[2] = check_ball_area(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
         first_poly += unit_vx*(vx_lengh*2/7)
-        second_poly = first_poly-unit_vy*vy_lengh*2/3
-        third_poly = second_poly+unit_vx*(vx_lengh*3/7)
-        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7)
+        second_poly = first_poly-unit_vy*vy_lengh*2/3 + np.array([0, -2*r])
+        third_poly = second_poly+unit_vx*(vx_lengh*3/7) + np.array([2*r, 0])
+        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7) + np.array([2*r, 0])
+
+        polygon_vertices = [first_poly, second_poly, third_poly, fourth_poly]
+        polygon = MatplotlibPolygon(polygon_vertices, closed=True, edgecolor='blue', facecolor='none')
+        plt.gca().add_patch(polygon)
+
         print("poly", first_poly)
         who4, countN[3] = check_ball_area(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
-        first_poly += unit_vy*vy_lengh*1/3
-        second_poly = first_poly-unit_vy*vy_lengh*2/3
-        third_poly = second_poly+unit_vx*(vx_lengh*3/7)
-        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7)
+        first_poly += unit_vy*vy_lengh*1/3 
+        second_poly = first_poly-unit_vy*vy_lengh*2/3 
+        third_poly = second_poly+unit_vx*(vx_lengh*3/7) + np.array([2*r, 0])
+        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7) + np.array([2*r, 0])
+
+        polygon_vertices = [first_poly, second_poly, third_poly, fourth_poly]
+        polygon = MatplotlibPolygon(polygon_vertices, closed=True, edgecolor='blue', facecolor='none')
+        plt.gca().add_patch(polygon)
+
         print("poly", first_poly)
         who5, countN[4] = check_ball_area(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
         first_poly -= unit_vx*(vx_lengh*2/7)
         second_poly = first_poly-unit_vy*vy_lengh*2/3
-        third_poly = second_poly+unit_vx*(vx_lengh*3/7)
-        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7)
+        third_poly = second_poly+unit_vx*(vx_lengh*3/7) 
+        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7) 
+
+        polygon_vertices = [first_poly, second_poly, third_poly, fourth_poly]
+        polygon = MatplotlibPolygon(polygon_vertices, closed=True, edgecolor='blue', facecolor='none')
+        plt.gca().add_patch(polygon)
+
         print("poly", first_poly)
         who6, countN[5] = check_ball_area(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
 
@@ -946,7 +980,7 @@ def main(objectballx, objectbally, cuex, cuey):
         plt.axis([0, tablewidth, 0, tableheight])
         plt.axis("equal")
         plt.show(block=False)
-        plt.pause(0.5)
+        # plt.pause(0.1)
         # input("Enter to continue...")
         plt.cla()
         # end_time = time.time()

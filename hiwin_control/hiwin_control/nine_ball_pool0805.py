@@ -8,7 +8,7 @@ from shapely.geometry import Polygon, Point, LineString
 import yaml
 
 #inital condition
-CONFIG_FILE = 'arm.yaml'
+CONFIG_FILE = '/home/yvonne/work/src/hiwin_control/hiwin_control/arm.yaml'
 #ball radius
 radius = 16
 width = 627
@@ -47,7 +47,7 @@ button_right = transform(conf['img_pot2'])
 button_left = transform(conf['img_pot3'])
 
 
-config_file = '/home/jimmy/Desktop/ws/src/Nine_Ball_Hiwin/hiwin_control/hiwin_control/arm.yaml'
+config_file = '/home/yvonne/work/src/hiwin_control/hiwin_control/arm.yaml'
 with open(config_file, 'r') as file:
     data = yaml.safe_load(file)
 
@@ -272,8 +272,8 @@ def screen2(ballcount,routenumber,cue,obj,nine,ball_position):
         plt.gca().add_patch(plt.Circle((holex[i],holey[i]), radius, color='black'))
         plt.gca().add_patch(plt.Circle((vir_hole_positions[i][0],vir_hole_positions[i][1]), radius, color='black'))
     
-    plt.show()
-    fig = plt.figure(figsize=(1900 / 200, 1080 / 200))
+    # plt.show()
+    # fig = plt.figure(figsize=(1900 / 200, 1080 / 200))
 def find_min_negative_integer_in_nested_list(lst):
     min_negative = None 
     min_position1 = None

@@ -21,7 +21,7 @@ WIDTH = 1920
 HEIGHT = 1080
 TEST_VIEW = False
 CAM_ROTATE_XAXIS = False
-LOCK_TAG = 3
+LOCK_TAG = 2
 CONFIG_FILE = 'arm.yaml'
 
 class State:
@@ -42,7 +42,7 @@ else:
     CAM_INIT_ORI = [0.0, 0.0, -45.0]
     INIT_STATE = State.BLIND_SEARCH
 
-TAG_DIST = 260      # distance between the camera and the target tag during measuring height in millimeter.
+TAG_DIST = 263      # distance between the camera and the target tag during measuring height in millimeter.
 TAG_WIDTH = 50
 EXPECT_TAG_AREA = 67000 # 260mm height
 MIN_TAG_AREA = 17560
@@ -176,18 +176,18 @@ class pid:
         # rz:-45, +45; rx: 0, 60
         if self.scandir == 0:
             self.ori[2] += 15
-            if self.ori[2] > 45:
+            if self.ori[2] > 60:
                 self.scandir = 1
                 self.ori[0] += 10
-                self.ori[2] = 45
+                self.ori[2] = 60
                 if self.ori[0] > 21:
                     return Frame.DONE
         else:
             self.ori[2] -= 15
-            if self.ori[2] < -45:
+            if self.ori[2] < -60:
                 self.scandir = 0
                 self.ori[0] += 10
-                self.ori[2] = -45
+                self.ori[2] = -60
                 if self.ori[0] > 21:
                     return Frame.DONE
 

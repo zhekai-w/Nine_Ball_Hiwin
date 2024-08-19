@@ -40,7 +40,7 @@ rb = 20
 '''
 Base on robot arm coordinate
 '''
-config_file = 'arm.yaml'
+config_file = '/home/yvonne/work/src/hiwin_control/hiwin_control/arm.yaml'
 with open(config_file, 'r') as file:
     data = yaml.safe_load(file)
 
