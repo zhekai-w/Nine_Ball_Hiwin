@@ -2,6 +2,7 @@
 import time
 import yaml
 import configparser
+import os
 
 import rclpy
 from enum import Enum
@@ -46,7 +47,7 @@ CALI_HIGHT = 80.0
 # Read tool to camera vector
 current_dir = os.getcwd()
 config = configparser.ConfigParser()
-file_path_ini = current_dir + '/hiwin_control/hiwin_control/eye_in_hand_calibration.ini'
+file_path_ini = current_dir + '/src/hiwin_control/hiwin_control/eye_in_hand_calibration.ini'
 config.read(file_path_ini)
 tm = config['hand_eye_calibration']
 TOOL_TO_CAM[0] = float(tm['y'])*1000
@@ -54,7 +55,8 @@ TOOL_TO_CAM[1] = float(tm['x'])*1000
 TOOL_TO_CAM[2] = -float(tm['z'])*1000
 
 # Read table pot hole position and camera to table height
-file_path_yaml = current_dir + '/hiwin_control/hiwin_control/arm.yaml'
+file_path_yaml = current_dir + '/src/hiwin_control/hiwin_control/arm.yaml'
+print(file_path_yaml)
 with open(file_path_yaml, 'r') as file:
     data = yaml.safe_load(file)
 
@@ -554,14 +556,15 @@ class Hiwin_Controller(Node):
             self.current_tool_pose = res.current_position
             self.get_logger().info('MOVING PITCH ANGLE IF ANY...')
             pose = Twist()
-            if self.obstacle == 0:
-                [pose.linear.x, pose.linear.y, pose.linear.z] = self.current_tool_pose[0:3]
+            if self.obstacle == 1:
+                [pose.linear.x, pose.linear.y, pose.linear.z] = [0., 408., 132.]
                 pose.angular.x = self.current_tool_pose[3]
                 pose.angular.y = 20.
                 pose.angular.z = self.current_tool_pose[5]
             else:
-                [pose.linear.x, pose.linear.y, pose.linear.z] = self.current_tool_pose[0:3]
+                [pose.linear.x, pose.linear.y, pose.linear.z] = [0., 408., 132.]
                 [pose.angular.x, pose.angular.y, pose.angular.z] = self.current_tool_pose[3:6]
+            print("POSE:", pose)
             req = self.generate_robot_request(
                 cmd_mode = RobotCommand.Request.PTP,
                 holding=True,
@@ -614,7 +617,8 @@ class Hiwin_Controller(Node):
             yaw, _ = yaw_angle(vx, vy)
             pose = Twist()
             [pose.linear.x, pose.linear.y, pose.linear.z] = self.current_pose[0:3]
-            [pose.angular.x, pose.angular.y, pose.angular.z] = [-180., 0., yaw-90.]
+            [pose.angular.x, pose.angular.y] = self.current_pose[3:5]
+            pose.angular.z = yaw-90.
             req = self.generate_robot_request(
                 cmd_mode = RobotCommand.Request.PTP,
                 # holding=False,

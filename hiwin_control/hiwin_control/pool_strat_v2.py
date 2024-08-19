@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.path as mplPath
 from matplotlib.patches import Polygon as MatplotlibPolygon
+from pyparsing import Empty
 from shapely.geometry import Polygon, Point, LineString
 import random
 import numpy as np
@@ -267,6 +268,19 @@ def check_obstacle(ballx, bally, vectorx, vectory, objx, objy):
             points_inside.append((objx[i], objy[i]))
             obstacle_flag = 1
     return obstacle_flag, points_inside
+
+def check_ball_area(first_poly, second_poly, third_poly, fourth_poly, objx, objy):
+    n_balls = 0
+    who = []
+    polygon_vertices = [first_poly, second_poly, third_poly, fourth_poly]
+    polygon = Polygon(polygon_vertices)
+    l = len(objx)
+    for i in range(l):
+        shapely_point = Point(objx[i], objy[i])
+        if polygon.contains(shapely_point):
+            who.append(i)
+            n_balls += 1
+    return who, n_balls
 
 def draw_end_effector_shadow(ballx, bally, vectorx, vectory):
     maskheight = 39+r
@@ -684,25 +698,63 @@ def main(objectballx, objectbally, cuex, cuey):
     if Numberofroute == 0:
         print("No valid route, start searching for lucky ball")
         #Method: cut table into six portion and look for the most dense area and meximum effort to that area
-        for i in range(0,n):
-            if TOP_LEFT[0] <= objectballx[i] <= TOP_LEFT[0]+(tablewidth/7)*3 and TOP_LEFT[1]-tableheight*2/3 <= objectbally[i] <= TOP_LEFT[1]:
-                countN[0] = countN[0] + 1
-                who1.append(i)
-            if TOP_LEFT[0]+(tablewidth/7)*2 <= objectballx[i] <= TOP_LEFT[0]+(tablewidth/7)*5 and TOP_LEFT[1]-tableheight*2/3 <= objectbally[i] <= TOP_LEFT[1]:
-                countN[1] = countN[1] + 1
-                who2.append(i)
-            if TOP_LEFT[0]+(tablewidth/7)*4 <= objectballx[i] <= TOP_LEFT[0]+tablewidth and TOP_LEFT[1]-tableheight*2/3 <= objectbally[i] <= TOP_LEFT[1]:
-                countN[2] = countN[2] + 1
-                who3.append(i)
-            if TOP_LEFT[0]+(tablewidth/7)*4 <= objectballx[i] <= TOP_LEFT[0]+tablewidth and TOP_LEFT[1]-tableheight <= objectbally[i] <= TOP_LEFT[1]-tableheight*1/3:
-                countN[3] = countN[3] + 1
-                who4.append(i)
-            if TOP_LEFT[0]+(tablewidth/7)*2 <= objectballx[i] <= TOP_LEFT[0]+(tablewidth/7)*5 and TOP_LEFT[1]-tableheight <= objectbally[i] <= TOP_LEFT[1]-tableheight*1/3:
-                countN[4] = countN[4] + 1
-                who5.append(i)
-            if TOP_LEFT[0] <= objectballx[i] <= TOP_LEFT[0]+(tablewidth/7)*3 and TOP_LEFT[1]-tableheight <= objectbally[i] <= TOP_LEFT[1]-tableheight*1/3:
-                countN[5] = countN[5] + 1
-                who6.append(i)
+        first_poly = hole_0 # first_poly is always the top left poly
+        second_poly = first_poly-unit_vy*vy_lengh*2/3
+        third_poly = second_poly+unit_vx*(vx_lengh*3/7)
+        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7)
+        print("poly", first_poly)
+        who1, countN[0] = check_ball_area(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
+        first_poly -= unit_vy*vy_lengh*1/3
+        second_poly = first_poly-unit_vy*vy_lengh*2/3
+        third_poly = second_poly+unit_vx*(vx_lengh*3/7)
+        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7)
+        print("poly", first_poly)
+        who2, countN[1] = check_ball_area(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
+        first_poly += unit_vx*(vx_lengh*2/7)
+        second_poly = first_poly-unit_vy*vy_lengh*2/3
+        third_poly = second_poly+unit_vx*(vx_lengh*3/7)
+        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7)
+        print("poly", first_poly)
+        who3, countN[2] = check_ball_area(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
+        first_poly += unit_vx*(vx_lengh*2/7)
+        second_poly = first_poly-unit_vy*vy_lengh*2/3
+        third_poly = second_poly+unit_vx*(vx_lengh*3/7)
+        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7)
+        print("poly", first_poly)
+        who4, countN[3] = check_ball_area(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
+        first_poly += unit_vy*vy_lengh*1/3
+        second_poly = first_poly-unit_vy*vy_lengh*2/3
+        third_poly = second_poly+unit_vx*(vx_lengh*3/7)
+        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7)
+        print("poly", first_poly)
+        who5, countN[4] = check_ball_area(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
+        first_poly -= unit_vx*(vx_lengh*2/7)
+        second_poly = first_poly-unit_vy*vy_lengh*2/3
+        third_poly = second_poly+unit_vx*(vx_lengh*3/7)
+        fourth_poly = first_poly+unit_vx*(vx_lengh*3/7)
+        print("poly", first_poly)
+        who6, countN[5] = check_ball_area(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
+
+
+        # for i in range(0,n):
+        #     if TOP_LEFT[0] <= objectballx[i] <= TOP_LEFT[0]+(tablewidth/7)*3 and TOP_LEFT[1]-tableheight*2/3 <= objectbally[i] <= TOP_LEFT[1]:
+        #         countN[0] = countN[0] + 1
+        #         who1.append(i)
+        #     if TOP_LEFT[0]+(tablewidth/7)*2 <= objectballx[i] <= TOP_LEFT[0]+(tablewidth/7)*5 and TOP_LEFT[1]-tableheight*2/3 <= objectbally[i] <= TOP_LEFT[1]:
+        #         countN[1] = countN[1] + 1
+        #         who2.append(i)
+        #     if TOP_LEFT[0]+(tablewidth/7)*4 <= objectballx[i] <= TOP_LEFT[0]+tablewidth and TOP_LEFT[1]-tableheight*2/3 <= objectbally[i] <= TOP_LEFT[1]:
+        #         countN[2] = countN[2] + 1
+        #         who3.append(i)
+        #     if TOP_LEFT[0]+(tablewidth/7)*4 <= objectballx[i] <= TOP_LEFT[0]+tablewidth and TOP_LEFT[1]-tableheight <= objectbally[i] <= TOP_LEFT[1]-tableheight*1/3:
+        #         countN[3] = countN[3] + 1
+        #         who4.append(i)
+        #     if TOP_LEFT[0]+(tablewidth/7)*2 <= objectballx[i] <= TOP_LEFT[0]+(tablewidth/7)*5 and TOP_LEFT[1]-tableheight <= objectbally[i] <= TOP_LEFT[1]-tableheight*1/3:
+        #         countN[4] = countN[4] + 1
+        #         who5.append(i)
+        #     if TOP_LEFT[0] <= objectballx[i] <= TOP_LEFT[0]+(tablewidth/7)*3 and TOP_LEFT[1]-tableheight <= objectbally[i] <= TOP_LEFT[1]-tableheight*1/3:
+        #         countN[5] = countN[5] + 1
+        #         who6.append(i)
         who.append(who1)
         who.append(who2)
         who.append(who3)
@@ -729,20 +781,24 @@ def main(objectballx, objectbally, cuex, cuey):
         # for i in range(0, len(thisareadis)):
 
         print("this area all dis:",thisareadis)
+        if len(thisareadis) != 0:
+            luckyindex = who[countN.index(max(countN))][thisareadis.index(min(thisareadis))]
+            luckyvectorx = objectballx[luckyindex] - cuex
+            luckyvectory = objectbally[luckyindex] - cuey
+            print('lucky index', luckyindex)
+            print('lucky ball x:', objectballx[luckyindex])
+            print('lucky ball y:', objectbally[luckyindex])
 
+            luckyroute = route(cue=[cuex,cuey],cuetoivector=[luckyvectorx, luckyvectory], objectballi=[objectballx[luckyindex],objectbally[luckyindex]],
+                                        toholevector=[1,1],n=-1,
+                                        itok2vector=[0,0],objectballk2=[0,0],k2tok1vector=[0,0],objectballk1=[0,0])
+            # luckyroute[0] = -6000
+            ValidRoute.append(luckyroute)
+        else:
+            print("No valid route even lucky route...")
+            """
 
-        luckyindex = who[countN.index(max(countN))][thisareadis.index(min(thisareadis))]
-        luckyvectorx = objectballx[luckyindex] - cuex
-        luckyvectory = objectbally[luckyindex] - cuey
-        print('lucky index', luckyindex)
-        print('lucky ball x:', objectballx[luckyindex])
-        print('lucky ball y:', objectbally[luckyindex])
-
-        luckyroute = route(cue=[cuex,cuey],cuetoivector=[luckyvectorx, luckyvectory], objectballi=[objectballx[luckyindex],objectbally[luckyindex]],
-                                      toholevector=[1,1],n=-1,
-                                      itok2vector=[0,0],objectballk2=[0,0],k2tok1vector=[0,0],objectballk1=[0,0])
-        # luckyroute[0] = -6000
-        ValidRoute.append(luckyroute)
+            """
 
     """
     #Plot table boundry
@@ -790,98 +846,103 @@ def main(objectballx, objectbally, cuex, cuey):
 
     #plot the best route
     #return score,cuefinalvector,cue,cuetoivector, objectballi, itok2vector, objectballk2 ,k2tok1vector, objectballk1, toholevector,n
-    score = []
-    print("Number of valid route:",len(ValidRoute))
-    for i in range(0,len(ValidRoute)):
-        tempscore = ValidRoute[i][0]
-        score.append(tempscore)
+    if len(ValidRoute) == 0:
+        bestrouteindex = 0
+        obstacle_flag = 1
+        return ValidRoute, bestrouteindex, obstacle_flag
+    else:
+        score = []
+        print("Number of valid route:",len(ValidRoute))
+        for i in range(0,len(ValidRoute)):
+            tempscore = ValidRoute[i][0]
+            score.append(tempscore)
 
-    bestrouteindex = score.index(max(score))
-    print("all score:",score)
-    print("best score:",max(score))
-    print("best route index:",bestrouteindex)
+        bestrouteindex = score.index(max(score))
+        print("all score:",score)
+        print("best score:",max(score))
+        print("best route index:",bestrouteindex)
 
-    Nofinterruptball = ValidRoute[bestrouteindex][-1]
-    if Nofinterruptball == 0:
-        plt.quiver(ValidRoute[bestrouteindex][4][0],ValidRoute[bestrouteindex][4][1],ValidRoute[bestrouteindex][-2][0],ValidRoute[bestrouteindex][-2][1],color='green',units="xy",angles="xy",scale_units="xy",scale=1, width=1)
-        plt.quiver(cuex,cuey,ValidRoute[bestrouteindex][3][0],ValidRoute[bestrouteindex][3][1],color='green',units="xy",angles="xy",scale_units="xy",scale=1, width=1)
-        #final cuevector
-        #plt.quiver(cuex+ValidRoute[bestrouteindex][3][0],cuey+ValidRoute[bestrouteindex][3][1],ValidRoute[bestrouteindex][2][0],ValidRoute[bestrouteindex][2][1],color='green',units="xy",angles="xy",scale_units="xy",scale=1, width=3)
-    elif Nofinterruptball == 1:
-        plt.quiver(ValidRoute[bestrouteindex][6][0],ValidRoute[bestrouteindex][6][1],ValidRoute[bestrouteindex][-2][0],ValidRoute[bestrouteindex][-2][1],color='red',units="xy",angles="xy",scale_units="xy",scale=1, width=2)
-        plt.quiver(ValidRoute[bestrouteindex][4][0],ValidRoute[bestrouteindex][4][1],ValidRoute[bestrouteindex][5][0],ValidRoute[bestrouteindex][5][1],color='red',units="xy",angles="xy",scale_units="xy",scale=1, width=2)
-        plt.quiver(cuex,cuey,ValidRoute[bestrouteindex][3][0],ValidRoute[bestrouteindex][3][1],color='red',units="xy",angles="xy",scale_units="xy",scale=1, width=1)
-    elif Nofinterruptball == 2:
-        plt.quiver(ValidRoute[bestrouteindex][8][0],ValidRoute[bestrouteindex][8][1],ValidRoute[bestrouteindex][9][0],ValidRoute[bestrouteindex][9][1],color='blue',units="xy",angles="xy",scale_units="xy",scale=1, width=2)
-        plt.quiver(ValidRoute[bestrouteindex][6][0],ValidRoute[bestrouteindex][6][1],ValidRoute[bestrouteindex][7][0],ValidRoute[bestrouteindex][7][1],color='blue',units="xy",angles="xy",scale_units="xy",scale=1, width=2)
-        plt.quiver(ValidRoute[bestrouteindex][4][0],ValidRoute[bestrouteindex][4][1],ValidRoute[bestrouteindex][5][0],ValidRoute[bestrouteindex][5][1],color='blue',units="xy",angles="xy",scale_units="xy",scale=1, width=2)
-        plt.quiver(cuex,cuey,ValidRoute[bestrouteindex][3][0],ValidRoute[bestrouteindex][3][1],color='blue',units="xy",angles="xy",scale_units="xy",scale=1, width=1)
-
-
-    #Plot table boundry
-    plt.plot([holex[0],holex[1]],[holey[0],holey[1]],[holex[1],holex[2]],[holey[1],holey[2]],
-             [holex[2],holex[3]],[holey[2],holey[3]],[holex[3],holex[4]],[holey[3],holey[4]],
-             [holex[4],holex[5]],[holey[4],holey[5]],[holex[5],holex[0]],[holey[5],holey[0]],color='black')
-
-    #plot aim point
-    for j in range(len(aimpointx)):
-        aimpoint = plt.Circle((aimpointx[j], aimpointy[j]),
-                            r, color="red", alpha=0.2)
-        plt.text(aimpointx[j],aimpointy[j],j,color='red',fontsize=15)
-        plt.gca().add_patch(aimpoint)
-
-    #plot vector from aiming point to hole
-    for i in range(0,6):
-        plt.quiver(aimpointx[i],aimpointy[i],aimtoholex[i],aimtoholey[i],color='red',units="xy",angles="xy",scale_units="xy",scale=1, width=1)
-
-    #PLOT ALL BALLS AND HOLES
-        #plot objectballs
-    for i in range(len(objectballx)-1):
-        objectball = plt.Circle((objectballx[i], objectbally[i]),
-                            r, color='blue', alpha=0.5)
-        plt.text(objectballx[i],objectbally[i],i,fontsize=15)
-        plt.gca().add_patch(objectball)
-
-    #plot cue ball
-    plt.gca().add_patch(plt.Circle((cuex, cuey), r, color='red'))
-
-    #plot holes
-    for j in range(len(holex)):
-        hole = plt.Circle((holex[j], holey[j]),
-                            rb, color="black", alpha=0.7)
-        #plt.text(holex[j],holey[j],j,color='white',fontsize=15)
-        plt.gca().add_patch(hole)
-
-    #plot end effector shadow
-    first_poly, second_poly, third_poly, fourth_poly = draw_end_effector_shadow(cuex,cuey,ValidRoute[bestrouteindex][3][0],ValidRoute[bestrouteindex][3][1])
-
-    obstacle_flag, points_inside = check_obstacle(cuex,cuey,ValidRoute[bestrouteindex][3][0],ValidRoute[bestrouteindex][3][1],objectballx, objectbally)
-    if obstacle_flag==1:
-        x_inside, y_inside = zip(*points_inside)
-        plt.scatter(x_inside, y_inside, c="green")
-
-    print("obstacle in way:", obstacle_flag)
-
-    polygon_vertices = [first_poly, second_poly, third_poly, fourth_poly]
-    polygon = MatplotlibPolygon(polygon_vertices, closed=True, edgecolor='blue', facecolor='none')
-    plt.gca().add_patch(polygon)
-    # #colored background
-    # plt.axvspan(0,(tablewidth/7)*3,facecolor='b',alpha=0.3)
-    # plt.axvspan((tablewidth/7)*2,(tablewidth/7)*5,facecolor='g',alpha=0.3)
-    # plt.axvspan((tablewidth/7)*4,tablewidth,facecolor='y',alpha=0.3)
+        Nofinterruptball = ValidRoute[bestrouteindex][-1]
+        if Nofinterruptball == 0:
+            plt.quiver(ValidRoute[bestrouteindex][4][0],ValidRoute[bestrouteindex][4][1],ValidRoute[bestrouteindex][-2][0],ValidRoute[bestrouteindex][-2][1],color='green',units="xy",angles="xy",scale_units="xy",scale=1, width=1)
+            plt.quiver(cuex,cuey,ValidRoute[bestrouteindex][3][0],ValidRoute[bestrouteindex][3][1],color='green',units="xy",angles="xy",scale_units="xy",scale=1, width=1)
+            #final cuevector
+            #plt.quiver(cuex+ValidRoute[bestrouteindex][3][0],cuey+ValidRoute[bestrouteindex][3][1],ValidRoute[bestrouteindex][2][0],ValidRoute[bestrouteindex][2][1],color='green',units="xy",angles="xy",scale_units="xy",scale=1, width=3)
+        elif Nofinterruptball == 1:
+            plt.quiver(ValidRoute[bestrouteindex][6][0],ValidRoute[bestrouteindex][6][1],ValidRoute[bestrouteindex][-2][0],ValidRoute[bestrouteindex][-2][1],color='red',units="xy",angles="xy",scale_units="xy",scale=1, width=2)
+            plt.quiver(ValidRoute[bestrouteindex][4][0],ValidRoute[bestrouteindex][4][1],ValidRoute[bestrouteindex][5][0],ValidRoute[bestrouteindex][5][1],color='red',units="xy",angles="xy",scale_units="xy",scale=1, width=2)
+            plt.quiver(cuex,cuey,ValidRoute[bestrouteindex][3][0],ValidRoute[bestrouteindex][3][1],color='red',units="xy",angles="xy",scale_units="xy",scale=1, width=1)
+        elif Nofinterruptball == 2:
+            plt.quiver(ValidRoute[bestrouteindex][8][0],ValidRoute[bestrouteindex][8][1],ValidRoute[bestrouteindex][9][0],ValidRoute[bestrouteindex][9][1],color='blue',units="xy",angles="xy",scale_units="xy",scale=1, width=2)
+            plt.quiver(ValidRoute[bestrouteindex][6][0],ValidRoute[bestrouteindex][6][1],ValidRoute[bestrouteindex][7][0],ValidRoute[bestrouteindex][7][1],color='blue',units="xy",angles="xy",scale_units="xy",scale=1, width=2)
+            plt.quiver(ValidRoute[bestrouteindex][4][0],ValidRoute[bestrouteindex][4][1],ValidRoute[bestrouteindex][5][0],ValidRoute[bestrouteindex][5][1],color='blue',units="xy",angles="xy",scale_units="xy",scale=1, width=2)
+            plt.quiver(cuex,cuey,ValidRoute[bestrouteindex][3][0],ValidRoute[bestrouteindex][3][1],color='blue',units="xy",angles="xy",scale_units="xy",scale=1, width=1)
 
 
-    plt.title("best route")
-    plt.axis([0, tablewidth, 0, tableheight])
-    plt.axis("equal")
-    plt.show(block=False)
-    plt.pause(0.5)
-    # input("Enter to continue...")
-    plt.cla()
-    # end_time = time.time()
-    # print("Execution time:", end_time - start_time, "seconds")
+        #Plot table boundry
+        plt.plot([holex[0],holex[1]],[holey[0],holey[1]],[holex[1],holex[2]],[holey[1],holey[2]],
+                [holex[2],holex[3]],[holey[2],holey[3]],[holex[3],holex[4]],[holey[3],holey[4]],
+                [holex[4],holex[5]],[holey[4],holey[5]],[holex[5],holex[0]],[holey[5],holey[0]],color='black')
 
-    return ValidRoute, bestrouteindex, obstacle_flag
+        #plot aim point
+        for j in range(len(aimpointx)):
+            aimpoint = plt.Circle((aimpointx[j], aimpointy[j]),
+                                r, color="red", alpha=0.2)
+            plt.text(aimpointx[j],aimpointy[j],j,color='red',fontsize=15)
+            plt.gca().add_patch(aimpoint)
+
+        #plot vector from aiming point to hole
+        for i in range(0,6):
+            plt.quiver(aimpointx[i],aimpointy[i],aimtoholex[i],aimtoholey[i],color='red',units="xy",angles="xy",scale_units="xy",scale=1, width=1)
+
+        #PLOT ALL BALLS AND HOLES
+            #plot objectballs
+        for i in range(len(objectballx)-1):
+            objectball = plt.Circle((objectballx[i], objectbally[i]),
+                                r, color='blue', alpha=0.5)
+            plt.text(objectballx[i],objectbally[i],i,fontsize=15)
+            plt.gca().add_patch(objectball)
+
+        #plot cue ball
+        plt.gca().add_patch(plt.Circle((cuex, cuey), r, color='red'))
+
+        #plot holes
+        for j in range(len(holex)):
+            hole = plt.Circle((holex[j], holey[j]),
+                                rb, color="black", alpha=0.7)
+            #plt.text(holex[j],holey[j],j,color='white',fontsize=15)
+            plt.gca().add_patch(hole)
+
+        #plot end effector shadow
+        first_poly, second_poly, third_poly, fourth_poly = draw_end_effector_shadow(cuex,cuey,ValidRoute[bestrouteindex][3][0],ValidRoute[bestrouteindex][3][1])
+
+        obstacle_flag, points_inside = check_obstacle(cuex,cuey,ValidRoute[bestrouteindex][3][0],ValidRoute[bestrouteindex][3][1],objectballx, objectbally)
+        if obstacle_flag==1:
+            x_inside, y_inside = zip(*points_inside)
+            plt.scatter(x_inside, y_inside, c="green")
+
+        print("obstacle in way:", obstacle_flag)
+
+        polygon_vertices = [first_poly, second_poly, third_poly, fourth_poly]
+        polygon = MatplotlibPolygon(polygon_vertices, closed=True, edgecolor='blue', facecolor='none')
+        plt.gca().add_patch(polygon)
+        # #colored background
+        # plt.axvspan(0,(tablewidth/7)*3,facecolor='b',alpha=0.3)
+        # plt.axvspan((tablewidth/7)*2,(tablewidth/7)*5,facecolor='g',alpha=0.3)
+        # plt.axvspan((tablewidth/7)*4,tablewidth,facecolor='y',alpha=0.3)
+
+
+        plt.title("best route")
+        plt.axis([0, tablewidth, 0, tableheight])
+        plt.axis("equal")
+        plt.show(block=False)
+        plt.pause(0.5)
+        # input("Enter to continue...")
+        plt.cla()
+        # end_time = time.time()
+        # print("Execution time:", end_time - start_time, "seconds")
+
+        return ValidRoute, bestrouteindex, obstacle_flag
 
 if __name__ == '__main__':
     # # objectball[-1] is cue ball
@@ -898,7 +959,7 @@ if __name__ == '__main__':
     n = 0
     illogical = 1
     while illogical:
-        cuex, cuey, objectballx, objectbally, n = generateballs(10, r)
+        cuex, cuey, objectballx, objectbally, n = generateballs(15, r)
         objectballx.append(cuex)
         objectbally.append(cuey)
         print("number of balls:",n)
@@ -931,14 +992,21 @@ if __name__ == '__main__':
         else:
             illogical = 1
     #############################
+    # cuex, cuey, objectballx, objectbally, n = generateballs(0, r)
     '''
     objectballx.append(cuex)
     objectbally.append(cuey)
     '''
     ValidRoute, bestrouteindex, obstacle_flag = main(objectballx, objectbally, cuex, cuey)
     # Process route for newer arm controller
-    score, vx, vy, obstacle_flag, hitpointx, hitpointy = route_process(ValidRoute, bestrouteindex, obstacle_flag)
-    print('Route Score:', score)
-    print(f'Vector[{vx},{vy}]')
-    print(f'Hit points[{hitpointx},{hitpointy}]')
-    print('Obstacle Flag:', obstacle_flag)
+    if len(ValidRoute) != 0:
+        score, vx, vy, obstacle_flag, hitpointx, hitpointy = route_process(ValidRoute, bestrouteindex, obstacle_flag)
+        print('Route Score:', score)
+        print(f'Vector[{vx},{vy}]')
+        print(f'Hit points[{hitpointx},{hitpointy}]')
+        print('Obstacle Flag:', obstacle_flag)
+    else:
+        print("No routes, possible end game")
+        print("ValidRoute:", ValidRoute)
+        print("bestrouteindex:", bestrouteindex)
+        print("obstacle_flag", obstacle_flag)
