@@ -1,0 +1,46 @@
+# install python dep
+pyrealsense2
+# tensorflow[and-cuda]
+
+# numpy==1.24.4
+numpy-quaternion
+scipy==1.15.2
+dynamixel_sdk
+pynput
+setuptools==58.2
+pygame
+rosdep
+
+# yolov7 dep
+tqdm
+pandas
+requests
+seaborn
+# install some pip packages needed for testing
+# argcomplete 
+# flake8-blind-except 
+# flake8-builtins 
+# flake8-class-newline 
+# flake8-comprehensions 
+# flake8-deprecated 
+# flake8-docstrings 
+# flake8-import-order 
+# flake8-quotes 
+# pytest-repeat 
+# pytest-rerunfailures 
+# pytest
+#autolab_core dependent
+# ruamel-yaml
+# scikit-learn
+# colorlog
+# multiprocess
+# setproctitle
+# scikit-image
+# visualization
+#gqcnn dependent
+# tensorflow-gpu==2.8.1
+# protobuf==3.20
+# future
+# gputil
+# nvidia-pyindex
+# nvidia-tensorflow

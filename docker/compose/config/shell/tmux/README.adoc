@@ -1,0 +1,117 @@
+= TMUX
+:experimental:
+:toc: left
+// :imagesdir: images
+
+== Install
+run install script
+
+[source, shell]
+----
+chmod +x install.sh
+./install.sh
+----
+
+== Description
+
+This tmux configuration uses many of the same shortcuts as vim.
+
+=== Usage
+
+[source, shell]
+----
+tmux # start tmux
+tmux new -s <session name> # create a new session
+tmux a -t <session name> # attach to a session
+tmux a # attach to the last session
+tmux ls # list all sessions
+pkill tmux # kill all tmux sessions
+----
+
+==== Keyboard shortcuts
+
+// TODO: review list
+
+|kbd:[prefix], kbd:[d]
+|.
+
+|===
+|shortcut |description
+
+|kbd:[Ctrl], kbd:[w]
+|*prefix key*.
+
+|kbd:[prefix + d] or kbd:[Ctrl], kbd:[d]
+|detach client.
+
+|kbd:[prefix + r]
+|reload tmux config.
+
+|kbd:[prefix + w]
+|choose tree.
+
+|kbd:[prefix + D]
+|choose client.
+
+|kbd:[prefix + "]
+|choose session.
+
+|kbd:[prefix + S]
+|new session.
+
+|kbd:[prefix] + kbd:[Alt], kbd:[r]
+|rename session.
+
+|kbd:[prefix + R]
+|rename window.
+
+|kbd:[prefix] + <kbd:[c] or kbd:[Ctrl + c]>
+|new session.
+
+|kbd:[prefix] + <kbd:[h] or kbd:[l]> or <kbd:[Ctrl], kbd:[h] or kbd:[Ctrl], kbd:[l]>
+|switch window to previous kbd:[h] or next kbd:[l].
+
+|kbd:[prefix] + <kbd:[H] or kbd:[L]>
+|switch client previous kbd:[H] or next kbd:[L].
+
+|kbd:[prefix] + kbd:[Ctrl], kbd:[l]
+|clear window.
+
+|kbd:[prefix] + <kbd:[Ctrl], kbd:[s] or kbd:[Ctrl], kbd:[r]>
+|save kbd:[s] or restore kbd:[r] work status.
+
+|kbd:[prefix + ']
+|choose window.
+
+2+^.^|*session*
+
+2+^.^|*window*
+
+2+^.^|*pane*
+
+|kbd:[prefix] + <kbd:[s] or kbd:[v]>
+|split window vertical kbd:[s], horizontal kbd:[v].
+
+|kbd:[prefix] + <kbd:[+] or kbd:[=] or kbd:[<] or kbd:[>]>
+|resize pane to the up kbd:[+] or down kbd:[=] left kbd:[<] or right kbd:[>].
+
+|kbd:[prefix] + <kbd:[j] or kbd:[k]> or <kbd:[Ctrl], kbd:[j] or kbd:[Ctrl], kbd:[k]>
+|switch pane to previous kbd:[j] or next kbd:[k].
+
+|kbd:[prefix] + <kbd:[J] or kbd:[K]>
+|swap pane with previous kbd:[J] or next kbd:[K].
+
+|kbd:[prefix + F12]
+|vertical split window and open htop.
+
+|===
+
+== Remove
+
+run remove script
+
+[source, shell]
+----
+chmod +x ./remove.sh
+./remove.sh
+----
