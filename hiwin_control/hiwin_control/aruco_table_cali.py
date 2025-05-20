@@ -16,6 +16,8 @@ from cv2 import aruco
 from threading import Thread
 import pyrealsense2 as rs
 from scipy.spatial.transform import Rotation as R
+import configparser
+import os
 
 WIDTH = 1920
 HEIGHT = 1080
@@ -600,6 +602,13 @@ class ArmCali(Node):
         super().__init__('ArmCalibration')
         self.hiwin_client = self.create_client(RobotCommand, 'hiwinmodbus_service')
 
+        # Read camera_calibration.ini
+        current_dir = os.getcwd()
+        print("Current dir", current_dir)
+        filepath = current_dir + '/camera_calibration.ini'
+        self.camera_matrix, self.dist_coeffs = self.read_camera_config(filepath)
+        print("Camera matrix: ", self.camera_matrix)
+
         self.pipeline = rs.pipeline()
         config = rs.config()
         config.enable_stream(rs.stream.color, 1920, 1080, rs.format.bgr8, 30)
@@ -607,6 +616,7 @@ class ArmCali(Node):
         self.pipeline.start(config)
 
         self.pid = pid(self.move_arm, self.capture_img, tf=self.cam2arm)
+
 
     def start(self):
         thread = Thread(target=self.calibrate)
@@ -638,7 +648,8 @@ class ArmCali(Node):
         frame = self.pipeline.wait_for_frames()
         color_frame = frame.get_color_frame()
         frame = np.asanyarray(color_frame.get_data())
-        return frame
+        undistort = self.undistort_image(frame, self.camera_matrix, self.dist_coeffs)
+        return undistort
 
     def cam2arm(self, pos, ori):
         end2cam_rot = R.from_euler('xyz', END2CAM[3:], degrees=True)
@@ -648,6 +659,43 @@ class ArmCali(Node):
         armpos = pos - relpos
         armori = A.as_euler('xyz', degrees=True)
         return armpos, armori
+    
+    def read_camera_config(self, filepath):
+        camera_matrix = None
+        dist_coeffs = None
+        config = configparser.ConfigParser()
+        config.read(filepath)
+        try:
+            # Read camera matrix
+            cm = config['Intrinsic']
+            camera_matrix = np.array([
+                [float(cm['0_0']), float(cm['0_1']), float(cm['0_2'])],
+                [float(cm['1_0']), float(cm['1_1']), float(cm['1_2'])],
+                [0, 0, 1]
+            ])
+
+            # Read distortion coefficient
+            dc = config['Distortion']
+            dist_coeffs = np.array(
+                [float(dc['k1']), float(dc['k2']), float(dc['t1']), float(dc['t2']), float(dc['k3'])]
+            )
+        except configparser.Error as e:
+            print(e)
+        return camera_matrix, dist_coeffs
+
+    def undistort_image(self, image, camera_matrix, dist_coeffs):
+        """
+        Undistort an image using camera calibration parameters
+        param image: Input image
+        param camera_matrix: Camera matrix
+        param dist_coeffs: Distortion ceofficients
+        return: Undistorted image
+        """
+        h, w = image.shape[:2]
+
+        new_camera_matrix,  roi = cv2.getOptimalNewCameraMatrix(camera_matrix, dist_coeffs, (w, h), 1, (w, h))
+        undistorted = cv2.undistort(image, camera_matrix, dist_coeffs, None, new_camera_matrix)
+        return undistorted
 
     def generate_robot_request(
             self,

@@ -40,7 +40,7 @@ rb = 20
 '''
 Base on robot arm coordinate
 '''
-config_file = '/home/yvonne/work/src/hiwin_control/hiwin_control/arm.yaml'
+config_file = '/home/yw/work/src/hiwin_control/hiwin_control/arm.yaml'
 with open(config_file, 'r') as file:
     data = yaml.safe_load(file)
 
@@ -153,10 +153,10 @@ def hitpoint(ballx, bally, vectorx, vectory):
     return hitpointx, hitpointy
 
 def outofbound(hitx, hity):
-    checkhitxplus = hitx + r
-    checkhityplus = hity + r
-    checkhitxminus = hitx - r
-    checkhityminus = hity - r
+    checkhitxplus = hitx + r/4
+    checkhityplus = hity + r/4
+    checkhitxminus = hitx - r/4
+    checkhityminus = hity - r/4
     if checkhitxplus > holex[3] or checkhityplus > holey[0] or checkhitxminus < holex[0] or checkhityminus < holey[1]:
         hitoutbound = 1
     else:
@@ -596,9 +596,9 @@ def main(objectballx, objectbally, cuex, cuey) -> Tuple:
         plt.axis([0, tablewidth, 0, tableheight])
         plt.axis("equal")
         plt.show(block=False)
-        input("Enter to continue...")
+        # input("Enter to continue...")
         plt.pause(0.5)
-        plt.cla()
+        plt.close()
 
         return [score, cuetotarget_v[0], cuetotarget_v[1], obstacle_flag, hitpoint[0], hitpoint[1]]
         # [score, cuetotarget_v[0], cuetotarget_v[1], obstacle_flag, hitpoint[0], hitpoint[1]]
@@ -778,9 +778,9 @@ def main(objectballx, objectbally, cuex, cuey) -> Tuple:
         plt.axis([0, tablewidth, 0, tableheight])
         plt.axis("equal")
         plt.show(block=False)
-        input("Enter to continue...")
+        # input("Enter to continue...")
         plt.pause(0.5)
-        plt.cla()
+        plt.close()
 
         # return best reflected route
         return [0, cuetoi_v[0], cuetoi_v[1], obstacle_flag, hitpoint[0], hitpoint[1]]
@@ -796,7 +796,10 @@ def main(objectballx, objectbally, cuex, cuey) -> Tuple:
         obstacle_flag, points_in_poly = check_obstacle(first_poly, second_poly, third_poly, fourth_poly, objectballx, objectbally)
         obstacle_flag = obstacle_flag or out_flag
         print("obstacle flag:", obstacle_flag)
-        plt.cla()
+        plt.show(block=False)
+        # input("Enter to continue...")
+        plt.pause(0.5)
+        plt.close()
         return [0, vx, vy, obstacle_flag, hitpointx, hitpointy]
 
 if __name__ == '__main__':

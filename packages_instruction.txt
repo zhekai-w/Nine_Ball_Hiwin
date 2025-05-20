@@ -11,3 +11,6 @@ ros2 run center publisher_dection_boxes
 ros2 run hiwin_libmodbus hiwinlibmodbus_server
 ros2 run hiwin_control arm_controller
 
+pip3 install numpy==1.25.0
+pip3 install shapely
+

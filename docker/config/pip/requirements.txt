@@ -2,15 +2,15 @@
 pyrealsense2
 # tensorflow[and-cuda]
 
-# numpy==1.24.4
 numpy-quaternion
+numpy==1.25.0
 scipy==1.15.2
 dynamixel_sdk
 pynput
 setuptools==58.2
 pygame
 rosdep
-
+shapely
 # yolov7 dep
 tqdm
 pandas
